@@ -1,6 +1,9 @@
 # Pycharm
 .idea
 
+# VSCode
+.vscode/
+
 # ROS2
 devel/
 logs/
