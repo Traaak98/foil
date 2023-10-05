@@ -1,0 +1,3 @@
+[submodule "kayak_foil_io"]
+	path = kayak_foil_io
+	url = https://gitlab.ensta-bretagne.fr/stic_ressources/kayak_foil_io.git
