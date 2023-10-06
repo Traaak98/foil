@@ -14,3 +14,6 @@ bin/
 lib/
 msg_gen/
 srv_gen/
+
+# Drawio
+*.bkp
