@@ -48,3 +48,7 @@ make clean all
 make upload
 seyon -modem /dev/ttyUSB0
 ```
+
+### Calibration servomotors
+
+Use microcontroller to calibrate servomotors: *Micro Maestro 6-Channel* from *Pololu* :smile:
