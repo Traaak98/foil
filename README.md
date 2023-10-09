@@ -36,3 +36,15 @@ VL-P16
 - [ ] Algorithme de vol
 - [ ] Algorithmes de détection
 - [ ] Algorithme d'évitement
+- [ ] interface ncurses terminal
+
+### Arduino Setup
+
+```bash
+sudo apt install arduino-mk
+sudo apt install seyon
+sudo apt remove brltty
+make clean all
+make upload
+seyon -modem /dev/ttyUSB0
+```
