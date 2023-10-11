@@ -1,4 +1,4 @@
-<mxfile host="Electron" modified="2023-10-09T12:09:24.659Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/22.0.2 Chrome/114.0.5735.289 Electron/25.8.4 Safari/537.36" etag="4pFokIBjjEhOGkzsQ6sX" version="22.0.2" type="device">
+<mxfile host="Electron" modified="2023-10-09T18:33:09.645Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/22.0.2 Chrome/114.0.5735.289 Electron/25.8.4 Safari/537.36" etag="js1CydMncRQjI7KnzUgt" version="22.0.2" type="device">
   <diagram name="Page-1" id="iIlJeRrTbglaG2vOU1Uc">
     <mxGraphModel dx="2187" dy="2012" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -71,7 +71,7 @@
         <mxCell id="voMYDoTwMETxyBbXoOtd-19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="ehzzfcADp96TAgKiNnCZ-7" target="voMYDoTwMETxyBbXoOtd-18" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="voMYDoTwMETxyBbXoOtd-20" value="PoseStamped / 10Hz" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="voMYDoTwMETxyBbXoOtd-19" vertex="1" connectable="0">
+        <mxCell id="voMYDoTwMETxyBbXoOtd-20" value="geometry_msgs/Vector3.msg" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="voMYDoTwMETxyBbXoOtd-19" vertex="1" connectable="0">
           <mxGeometry x="-0.1899" relative="1" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
@@ -188,7 +188,7 @@
         <mxCell id="voMYDoTwMETxyBbXoOtd-21" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="voMYDoTwMETxyBbXoOtd-18" target="ehzzfcADp96TAgKiNnCZ-9" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="voMYDoTwMETxyBbXoOtd-23" value="PoseStamped / 10Hz" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="voMYDoTwMETxyBbXoOtd-21" vertex="1" connectable="0">
+        <mxCell id="voMYDoTwMETxyBbXoOtd-23" value="geometry_msgs/Vector3.msg" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="voMYDoTwMETxyBbXoOtd-21" vertex="1" connectable="0">
           <mxGeometry x="-0.6126" relative="1" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>

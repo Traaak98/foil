@@ -52,3 +52,69 @@ seyon -modem /dev/ttyUSB0
 ### Calibration servomotors
 
 Use microcontroller to calibrate servomotors: *Micro Maestro 6-Channel* from *Pololu* :smile:
+
+### Antenna setup
+
+video link: [Antenna Setup](https://www.youtube.com/watch?v=jPwG0O03uEA)
+
+Black Antenna is the Access Point and the White Antenna is the Station.
+Username is ubnt
+Password is foil
+
+#### Access Point
+
+- Reset Ubiquiti by pushing button until it stops blinking
+- Change Ubuntu Wired config with Manual IPv4:
+  - 192.168.1.45
+  - 255.255.255.0
+  - 192.168.1.20
+- Connect to https://192.168.1.20
+- Change IP adress to 192.168.20.101
+- Change Netmask to 255.255.255.0
+- Change Gateway IP to 192.168.20.1
+- Change Primary DNS IP to 8.8.8.8
+- Change Secondary DNS IP to 8.8.4.4
+- Disable IPv6
+- Apply changes
+- Change Ubuntu Wired config with Manual IPv4:
+  - 192.168.20.45
+  - 255.255.255.0
+  - 192.168.20.101
+- Deactivate Wireless connection
+- Reactivate Wireless connection
+- Check with `ip a` if new adress is ok
+- Connect to https://192.168.20.101
+- Change Wireless Mode to Access Point
+- Change SSID to WIFI-FOIL
+- Change Channel Width to 20 MHz
+- Disable Check for Updates
+- Change Device Name to Foil Access Point
+- Change Time Zone to GMT+01:00
+- Logout
+  
+#### Station
+
+- Reset Ubiquiti by pushing button until it stops blinking
+- Change Ubuntu Wired config with Manual IPv4:
+- Change Ubuntu Wired config with Manual IPv4:
+  - 192.168.1.45
+  - 255.255.255.0
+  - 192.168.1.20
+- Connect to https://192.168.1.20
+- Change IP adress to 192.168.20.102
+- Change Netmask to 255.255.255.0
+- Change Gateway IP to 192.168.20.1
+- Change Primary DNS IP to 8.8.8.8
+- Change Secondary DNS IP to 8.8.4.4
+- Disable IPv6
+- Apply changes
+- Change Ubuntu Wired config with Manual IPv4:
+  - 192.168.20.45
+  - 255.255.255.0
+  - 192.168.20.102
+- Disable Check for Updates
+- Change Device Name to Foil Station
+- Change Time Zone to GMT+01:00
+- Set airMAX Priority to High
+- Change Wireless Mode to Station
+- Choose Select and find WIFI-FOIL and Lock to AP
