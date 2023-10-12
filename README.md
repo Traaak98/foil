@@ -43,10 +43,12 @@ VL-P16
 ```bash
 sudo apt install arduino-mk
 sudo apt install seyon
-sudo apt remove brltty
+sudo apt remove brltty # If no ttyUSB0
 make clean all
 make upload
 seyon -modem /dev/ttyUSB0
+# Or
+minicom -D /dev/ttyUSB0 -b 115200
 ```
 
 ### Calibration servomotors
