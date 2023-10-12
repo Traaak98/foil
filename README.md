@@ -120,3 +120,11 @@ Password is foil
 - Set airMAX Priority to High
 - Change Wireless Mode to Station
 - Choose Select and find WIFI-FOIL and Lock to AP
+
+## KillList
+
+- Arduino ATMega 2560 : Morte le 05/10 au Labo ROB. Cause du décès: surtension, prend feu instantanément.
+- HS-5646WP : Mort au combat le 09/10 à Guerlédan. Cause du décès: blocage mécanique du servo.
+- HS-5646WP : Mort au combat le 10/10 à Guerlédan. Cause du décès: non remise à zéro après le test, décède de ses blessures durant la nuit.
+- Torqeedo motor : Mort le 11/10 dans le lac de Guerlédan. Cause du décès: inconnue. Hypothèse retennue : surchauffe.
+- HS-646WP : Mort le 12/10 à Guerlédan. Cause du suicide: inconnue.
