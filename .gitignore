@@ -18,3 +18,6 @@ srv_gen/
 # Drawio
 *.bkp
 *.dtmp
+
+# CAO
+cao/OldVersions/
