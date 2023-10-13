@@ -2,6 +2,7 @@
 
 ## Z-Shell Configuration
 
+<<<<<<< HEAD
 <!-- Tutorial link -->
 - [Tutorial](https://vitux.com/ubuntu-zsh-shell/)
 - Theme: [jonathan](https://github.com/ohmyzsh/ohmyzsh/wiki/Themes#jonathan)
@@ -10,6 +11,9 @@
   - [git](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/git)
   - [zsh-navigation-tools](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/zsh-navigation-tools)
   - [zsh-interative-cd](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/zsh-interactive-cd)
+=======
+## Getting started
+>>>>>>> ac5391e (old readme)
 
 ## Lidar
 
