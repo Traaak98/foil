@@ -1,6 +1,4 @@
 # Foil State Message
-# TODO: Faire le .hpp du message
-
 std_msgs/Header header
 
 # PoseStamped

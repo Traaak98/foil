@@ -4,9 +4,11 @@
 #include <memory>
 #include "rclcpp/rclcpp.hpp"
 #include "geometry_msgs/msg/pose_stamped.hpp"
+
 #include "sbg_driver/msg/sbg_ekf_euler.hpp"
 #include "sbg_driver/msg/sbg_gps_vel.hpp"
 #include "sbg_driver/msg/sbg_gps_hdt.hpp"
+#include "foil_state_msg/msg/foil_state.hpp"
 
 using namespace std::chrono_literals;
 using namespace std;
@@ -38,6 +40,7 @@ private:
     rclcpp::Subscription<sbg_driver::msg::SbgEkfEuler>::SharedPtr subscription_sbg_ekf_euler_;
     rclcpp::Subscription<sbg_driver::msg::SbgGpsVel>::SharedPtr subscription_sbg_gps_vel_;
     rclcpp::Subscription<sbg_driver::msg::SbgGpsHdt>::SharedPtr subscription_sbg_gps_hdt_;
+    rclcpp::Publisher<foil_state_msg::msg::FoilState>::SharedPtr publisher_foil_state_;
 
     void init_parameters();
     void init_interfaces();
