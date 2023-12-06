@@ -15,4 +15,10 @@ lib/
 msg_gen/
 srv_gen/
 
-#
+# Drawio
+*.bkp
+*.dtmp
+
+# CAO
+cao/OldVersions/
+
