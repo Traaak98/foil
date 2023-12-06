@@ -1,6 +1,6 @@
-<mxfile host="Electron" modified="2023-10-09T18:33:09.645Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/22.0.2 Chrome/114.0.5735.289 Electron/25.8.4 Safari/537.36" etag="js1CydMncRQjI7KnzUgt" version="22.0.2" type="device">
+<mxfile host="Electron" modified="2023-12-06T14:14:51.184Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/22.1.2 Chrome/114.0.5735.289 Electron/25.9.4 Safari/537.36" etag="6xCZ7mO3ADtLrXkF-af_" version="22.1.2" type="device">
   <diagram name="Page-1" id="iIlJeRrTbglaG2vOU1Uc">
-    <mxGraphModel dx="2187" dy="2012" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="2191" dy="2012" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -62,7 +62,7 @@
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="ehzzfcADp96TAgKiNnCZ-4" value="nodeAccoustic" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" parent="1" vertex="1">
+        <mxCell id="ehzzfcADp96TAgKiNnCZ-4" value="nodeSenix" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" parent="1" vertex="1">
           <mxGeometry x="720" y="545" width="80" height="80" as="geometry" />
         </mxCell>
         <mxCell id="ehzzfcADp96TAgKiNnCZ-5" value="nodeCamera" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;dashed=1;dashPattern=8 8;" parent="1" vertex="1">
@@ -208,7 +208,7 @@
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="voMYDoTwMETxyBbXoOtd-32" value="Height" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+        <mxCell id="voMYDoTwMETxyBbXoOtd-32" value="senix/altitude" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="700" y="410" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="voMYDoTwMETxyBbXoOtd-40" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="voMYDoTwMETxyBbXoOtd-37" target="ehzzfcADp96TAgKiNnCZ-10" edge="1">
@@ -245,7 +245,7 @@
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="5eLMSQ6_MZH-pE0k0Zy7-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="voMYDoTwMETxyBbXoOtd-49" target="voMYDoTwMETxyBbXoOtd-67" edge="1">
+        <mxCell id="5eLMSQ6_MZH-pE0k0Zy7-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="voMYDoTwMETxyBbXoOtd-49" target="voMYDoTwMETxyBbXoOtd-66" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="voMYDoTwMETxyBbXoOtd-49" value="FoilState" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">

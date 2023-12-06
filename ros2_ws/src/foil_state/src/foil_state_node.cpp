@@ -80,6 +80,6 @@ int main(int argc, char ** argv)
   rclcpp::spin(std::make_shared<FoilStateNode>());
   rclcpp::shutdown();
 
-  printf("hello world utm_proj package\n");
+  printf("hello world foil_state package\n");
   return 0;
 }
