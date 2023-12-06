@@ -2,6 +2,7 @@ import launch
 import launch_ros
 from ament_index_python.packages import get_package_share_directory
 import os
+from launch.actions import ExecuteProcess
 
 def generate_launch_description():
     config = os.path.join(
@@ -24,8 +25,11 @@ def generate_launch_description():
         output = 'screen'
     )
 
+    rosbag = ExecuteProcess(cmd=['ros2', 'bag', 'record', '-a'],output='screen')
+
 
     return launch.LaunchDescription([
         sbg_node,
-        senix_node
+        senix_node,
+        rosbag
     ])
