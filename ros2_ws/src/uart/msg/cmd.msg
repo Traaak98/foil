@@ -1,5 +1,0 @@
-float32 servoFoil
-float32 servoGouvernail
-float32 servoAileronLeft
-float32 servoAileronRight
-float32 thruster
