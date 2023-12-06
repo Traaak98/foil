@@ -35,7 +35,7 @@ private:
     rclcpp::TimerBase::SharedPtr timer_;
     std::chrono::milliseconds loop_dt_ = 100ms; // loop dt
 
-    // TODO: Add Publisher for FoilState.msg
+    // TODO: Add Subscriber senix/Altitude
     rclcpp::Subscription<geometry_msgs::msg::PoseStamped>::SharedPtr subscription_utm_pose_;
     rclcpp::Subscription<sbg_driver::msg::SbgEkfEuler>::SharedPtr subscription_sbg_ekf_euler_;
     rclcpp::Subscription<sbg_driver::msg::SbgGpsVel>::SharedPtr subscription_sbg_gps_vel_;

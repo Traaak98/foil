@@ -11,12 +11,6 @@ find_package(sbg_driver REQUIRED)
 find_package(utm_proj REQUIRED)
 find_package(foil_state_msg REQUIRED)
 
-# rosidl_generate_interfaces(${PROJECT_NAME}
-#   "foil_state_msg/msg/FoilState.msg"
-#   DEPENDENCIES geometry_msgs std_msgs
-# )
-# rosidl_get_typesupport_target(cpp_typesupport_target ${PROJECT_NAME} "rosidl_typesupport_cpp")
-
 add_executable(foil_state_node src/foil_state_node.cpp)
 
 ament_target_dependencies(foil_state_node

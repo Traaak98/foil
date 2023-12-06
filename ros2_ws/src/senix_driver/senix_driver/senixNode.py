@@ -64,7 +64,7 @@ class Senix:
 class senixNode(Node):
     def __init__(self):
         super().__init__('senixNode')
-        self.publisher_int = self.create_publisher(Int32, 'senix/alti', 1)
+        self.publisher_int = self.create_publisher(Int32, 'senix/altitude', 1)
         self.timer = self.create_timer(0.1, self.timer_callback)
 
         self.my_senix = Senix(port = "/dev/ttyAcous")
