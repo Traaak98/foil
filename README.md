@@ -21,6 +21,9 @@ VL-P16
 <!-- Tutorial ROS2? -->
 [Tutorial VLP-16](http://wiki.ros.org/velodyne/Tutorials/Getting%20Started%20with%20the%20Velodyne%20VLP16)
 
+## SBG
+** Attention ** : La connection au SBG se fait uniquement avec un port USB 3.0.
+
 ## TODOLIST
 
 - [ ] Plan d'expérimentation
