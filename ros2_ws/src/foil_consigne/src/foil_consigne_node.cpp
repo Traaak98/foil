@@ -21,24 +21,27 @@ void FoilConsigneNode::init_interfaces()
 {
     subscription_foil_state_ = this->create_subscription<foil_state_msg::msg::FoilState>("foil_state", 10, std::bind(&FoilConsigneNode::foil_state_callback, this, std::placeholders::_1));
     subscription_foil_objective_ = this->create_subscription<foil_objective_msg::msg::FoilObjective>("foil_objective", 10, std::bind(&FoilConsigneNode::foil_objective_callback, this, std::placeholders::_1));
-    // publisher_foil_consigne_ = this->create_publisher<uart_msg::msg::Uart>("foil_consigne", 10);
+    publisher_foil_consigne_ = this->create_publisher<foil_consigne_msg::msg::FoilConsigne>("foil_consigne", 10);
 }
 
 void FoilConsigneNode::timer_callback()
 {
-    // TODO : auto msg = uart_msg::msg::Uart();
-    // TODO : Find relation between speed and thruster command
-
-    float speed = 0.0;
+    auto msg = foil_consigne_msg::msg::FoilConsigne();
     
-    float alpha1_left_aileron = 0.0;
-    float alpha2_right_aileron = 0.0;
-    float beta_foil = 0.0;
-    float theta_rudder = atan2(y_objective_ - y_, x_objective_ - x_);
+    double speed = 0.0;
+    
+    double alpha1_left_aileron = 0.0;
+    double alpha2_right_aileron = 0.0;
+    double beta_foil = 0.0;
+    double theta_gouvernail = atan2(y_objective_ - y_, x_objective_ - x_);
 
-    // TODO : Add to message
+    msg.servo_foil = beta_foil;
+    msg.servo_gouvernail = theta_gouvernail;
+    msg.servo_aileron_left = alpha1_left_aileron;
+    msg.servo_aileron_right = alpha2_right_aileron;
+    msg.thruster = speed;
 
-    // publisher_foil_consigne_->publish(msg);
+    publisher_foil_consigne_->publish(msg);
 
 }
 

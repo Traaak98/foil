@@ -6,6 +6,7 @@
 
 #include "foil_state_msg/msg/foil_state.hpp"
 #include "foil_objective_msg/msg/foil_objective.hpp"
+#include "foil_consigne_msg/msg/foil_consigne.hpp"
 
 using namespace std::chrono_literals;
 using namespace std;
@@ -44,7 +45,7 @@ private:
     // TODO: Add Publisher for consigne message
     rclcpp::Subscription<foil_state_msg::msg::FoilState>::SharedPtr subscription_foil_state_;
     rclcpp::Subscription<foil_objective_msg::msg::FoilObjective>::SharedPtr subscription_foil_objective_;
-    // rclcpp::Publisher<uart_msg::msg::Uart>::SharedPtr publisher_foil_consigne_;
+    rclcpp::Publisher<foil_consigne_msg::msg::FoilConsigne>::SharedPtr publisher_foil_consigne_;
 
     void init_parameters();
     void init_interfaces();
