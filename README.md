@@ -2,7 +2,6 @@
 
 ## Z-Shell Configuration
 
-<<<<<<< HEAD
 <!-- Tutorial link -->
 - [Tutorial](https://vitux.com/ubuntu-zsh-shell/)
 - Theme: [jonathan](https://github.com/ohmyzsh/ohmyzsh/wiki/Themes#jonathan)
@@ -11,9 +10,6 @@
   - [git](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/git)
   - [zsh-navigation-tools](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/zsh-navigation-tools)
   - [zsh-interative-cd](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/zsh-interactive-cd)
-=======
-## Getting started
->>>>>>> ac5391e (old readme)
 
 ## Lidar
 
@@ -22,7 +18,8 @@ VL-P16
 [Tutorial VLP-16](http://wiki.ros.org/velodyne/Tutorials/Getting%20Started%20with%20the%20Velodyne%20VLP16)
 
 ## SBG
-** Attention ** : La connection au SBG se fait uniquement avec un port USB 3.0.
+
+**Attention** : La connection au SBG se fait uniquement avec un port USB 3.0.
 
 ## TODOLIST
 
@@ -141,3 +138,9 @@ Password is foil
 - Torqeedo motor : Mort le 11/10 dans le lac de Guerlédan. Cause du décès: inconnue. Hypothèse retennue : surchauffe.
 - HS-646WP : Mort le 12/10 à Guerlédan. Cause du suicide: inconnue.
 - Servo Tester Pro-Tronik : Mort le 12/10 à Guerlédan. Cause du décès : grillé à cause d'un court-circuit.
+
+## Idées de nom pour le foil
+
+- Le Laboureur des mers
+- L'Eri volante
+- Le pourfendeur de mer
