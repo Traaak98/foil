@@ -70,7 +70,7 @@ Black Antenna is the Access Point and the White Antenna is the Station.
 Username is ubnt
 Password is foil
 
-#### Access Point
+#### Access Point (NUC)
 
 - Reset Ubiquiti by pushing button until it stops blinking
 - Change Ubuntu Wired config with Manual IPv4:
@@ -106,7 +106,7 @@ Password is foil
 - Wireless -> Calculate EIRP Limit
 - Increase output power
   
-#### Station
+#### Station (PC)
 
 - Reset Ubiquiti by pushing button until it stops blinking
 - Change Ubuntu Wired config with Manual IPv4:
