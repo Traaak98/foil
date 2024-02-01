@@ -21,6 +21,9 @@ VL-P16
 <!-- Tutorial ROS2? -->
 [Tutorial VLP-16](http://wiki.ros.org/velodyne/Tutorials/Getting%20Started%20with%20the%20Velodyne%20VLP16)
 
+## SBG
+** Attention ** : La connection au SBG se fait uniquement avec un port USB 3.0.
+
 ## TODOLIST
 
 - [ ] Plan d'expérimentation
@@ -67,7 +70,7 @@ Black Antenna is the Access Point and the White Antenna is the Station.
 Username is ubnt
 Password is foil
 
-#### Access Point
+#### Access Point (NUC)
 
 - Reset Ubiquiti by pushing button until it stops blinking
 - Change Ubuntu Wired config with Manual IPv4:
@@ -97,8 +100,13 @@ Password is foil
 - Change Device Name to Foil Access Point
 - Change Time Zone to GMT+01:00
 - Logout
+- deactivate airMax
+- Frequency, MHz: 2437
+- Advanced -> Tick Installer EIRP Control
+- Wireless -> Calculate EIRP Limit
+- Increase output power
   
-#### Station
+#### Station (PC)
 
 - Reset Ubiquiti by pushing button until it stops blinking
 - Change Ubuntu Wired config with Manual IPv4:
@@ -124,3 +132,12 @@ Password is foil
 - Set airMAX Priority to High
 - Change Wireless Mode to Station
 - Choose Select and find WIFI-FOIL and Lock to AP
+
+## KillList
+
+- Arduino ATMega 2560 : Morte le 05/10 au Labo ROB. Cause du décès: surtension, prend feu instantanément.
+- HS-5646WP : Mort au combat le 09/10 à Guerlédan. Cause du décès: blocage mécanique du servo.
+- HS-5646WP : Mort au combat le 11/10 à Guerlédan. Cause du décès: non remise à zéro après le test, décède de ses blessures durant la nuit.
+- Torqeedo motor : Mort le 11/10 dans le lac de Guerlédan. Cause du décès: inconnue. Hypothèse retennue : surchauffe.
+- HS-646WP : Mort le 12/10 à Guerlédan. Cause du suicide: inconnue.
+- Servo Tester Pro-Tronik : Mort le 12/10 à Guerlédan. Cause du décès : grillé à cause d'un court-circuit.

@@ -6,8 +6,9 @@ find_package(ament_cmake REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(geometry_msgs REQUIRED)
+find_package(std_msgs REQUIRED)
 find_package(sbg_driver REQUIRED)
-find_package(utm_proj REQUIRED)
+find_package(foil_state_msg REQUIRED)
 
 add_executable(foil_state_node src/foil_state_node.cpp)
 
@@ -15,8 +16,9 @@ ament_target_dependencies(foil_state_node
   rclcpp
   rosidl_default_generators
   geometry_msgs
+  std_msgs
   sbg_driver
-  utm_proj
+  foil_state_msg
 )
 
 target_include_directories(foil_state_node PUBLIC

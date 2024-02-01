@@ -4,9 +4,11 @@
 #include <memory>
 #include "rclcpp/rclcpp.hpp"
 #include "geometry_msgs/msg/pose_stamped.hpp"
+
 #include "sbg_driver/msg/sbg_ekf_euler.hpp"
 #include "sbg_driver/msg/sbg_gps_vel.hpp"
 #include "sbg_driver/msg/sbg_gps_hdt.hpp"
+#include "foil_state_msg/msg/foil_state.hpp"
 
 using namespace std::chrono_literals;
 using namespace std;
@@ -33,16 +35,16 @@ private:
     rclcpp::TimerBase::SharedPtr timer_;
     std::chrono::milliseconds loop_dt_ = 100ms; // loop dt
 
-    // TODO: Add Publisher for FoilState.msg
-    rclcpp::Subscription<geometry_msgs::msg::PoseStamped>::SharedPtr subscription_utm_pose_;
+    // TODO: Add Subscriber senix/Altitude
+    // TODO: Add Subscriber Position from UTM
     rclcpp::Subscription<sbg_driver::msg::SbgEkfEuler>::SharedPtr subscription_sbg_ekf_euler_;
     rclcpp::Subscription<sbg_driver::msg::SbgGpsVel>::SharedPtr subscription_sbg_gps_vel_;
     rclcpp::Subscription<sbg_driver::msg::SbgGpsHdt>::SharedPtr subscription_sbg_gps_hdt_;
+    rclcpp::Publisher<foil_state_msg::msg::FoilState>::SharedPtr publisher_foil_state_;
 
     void init_parameters();
     void init_interfaces();
     void timer_callback();
-    void utm_pose_callback(const geometry_msgs::msg::PoseStamped::SharedPtr msg);
     void sbg_ekf_euler_callback(const sbg_driver::msg::SbgEkfEuler::SharedPtr msg);
     void sbg_gps_vel_callback(const sbg_driver::msg::SbgGpsVel::SharedPtr msg);
     void sbg_gps_hdt_callback(const sbg_driver::msg::SbgGpsHdt::SharedPtr msg);
