@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <Eigen/Core>
+#include <Eigen/LU>
 #include "rclcpp/rclcpp.hpp"
 
 #include "foil_state_msg/msg/foil_state.hpp"
@@ -41,17 +42,15 @@ private:
 
     double speed_objective_ = 0.0;
 
-    Matrix <double, 3, 3> Model_;
-    Matrix <double, 3, 3> Model_inv_;
-
     double l = 1.0; // TODO: set this parameter
     double d = 1.0; // TODO: set this parameter
 
-    Model << 1.0 1.0 1.0,
-             d -d 0.0,
-             0.0 0.0 l;
-
-    Model_inv_ = Model.inverse();
+    Matrix <double, 3, 3> Model_ {
+        {1.0, 1.0, 1.0},
+        {d, -d, 0.0},
+        {0.0, 0.0, l}
+    };
+    Matrix <double, 3, 3> Model_inv_;
 
     rclcpp::TimerBase::SharedPtr timer_;
     std::chrono::milliseconds loop_dt_ = 100ms; // loop dt
