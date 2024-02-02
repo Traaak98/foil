@@ -12,7 +12,7 @@ struct CommandData {
 
 void setup() {
     // Initialiser le port série à 9600 bauds
-    Serial.begin(9600);
+    Serial.begin(115200);
 }
 
 void loop() {
@@ -23,6 +23,11 @@ void loop() {
 
     // Lire les données du port série
     CommandData command_data;
+    command_data.command1 = 0.1;
+    command_data.command2 = 0.2;
+    command_data.command3 = 0.3;
+    command_data.command4 = 0.4;
+    command_data.command5 = 0.5;
     Serial.readBytes(reinterpret_cast<char*>(&command_data), sizeof(CommandData));
     
     // Créer une instance de la structure avec des commandes fictives
