@@ -1,5 +1,4 @@
 #include <Arduino.h>
-#include <Servo.h>
 
 // Définir la structure pour stocker les commandes
 struct CommandData {
@@ -19,7 +18,7 @@ void setup() {
 void loop() {
     // Envoyer un message toutes les 10 secondes
     while (Serial.available() < sizeof(CommandData)) {
-    delay(10);
+        delay(10);
     }
 
     // Lire les données du port série

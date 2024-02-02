@@ -22,7 +22,8 @@ VL-P16
 [Tutorial VLP-16](http://wiki.ros.org/velodyne/Tutorials/Getting%20Started%20with%20the%20Velodyne%20VLP16)
 
 ## SBG
-** Attention ** : La connection au SBG se fait uniquement avec un port USB 3.0.
+
+**Attention** : La connection au SBG se fait uniquement avec un port USB 3.0.
 
 ## TODOLIST
 
@@ -141,3 +142,28 @@ Password is foil
 - Torqeedo motor : Mort le 11/10 dans le lac de Guerlédan. Cause du décès: inconnue. Hypothèse retennue : surchauffe.
 - HS-646WP : Mort le 12/10 à Guerlédan. Cause du suicide: inconnue.
 - Servo Tester Pro-Tronik : Mort le 12/10 à Guerlédan. Cause du décès : grillé à cause d'un court-circuit.
+
+## NUC
+
+Adresse IP avec antennes: 192.168.20.47
+
+## Camera
+
+gst-launch-1.0 -e -v udpsrc port=5600 close-socket=false multicast-iface=false auto-multicast=true ! application/x-rtp, payload=96 ! rtpjitterbuffer ! rtph264depay ! avdec_h264 ! queue ! autovideosink
+
+## Servo Binding
+
+PCB order:
+
+1. Foil Arrière
+2. Gouvernail
+3. Servo avant ????
+4. Servo avant ????
+
+## Servo Transport / Remise à zéro
+
+- Foil arrière: Dévisser la petite vis entre la pièce blanche et la pièce noire. NE PAS RETIRER LA PIECE NOIRE
+
+## UART
+
+Renommer dans le node la sortie USB0 (sur le NUC)
