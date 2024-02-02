@@ -41,7 +41,9 @@ class Uart(Node):
         )
 
         # Créer un publisher pour publier les données du capteur
-        # self.sensor_data_publisher = self.create_publisher(SensorData, '/sensors_data', 10)
+        # self.sensor_data_publisher = self.create_publisher(
+        #     SensorData, "/sensors_data", 10
+        # )
 
         self.get_logger().info("Subscribeur et publisher initialisé.")
         self.get_logger().info("Ouverture de la liaison série.")
@@ -85,10 +87,7 @@ class Uart(Node):
         # Recevoir des données via UART
         received_data = self.receive_sensor_data()
         if received_data:
-            self.get_logger().info(
-                f"Données du capteur reçues: {received_data.__dict__}"
-            )
-
+            pass
             # Publier les données du capteur
             # self.sensor_data_publisher.publish(received_data)
         else:
@@ -96,7 +95,7 @@ class Uart(Node):
 
     def send_uart_data(self, msg):
         # command_to_send = CommandData(msg.servo_foil, msg.servo_gouvernail, msg.servo_aileron_left, msg.servo_aileron_right, msg.thruster)
-        command_to_send = CommandData(-80, 80, 40, 0.0, 0.0)
+        command_to_send = CommandData(1.0, 2.0, 3.0, 4.0, 5.0)
 
         # Emballer les données dans une chaîne binaire
         data_to_send = struct.pack(
