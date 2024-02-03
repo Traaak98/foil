@@ -2,7 +2,6 @@
 
 ## Z-Shell Configuration
 
-<<<<<<< HEAD
 <!-- Tutorial link -->
 - [Tutorial](https://vitux.com/ubuntu-zsh-shell/)
 - Theme: [jonathan](https://github.com/ohmyzsh/ohmyzsh/wiki/Themes#jonathan)
@@ -11,18 +10,45 @@
   - [git](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/git)
   - [zsh-navigation-tools](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/zsh-navigation-tools)
   - [zsh-interative-cd](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/zsh-interactive-cd)
-=======
 ## Getting started
 >>>>>>> ac5391e (old readme)
 
 ## Lidar
 
-VL-P16
-<!-- Tutorial ROS2? -->
-[Tutorial VLP-16](http://wiki.ros.org/velodyne/Tutorials/Getting%20Started%20with%20the%20Velodyne%20VLP16)
+voir "tuto_velodyne.md"
+adresse ip velodyne : 192.168.10.91
 
 ## SBG
 ** Attention ** : La connection au SBG se fait uniquement avec un port USB 3.0.
+
+## Mettre une nouveau nom pour un port :
+
+Obtenir les information sur le port :
+```bash
+udevadm info -a -p $(udevadm info -q path -n adresse_du_port)
+```
+En général les informations à retenir sont :
+- idVendor
+- idProduct
+- kernel
+- subsystem
+
+Ensuite il faut modifier notre fichier de règle udev :
+```bash
+nano /etc/udev/rules.d/myrule.rules
+```
+Et ajouter le port en prenant exemple sur les lignes suivantes.
+On suppose dans cet exemple que le port est un port ttyACM* et que le idVendor est 1546 et le idProduct est 01a8.
+On souhaite le renomer en ttyGPS et que les droits d'accès soient donnés à l'utilisateur.
+```
+KERNEL=="ttyACM*", SUBSYSTEM=="tty", ATTRS{idVendor}=="1546", ATTRS{idProduct}=="01a8", SYMLINK="ttyGPS", MODE="0777"
+```
+
+Puis on recharge les règles udev :
+```bash 
+sudo udevadm control --reload-rules
+sudo udevadm trigger
+```
 
 ## TODOLIST
 
@@ -69,6 +95,18 @@ video link: [Antenna Setup](https://www.youtube.com/watch?v=jPwG0O03uEA)
 Black Antenna is the Access Point and the White Antenna is the Station.
 Username is ubnt
 Password is foil
+
+### Webcam setup
+Commande gstreamer pour publier le flux vidéo de la webcam sur le réseau:
+```bash
+gst-launch-1.0 -v v4l2src device=/dev/video2 do-timestamp=true ! video/x-h264, width=1920, height=1080, framerate=30/1 ! h264parse ! queue ! rtph264pay config-interval=10 pt=96 ! udpsink host=adresse_ip_station port=5600
+```
+
+Commande gstreamer pour lire le flux vidéo de la webcam sur le réseau:
+```bash
+gst-launch-1.0 -e -v udpsrc port=5600 close-socket=false multicast-iface=false auto-multicast=true ! application/x-rtp, payload=96 ! rtpjitterbuffer ! rtph264depay ! avdec_h264 ! queue ! autovideosink
+```
+
 
 #### Access Point
 
