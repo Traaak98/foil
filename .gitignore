@@ -22,3 +22,7 @@ srv_gen/
 # CAO
 cao/OldVersions/
 
+# Rosbag
+bags/
+rosbag2_2024*
+
