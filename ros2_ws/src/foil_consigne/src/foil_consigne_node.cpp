@@ -69,11 +69,25 @@ void FoilConsigneNode::timer_callback()
     double beta_foil = 0.0;
     double theta_gouvernail = 0.0;
 
-    msg.servo_foil = beta_foil;
-    msg.servo_gouvernail = theta_gouvernail;
-    msg.servo_aileron_left = alpha1_left_aileron;
-    msg.servo_aileron_right = alpha2_right_aileron;
-    msg.thruster = speed_;  
+    // Renvoyer un pourcentage d'angle entre -100 et 100 à la liaison série
+    double beta_foil_extrema = 20.0; // TODO: set this parameter$
+    double theta_gouvernail_extrema = 20.0; // TODO: set this parameter
+    double alpha_aileron_extrema = 20.0; // TODO: set this parameter
+    double speed_extrema = 20.0; // TODO: set this parameter
+
+    // Passage en pourcentage
+    beta_foil = beta_foil/(2*speed_extrema);
+    theta_gouvernail = theta_gouvernail/(2*speed_extrema);
+    alpha1_left_aileron = alpha1_left_aileron/(2*alpha_aileron_extrema);
+    alpha2_right_aileron = alpha2_right_aileron/(2*alpha_aileron_extrema);
+    speed_ = speed_/(speed_extrema);
+
+    // Envoyer les données à la liaison série (UART)
+    msg.servo_foil = 100*beta_foil;
+    msg.servo_gouvernail = 100*theta_gouvernail;
+    msg.servo_aileron_left = 100*alpha1_left_aileron;
+    msg.servo_aileron_right = 100*alpha2_right_aileron;
+    msg.thruster = 100*speed_;  
 
     publisher_foil_consigne_->publish(msg);
 
