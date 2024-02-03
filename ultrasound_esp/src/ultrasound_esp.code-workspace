@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"name": "ultrasound_esp",
+			"path": ".."
+		}
+	],
+	"settings": {
+		"ros.distro": "humble"
+	}
+}
