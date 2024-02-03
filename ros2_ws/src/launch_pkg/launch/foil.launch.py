@@ -2,9 +2,11 @@ import launch
 import launch_ros
 from ament_index_python.packages import get_package_share_directory
 import os
+
 import yaml
 from launch.actions import ExecuteProcess
 
+from launch.actions import ExecuteProcess
 
 def generate_launch_description():
     config = os.path.join(
@@ -44,6 +46,8 @@ def generate_launch_description():
                                                       executable='velodyne_laserscan_node',
                                                       output='both',
                                                       parameters=[laserscan_params_file])
+
+    rosbag = ExecuteProcess(cmd=['ros2', 'bag', 'record', '-a'],output='screen')
 
     rosbag = ExecuteProcess(cmd=['ros2', 'bag', 'record', '-a'],output='screen')
 

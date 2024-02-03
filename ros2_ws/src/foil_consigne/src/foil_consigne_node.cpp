@@ -15,30 +15,67 @@ FoilConsigneNode::~FoilConsigneNode()
 
 void FoilConsigneNode::init_parameters()
 {
+    Model_inv_ = Model_.inverse();
 }
 
 void FoilConsigneNode::init_interfaces()
 {
     subscription_foil_state_ = this->create_subscription<foil_state_msg::msg::FoilState>("foil_state", 10, std::bind(&FoilConsigneNode::foil_state_callback, this, std::placeholders::_1));
     subscription_foil_objective_ = this->create_subscription<foil_objective_msg::msg::FoilObjective>("foil_objective", 10, std::bind(&FoilConsigneNode::foil_objective_callback, this, std::placeholders::_1));
-    // publisher_foil_consigne_ = this->create_publisher<uart_msg::msg::Uart>("foil_consigne", 10);
+    publisher_foil_consigne_ = this->create_publisher<foil_consigne_msg::msg::FoilConsigne>("foil_consigne", 10);
 }
 
 void FoilConsigneNode::timer_callback()
 {
-    // TODO : auto msg = uart_msg::msg::Uart();
-    // TODO : Find relation between speed and thruster command
+    auto msg = foil_consigne_msg::msg::FoilConsigne();
 
-    float speed = 0.0;
+    double speed_ = sqrt(pow(speed_x_, 2) + pow(speed_y_, 2));
+
+    double kz_ = 0.5; // TODO: set this parameter
+    double kroll_ = 0.5; // TODO: set this parameter
+    double kpitch_ = 0.5; // TODO: set this parameter
+
+    double g = 9.81;
+
+    double z_desired = z_objective_*tanh(kz_*speed_);
+    z_desired = z_; // TODO: TEST PARAMETER. TO BE REMOVED
+    double z_diff = z_desired - z_;
+
+    double yaw_desired = atan2(y_objective_ - y_, x_objective_ - x_);
+    yaw_desired = 0.0; // TODO: TEST PARAMETER. TO BE REMOVED
+    double yaw_diff = yaw_desired - yaw_;
+
+    double roll_desired = atan(yaw_diff*speed_/g);
+    roll_desired = 0.0; // TODO: TEST PARAMETER. TO BE REMOVED
+    double roll_diff = roll_desired - roll_;
+    double pitch_desired = pitch_objective_*tanh(kpitch_*z_diff);
+    pitch_desired = 0.0; // TODO: TEST PARAMETER. TO BE REMOVED
+    double pitch_diff = pitch_desired - pitch_;
+
+    double kz_proportional = 0.5; // TODO: set this parameter
+    double kroll_proportional = 0.5; // TODO: set this parameter
+    double kpitch_proportional = 0.5; // TODO: set this parameter
+
+    double force_u_desired = kz_proportional*z_diff;
+    double force_roll_desired = kroll_proportional*roll_diff;
+    double force_pitch_desired = kpitch_proportional*pitch_diff;
+
+    double force_aileron_left = Model_inv_(0, 0)*force_u_desired + Model_inv_(0, 1)*force_roll_desired + Model_inv_(0, 2)*force_pitch_desired;
+    double force_aileron_right = Model_inv_(1, 0)*force_u_desired + Model_inv_(1, 1)*force_roll_desired + Model_inv_(1, 2)*force_pitch_desired;
+    double force_foil = Model_inv_(2, 0)*force_u_desired + Model_inv_(2, 1)*force_roll_desired + Model_inv_(2, 2)*force_pitch_desired;
     
-    float alpha1_left_aileron = 0.0;
-    float alpha2_right_aileron = 0.0;
-    float beta_foil = 0.0;
-    float theta_rudder = atan2(y_objective_ - y_, x_objective_ - x_);
+    double alpha1_left_aileron = 0.0;
+    double alpha2_right_aileron = 0.0;
+    double beta_foil = 0.0;
+    double theta_gouvernail = 0.0;
 
-    // TODO : Add to message
+    msg.servo_foil = beta_foil;
+    msg.servo_gouvernail = theta_gouvernail;
+    msg.servo_aileron_left = alpha1_left_aileron;
+    msg.servo_aileron_right = alpha2_right_aileron;
+    msg.thruster = speed_;  
 
-    // publisher_foil_consigne_->publish(msg);
+    publisher_foil_consigne_->publish(msg);
 
 }
 

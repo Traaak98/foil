@@ -36,7 +36,7 @@ private:
     std::chrono::milliseconds loop_dt_ = 100ms; // loop dt
 
     // TODO: Add Subscriber senix/Altitude
-    rclcpp::Subscription<geometry_msgs::msg::PoseStamped>::SharedPtr subscription_utm_pose_;
+    // TODO: Add Subscriber Position from UTM
     rclcpp::Subscription<sbg_driver::msg::SbgEkfEuler>::SharedPtr subscription_sbg_ekf_euler_;
     rclcpp::Subscription<sbg_driver::msg::SbgGpsVel>::SharedPtr subscription_sbg_gps_vel_;
     rclcpp::Subscription<sbg_driver::msg::SbgGpsHdt>::SharedPtr subscription_sbg_gps_hdt_;
@@ -45,7 +45,6 @@ private:
     void init_parameters();
     void init_interfaces();
     void timer_callback();
-    void utm_pose_callback(const geometry_msgs::msg::PoseStamped::SharedPtr msg);
     void sbg_ekf_euler_callback(const sbg_driver::msg::SbgEkfEuler::SharedPtr msg);
     void sbg_gps_vel_callback(const sbg_driver::msg::SbgGpsVel::SharedPtr msg);
     void sbg_gps_hdt_callback(const sbg_driver::msg::SbgGpsHdt::SharedPtr msg);

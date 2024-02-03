@@ -1,0 +1,144 @@
+<mxfile host="Electron" modified="2024-01-05T16:10:06.837Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/22.1.11 Chrome/114.0.5735.289 Electron/25.9.8 Safari/537.36" etag="QE3OOkURQ1C7ZrOBiF_1" version="22.1.11" type="device">
+  <diagram name="Page-1" id="10Zy6aZKsJeUiQX8Hp7I">
+    <mxGraphModel dx="2189" dy="843" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="5kbAPBs41a94nzaQPjtL-3" value="&lt;font style=&quot;font-size: 17px;&quot;&gt;&lt;b&gt;OBSERVATEUR&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;/b&gt;&lt;br&gt;&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;fillColor=none;strokeWidth=3;strokeColor=#3399FF;" vertex="1" parent="1">
+          <mxGeometry x="-730" y="402" width="320" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="5kbAPBs41a94nzaQPjtL-4" value="&lt;font style=&quot;font-size: 17px;&quot;&gt;&lt;b&gt;ENVIRONNEMENT&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;fillColor=none;strokeWidth=3;strokeColor=#3399FF;" vertex="1" parent="1">
+          <mxGeometry x="-770" y="680" width="720" height="260" as="geometry" />
+        </mxCell>
+        <mxCell id="5kbAPBs41a94nzaQPjtL-5" value="&lt;font style=&quot;font-size: 17px;&quot;&gt;&lt;b&gt;PLANIFICATEUR&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;/b&gt;&lt;br&gt;&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;fillColor=none;strokeWidth=3;strokeColor=#3399FF;" vertex="1" parent="1">
+          <mxGeometry x="-370" y="160" width="320" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="5kbAPBs41a94nzaQPjtL-6" value="&lt;font style=&quot;font-size: 17px;&quot;&gt;&lt;b&gt;ENREGISTREUR&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;/b&gt;&lt;br&gt;&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;fillColor=none;strokeWidth=3;strokeColor=#3399FF;" vertex="1" parent="1">
+          <mxGeometry x="-759" y="161" width="359" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="5kbAPBs41a94nzaQPjtL-7" value="&lt;font style=&quot;font-size: 17px;&quot;&gt;&lt;b&gt;REGULATEUR&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;/b&gt;&lt;br&gt;&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;fillColor=none;strokeWidth=3;strokeColor=#3399FF;" vertex="1" parent="1">
+          <mxGeometry x="-370" y="440" width="320" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="5kbAPBs41a94nzaQPjtL-8" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;Calcul de la commande angulaire du servomoteur.&lt;/font&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;br&gt;Commande en vitesse constante pour la propulsion.&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fa7741;gradientColor=none;" vertex="1" parent="1">
+          <mxGeometry x="-325" y="481" width="230" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="5kbAPBs41a94nzaQPjtL-9" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;Servomoteurs&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fa7741;gradientColor=none;" vertex="1" parent="1">
+          <mxGeometry x="-365" y="740" width="150" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="5kbAPBs41a94nzaQPjtL-10" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;Propulseur&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fa7741;gradientColor=none;" vertex="1" parent="1">
+          <mxGeometry x="-206" y="740" width="150" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="5kbAPBs41a94nzaQPjtL-11" value="IMU + GNSS" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#66ab55;gradientColor=none;fontSize=14;strokeColor=default;" vertex="1" parent="1">
+          <mxGeometry x="-765" y="740" width="150" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="5kbAPBs41a94nzaQPjtL-12" value="Capteurs Acoustiques" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#66ab55;gradientColor=none;fontSize=14;strokeColor=default;" vertex="1" parent="1">
+          <mxGeometry x="-600" y="740" width="150" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="5kbAPBs41a94nzaQPjtL-14" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.25;entryY=1;entryDx=0;entryDy=0;strokeColor=#3333FF;strokeWidth=2;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="5kbAPBs41a94nzaQPjtL-21" target="5kbAPBs41a94nzaQPjtL-20">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="280" y="450" as="sourcePoint" />
+            <mxPoint x="330" y="400" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="-450" y="490" />
+              <mxPoint x="-450" y="380" />
+              <mxPoint x="-265" y="380" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5kbAPBs41a94nzaQPjtL-15" value="&lt;b style=&quot;font-size: 14px;&quot;&gt;&lt;font color=&quot;#3333ff&quot;&gt;cordonnées &lt;br&gt;x,y et z&lt;/font&gt;&lt;br style=&quot;font-size: 14px;&quot;&gt;&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="-413" y="380" width="170" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="5kbAPBs41a94nzaQPjtL-16" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#6600CC;strokeWidth=2;exitX=0.446;exitY=1.007;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" target="5kbAPBs41a94nzaQPjtL-8">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-210.03999999999996" y="341.04999999999995" as="sourcePoint" />
+            <mxPoint x="-206" y="440" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5kbAPBs41a94nzaQPjtL-17" value="&lt;b style=&quot;font-size: 14px;&quot;&gt;&lt;font color=&quot;#6600cc&quot;&gt;Hauteur et orientation&lt;br&gt;consigne&amp;nbsp;&lt;/font&gt;&lt;br style=&quot;font-size: 14px;&quot;&gt;&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="-221" y="375" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="5kbAPBs41a94nzaQPjtL-18" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#000000;strokeWidth=2;exitX=0.148;exitY=1.007;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="5kbAPBs41a94nzaQPjtL-8" target="5kbAPBs41a94nzaQPjtL-9">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-200" y="290" as="sourcePoint" />
+            <mxPoint x="-200" y="410" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5kbAPBs41a94nzaQPjtL-19" value="" style="endArrow=classic;html=1;rounded=0;strokeColor=#000000;strokeWidth=2;exitX=0.839;exitY=1.004;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-131.02999999999975" y="631.5999999999999" as="sourcePoint" />
+            <mxPoint x="-129.99999999999955" y="740" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5kbAPBs41a94nzaQPjtL-20" value="Mission : Rester à 40 cm de l&#39;eau en vol stabilisé (angle de gîte et d&#39;asiette nul)&amp;nbsp;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#66ab55;gradientColor=none;fontSize=14;strokeColor=default;" vertex="1" parent="1">
+          <mxGeometry x="-330" y="190" width="260" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="5kbAPBs41a94nzaQPjtL-21" value="Conversion WGS84 -&amp;gt; Lambert 93" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#66ab55;gradientColor=none;fontSize=14;strokeColor=default;" vertex="1" parent="1">
+          <mxGeometry x="-690" y="445" width="198" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="5kbAPBs41a94nzaQPjtL-22" value="&lt;b style=&quot;&quot;&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;commande en angle et en vitesse&lt;/font&gt;&lt;br style=&quot;font-size: 13px;&quot;&gt;&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="-290" y="640" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="5kbAPBs41a94nzaQPjtL-23" value="" style="endArrow=classic;html=1;rounded=0;strokeColor=#FF3333;strokeWidth=2;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" edge="1" parent="1" target="5kbAPBs41a94nzaQPjtL-8">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-450" y="761" as="sourcePoint" />
+            <mxPoint x="-370" y="518" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="-390" y="761" />
+              <mxPoint x="-390" y="518" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5kbAPBs41a94nzaQPjtL-25" value="" style="endArrow=classic;html=1;rounded=0;strokeColor=#FF3333;strokeWidth=2;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-690" y="740" as="sourcePoint" />
+            <mxPoint x="-325" y="518.5" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="-690" y="720" />
+              <mxPoint x="-390" y="720" />
+              <mxPoint x="-390" y="518" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5kbAPBs41a94nzaQPjtL-26" value="stockage des données capteurs sous forme de rosbag" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#66ab55;gradientColor=none;fontSize=14;strokeColor=default;" vertex="1" parent="1">
+          <mxGeometry x="-695" y="215" width="270" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="5kbAPBs41a94nzaQPjtL-28" value="" style="endArrow=classic;html=1;rounded=0;strokeColor=#FF8000;strokeWidth=2;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" target="5kbAPBs41a94nzaQPjtL-26">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-390" y="660" as="sourcePoint" />
+            <mxPoint x="-530" y="280" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="-760" y="660" />
+              <mxPoint x="-760" y="360" />
+              <mxPoint x="-560" y="360" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5kbAPBs41a94nzaQPjtL-29" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.644;entryY=1.014;entryDx=0;entryDy=0;strokeColor=#FF8000;strokeWidth=2;entryPerimeter=0;" edge="1" parent="1" target="5kbAPBs41a94nzaQPjtL-21">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-560" y="660" as="sourcePoint" />
+            <mxPoint x="-200" y="480" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5kbAPBs41a94nzaQPjtL-30" value="&lt;b style=&quot;font-size: 14px;&quot;&gt;&lt;font color=&quot;#ff8000&quot;&gt;hauteur au-dessus de l&#39;eau, orientation (gîte, asiette et cap), vitesse et position et vidéo&lt;/font&gt;&lt;br style=&quot;font-size: 14px;&quot;&gt;&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="-745" y="570" width="170" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="5kbAPBs41a94nzaQPjtL-31" value="Caméra&amp;nbsp;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#66ab55;gradientColor=none;fontSize=14;strokeColor=default;" vertex="1" parent="1">
+          <mxGeometry x="-690" y="840" width="150" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="5kbAPBs41a94nzaQPjtL-32" value="" style="endArrow=classic;html=1;rounded=0;strokeColor=#FF3333;strokeWidth=2;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" edge="1" parent="1" target="5kbAPBs41a94nzaQPjtL-8">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-540" y="876" as="sourcePoint" />
+            <mxPoint x="-325" y="509.5" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="-390" y="876" />
+              <mxPoint x="-390" y="519" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5kbAPBs41a94nzaQPjtL-33" value="&lt;b style=&quot;font-size: 14px;&quot;&gt;&lt;font color=&quot;#ff0000&quot;&gt;hauteur au-dessus de l&#39;eau, orientation (gîte et asiette)&lt;/font&gt;&lt;br style=&quot;font-size: 14px;&quot;&gt;&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=none;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="-539" y="600" width="140" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
