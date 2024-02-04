@@ -1,9 +1,10 @@
-import rclpy
-from rclpy.node import Node
-from foil_consigne_msg.msg import FoilConsigne
-import serial
 import struct
 import time
+
+import rclpy
+import serial
+from foil_consigne_msg.msg import FoilConsigne
+from rclpy.node import Node
 
 
 # Définir la structure pour stocker les données envoyées
@@ -19,13 +20,22 @@ class CommandData:
 # Définir la structure pour stocker les données reçues
 class ReceivedData:
     def __init__(
-        self, sensor_data1, sensor_data2, sensor_data3, sensor_data4, sensor_data5
+        self,
+        sensor_data1,
+        sensor_data2,
+        sensor_data3,
+        sensor_data4,
+        sensor_data5,
+        sensor_data6,
+        sensor_data7,
     ):
         self.sensor_data1 = sensor_data1
         self.sensor_data2 = sensor_data2
         self.sensor_data3 = sensor_data3
         self.sensor_data4 = sensor_data4
         self.sensor_data5 = sensor_data5
+        self.sensor_data6 = sensor_data6
+        self.sensor_data7 = sensor_data7
 
 
 class Uart(Node):
@@ -34,7 +44,7 @@ class Uart(Node):
         super().__init__("uart")
         self.init_interface()
         self.commands_to_send = CommandData(0.0, 0.0, 0.0, 0.0, 0.0)
-        self.commands_received = ReceivedData(0.0, 0.0, 0.0, 0.0, 0.0)
+        self.commands_received = ReceivedData(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
 
     def init_interface(self):
         # Souscrire au topic donnant les consignes d'angle des servomoteurs
@@ -51,7 +61,7 @@ class Uart(Node):
         self.get_logger().info("Ouverture de la liaison série.")
 
         # Configuration de la communication série
-        self.serial_port = serial.Serial("/dev/ttyUSB0", 115200, timeout=1)
+        self.serial_port = serial.Serial("/dev/ttyArduino", 115200, timeout=1)
 
         time.sleep(1)
         # Vérifier si la liaison série est ouverte
@@ -61,7 +71,7 @@ class Uart(Node):
             self.get_logger().info("Erreur lors de l'ouverture de la liaison série.")
 
         # Créer un minuteur pour appeler la fonction time_callback toutes les 2 secondes
-        self.timer = self.create_timer(2.0, self.time_callback)
+        self.timer = self.create_timer(0.05, self.time_callback)
 
     def servo_angles_callback(self, msg):
         # Lecture des consignes d'angle des servomoteurs et de la commande du thruster
@@ -81,11 +91,6 @@ class Uart(Node):
         self.commands_to_send.command5 = msg.thruster
 
     def time_callback(self):
-        # Code à exécuter à intervalles réguliers
-        self.get_logger().info(
-            "Fonction time_callback appelée à intervalles réguliers."
-        )
-
         # Assurez-vous d'utiliser les attributs corrects de msg
         msg = FoilConsigne()
 
@@ -95,14 +100,11 @@ class Uart(Node):
         # Recevoir des données via UART
         self.commands_received = self.receive_sensor_data()
         if self.commands_received is not None:
-            self.get_logger().info(
-                f"Données du capteur reçues: {self.commands_received.__dict__}"
-            )
-            msg.servo_foil = self.commands_received.sensor_data3
-            msg.servo_gouvernail = self.commands_received.sensor_data4
-            msg.servo_aileron_left = self.commands_received.sensor_data5
-            msg.servo_aileron_right = self.commands_received.sensor_data1
-            msg.thruster = self.commands_received.sensor_data2
+            msg.servo_foil = self.commands_received.sensor_data1
+            msg.servo_gouvernail = self.commands_received.sensor_data2
+            msg.servo_aileron_left = self.commands_received.sensor_data3
+            msg.servo_aileron_right = self.commands_received.sensor_data4
+            msg.thruster = self.commands_received.sensor_data5
 
             # Publier les données du capteur
             self.sensor_data_publisher.publish(msg)
@@ -133,7 +135,7 @@ class Uart(Node):
 
     def receive_sensor_data(self):
         # Lire la taille des données (sizeof(SensorData))
-        data_size = struct.calcsize("fffff")  # Utiliser 'fffff' pour 5 flottants
+        data_size = struct.calcsize("fffffff")  # Utiliser 'fffff' pour 5 flottants
 
         # Lire les données depuis le port série
         raw_data = self.serial_port.read(data_size)
@@ -141,7 +143,7 @@ class Uart(Node):
         # Vérifier si suffisamment de données ont été lues
         if len(raw_data) == data_size:
             # Déballer les données dans la structure SensorData
-            sensor_data = ReceivedData(*struct.unpack("fffff", raw_data))
+            sensor_data = ReceivedData(*struct.unpack("fffffff", raw_data))
             self.get_logger().info(f"Données du capteur reçues: {sensor_data.__dict__}")
 
             return sensor_data
