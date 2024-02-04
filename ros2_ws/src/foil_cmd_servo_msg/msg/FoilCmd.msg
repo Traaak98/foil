@@ -1,0 +1,8 @@
+# Command Message
+float32 cmd_servo_foil
+float32 cmd_servo_gouvernail
+float32 cmd_servo_aileron_left
+float32 cmd_servo_aileron_right
+float32 cmd_thruster
+float32 mode
+float32 emmergency_stop
