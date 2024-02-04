@@ -51,7 +51,7 @@ class Uart(Node):
         self.get_logger().info("Ouverture de la liaison série.")
 
         # Configuration de la communication série
-        self.serial_port = serial.Serial("/dev/ttyArduino", 115200, timeout=1)
+        self.serial_port = serial.Serial("/dev/ttyUSB0", 115200, timeout=1)
 
         time.sleep(1)
         # Vérifier si la liaison série est ouverte
@@ -141,7 +141,7 @@ class Uart(Node):
         # Vérifier si suffisamment de données ont été lues
         if len(raw_data) == data_size:
             # Déballer les données dans la structure SensorData
-            sensor_data = struct.unpack("fffff", raw_data)
+            sensor_data = ReceivedData(*struct.unpack("fffff", raw_data))
             self.get_logger().info(f"Données du capteur reçues: {sensor_data.__dict__}")
 
             return sensor_data
