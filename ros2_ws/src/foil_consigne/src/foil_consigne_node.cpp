@@ -21,7 +21,7 @@ void FoilConsigneNode::init_parameters()
 
 void FoilConsigneNode::init_interfaces()
 {
-    // subscription_foil_state_ = this->create_subscription<foil_state_msg::msg::FoilState>("foil_state", 10, std::bind(&FoilConsigneNode::foil_state_callback, this, std::placeholders::_1));
+    subscription_foil_state_ = this->create_subscription<foil_state_msg::msg::FoilState>("foil_state", 10, std::bind(&FoilConsigneNode::foil_state_callback, this, std::placeholders::_1));
     // subscription_foil_objective_ = this->create_subscription<foil_objective_msg::msg::FoilObjective>("foil_objective", 10, std::bind(&FoilConsigneNode::foil_objective_callback, this, std::placeholders::_1));
     // subscription_foil_height_ = this->create_subscription<foil_height_sensor_message::msg::FoilHeight>("foil_objective", 10, std::bind(&FoilConsigneNode::foil_height_callback, this, std::placeholders::_1));
     publisher_foil_consigne_ = this->create_publisher<foil_consigne_msg::msg::FoilConsigne>("foil_consigne", 10);
@@ -77,20 +77,19 @@ void FoilConsigneNode::timer_callback()
     double alpha_aileron_extrema = 20.0; // TODO: set this parameter
     double speed_extrema = 20.0; // TODO: set this parameter
 
-    // Passage en pourcentage
-    beta_foil = beta_foil/(2*speed_extrema);
-    theta_gouvernail = theta_gouvernail/(2*speed_extrema);
-    alpha1_left_aileron = alpha1_left_aileron/(2*alpha_aileron_extrema);
-    alpha2_right_aileron = alpha2_right_aileron/(2*alpha_aileron_extrema);
-    speed_ = speed_/(speed_extrema);
-
-
     // Test de certaines valeurs 
     beta_foil = 1.0;
     theta_gouvernail = 10.0;
     alpha1_left_aileron = -10.0;
     alpha2_right_aileron = 5.0;
     speed_ = 5.0;
+
+    // Passage en pourcentage
+    beta_foil = beta_foil/(2*speed_extrema);
+    theta_gouvernail = theta_gouvernail/(2*speed_extrema);
+    alpha1_left_aileron = alpha1_left_aileron/(2*alpha_aileron_extrema);
+    alpha2_right_aileron = alpha2_right_aileron/(2*alpha_aileron_extrema);
+    speed_ = speed_/(speed_extrema);
 
     // Envoyer les données à la liaison série (UART)
     msg.servo_foil = 100*beta_foil;

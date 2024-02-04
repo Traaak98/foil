@@ -4,6 +4,7 @@ import time
 import rclpy
 import serial
 from foil_consigne_msg.msg import FoilConsigne
+from foil_cmd_servo_msg.msg import FoilCmd
 from rclpy.node import Node
 
 
@@ -54,7 +55,7 @@ class Uart(Node):
 
         # Créer un publisher pour publier les données du capteur
         self.sensor_data_publisher = self.create_publisher(
-            FoilConsigne, "/controler_data", 10
+            FoilCmd, "/controler_data", 10
         )
 
         self.get_logger().info("Subscribeur et publisher initialisé.")
@@ -90,9 +91,10 @@ class Uart(Node):
         self.commands_to_send.command4 = msg.servo_aileron_right
         self.commands_to_send.command5 = msg.thruster
 
+
     def time_callback(self):
         # Assurez-vous d'utiliser les attributs corrects de msg
-        msg = FoilConsigne()
+        msg = FoilCmd()
 
         # Envoyer des données via UART
         self.send_uart_data(msg)
@@ -100,11 +102,13 @@ class Uart(Node):
         # Recevoir des données via UART
         self.commands_received = self.receive_sensor_data()
         if self.commands_received is not None:
-            msg.servo_foil = self.commands_received.sensor_data1
-            msg.servo_gouvernail = self.commands_received.sensor_data2
-            msg.servo_aileron_left = self.commands_received.sensor_data3
-            msg.servo_aileron_right = self.commands_received.sensor_data4
-            msg.thruster = self.commands_received.sensor_data5
+            msg.cmd_servo_foil = self.commands_received.sensor_data1
+            msg.cmd_servo_gouvernail = self.commands_received.sensor_data2
+            msg.cmd_servo_aileron_left = self.commands_received.sensor_data3
+            msg.cmd_servo_aileron_right = self.commands_received.sensor_data4
+            msg.cmd_thruster = self.commands_received.sensor_data5
+            msg.mode = self.commands_received.sensor_data6
+            msg.emmergency_stop = self.commands_received.sensor_data7
 
             # Publier les données du capteur
             self.sensor_data_publisher.publish(msg)
@@ -112,17 +116,25 @@ class Uart(Node):
             self.get_logger().warn("Erreur lors de la lecture des données du capteur.")
 
     def send_uart_data(self, msg):
-        # command_to_send = self.commands_to_send
-        command_to_send = CommandData(0.0, 1.0, 2.0, 3.0, 4.0)
+        self.get_logger().info(
+            f"Angles consignes des servomoteurs à l'envoie - \
+            servoFoil: {self.commands_to_send.command1}, \
+            servoGouvernail: {self.commands_to_send.command2}, \
+            servoAileronLeft: {self.commands_to_send.command3}, \
+            servoAileronRight: {self.commands_to_send.command4}, \
+            Thruster: {self.commands_to_send.command5}"
+            )
+        
+        # pour tester 
 
         # Emballer les données dans une chaîne binaire
         data_to_send = struct.pack(
             "fffff",
-            command_to_send.command1,
-            command_to_send.command2,
-            command_to_send.command3,
-            command_to_send.command4,
-            command_to_send.command5,
+            self.commands_to_send.command1,
+            self.commands_to_send.command2,
+            self.commands_to_send.command3,
+            self.commands_to_send.command4,
+            self.commands_to_send.command5,
         )
 
         # Envoyer les données via la liaison UART
@@ -130,7 +142,7 @@ class Uart(Node):
 
         # Afficher les données envoyées
         self.get_logger().info(
-            f"Données de commandes envoyées: {command_to_send.__dict__}"
+            f"Données de commandes envoyées: {self.commands_to_send.__dict__}"
         )
 
     def receive_sensor_data(self):
