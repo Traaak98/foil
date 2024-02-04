@@ -107,6 +107,23 @@ Commande gstreamer pour lire le flux vidéo de la webcam sur le réseau:
 gst-launch-1.0 -e -v udpsrc port=5600 close-socket=false multicast-iface=false auto-multicast=true ! application/x-rtp, payload=96 ! rtpjitterbuffer ! rtph264depay ! avdec_h264 ! queue ! autovideosink
 ```
 
+## Servo Binding
+
+PCB order:
+
+1. Foil Arrière
+2. Gouvernail
+3. Servo avant ????
+4. Servo avant ????
+
+## Servo Transport / Remise à zéro
+
+- Foil arrière: Dévisser la petite vis entre la pièce blanche et la pièce noire. NE PAS RETIRER LA PIECE NOIRE
+
+## UART
+
+Renommer dans le node la sortie USB0 (sur le NUC)
+
 
 #### Access Point
 
