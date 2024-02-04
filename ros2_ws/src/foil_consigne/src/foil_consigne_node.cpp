@@ -1,5 +1,6 @@
 #include "foil_consigne/foil_consigne_node.hpp"
 
+
 FoilConsigneNode::FoilConsigneNode() : Node("foil_consigne_node")
 {
     init_parameters();
@@ -22,6 +23,7 @@ void FoilConsigneNode::init_interfaces()
 {
     subscription_foil_state_ = this->create_subscription<foil_state_msg::msg::FoilState>("foil_state", 10, std::bind(&FoilConsigneNode::foil_state_callback, this, std::placeholders::_1));
     subscription_foil_objective_ = this->create_subscription<foil_objective_msg::msg::FoilObjective>("foil_objective", 10, std::bind(&FoilConsigneNode::foil_objective_callback, this, std::placeholders::_1));
+    subscription_foil_height_ = this->create_subscription<foil_height_sensor_message::msg::FoilHeight>("foil_objective", 10, std::bind(&FoilConsigneNode::foil_height_callback, this, std::placeholders::_1));
     publisher_foil_consigne_ = this->create_publisher<foil_consigne_msg::msg::FoilConsigne>("foil_consigne", 10);
 }
 
@@ -69,11 +71,25 @@ void FoilConsigneNode::timer_callback()
     double beta_foil = 0.0;
     double theta_gouvernail = 0.0;
 
-    msg.servo_foil = beta_foil;
-    msg.servo_gouvernail = theta_gouvernail;
-    msg.servo_aileron_left = alpha1_left_aileron;
-    msg.servo_aileron_right = alpha2_right_aileron;
-    msg.thruster = speed_;  
+    // Renvoyer un pourcentage d'angle entre -100 et 100 à la liaison série
+    double beta_foil_extrema = 20.0; // TODO: set this parameter$
+    double theta_gouvernail_extrema = 20.0; // TODO: set this parameter
+    double alpha_aileron_extrema = 20.0; // TODO: set this parameter
+    double speed_extrema = 20.0; // TODO: set this parameter
+
+    // Passage en pourcentage
+    beta_foil = beta_foil/(2*speed_extrema);
+    theta_gouvernail = theta_gouvernail/(2*speed_extrema);
+    alpha1_left_aileron = alpha1_left_aileron/(2*alpha_aileron_extrema);
+    alpha2_right_aileron = alpha2_right_aileron/(2*alpha_aileron_extrema);
+    speed_ = speed_/(speed_extrema);
+
+    // Envoyer les données à la liaison série (UART)
+    msg.servo_foil = 100*beta_foil;
+    msg.servo_gouvernail = 100*theta_gouvernail;
+    msg.servo_aileron_left = 100*alpha1_left_aileron;
+    msg.servo_aileron_right = 100*alpha2_right_aileron;
+    msg.thruster = 100*speed_;  
 
     publisher_foil_consigne_->publish(msg);
 
@@ -104,6 +120,14 @@ void FoilConsigneNode::foil_objective_callback(const foil_objective_msg::msg::Fo
     this->pitch_objective_ = msg->pose.pose.orientation.y;
 
     this->speed_objective_ = msg->speed;
+}
+
+void FoilConsigneNode::foil_height_callback(const foil_height_sensor_message::msg::FoilHeight::SharedPtr msg)
+{
+    this->height_left_ = msg->height_left;
+    this->height_right_ = msg->height_right;
+    this->height_rear_ = msg->height_rear;
+    this->height_potar_ = msg->height_potar;
 }
 
 int main(int argc, char * argv[])
