@@ -1,0 +1,45 @@
+#include <Arduino.h>
+
+#define SOUND_SPEED 0.0340 // cm/µs
+#define LEDC_TIMER_13_BIT 13
+#define LEDC_BASE_FREQ 1    //10Hz
+uint32_t dutyCycle = (pow(2, LEDC_TIMER_13_BIT) - 1) / 10; //1kHz
+
+
+/*Ultrasound 0*/
+#define LEDC_CHANNEL_0 0
+#define TRIGGER_PIN0 26
+
+/*Ultrasound 1*/
+#define LEDC_CHANNEL_1 1
+#define TRIGGER_PIN1 33
+
+/*Ultrasound 2*/
+#define LEDC_CHANNEL_2 2
+#define TRIGGER_PIN2 22
+
+
+
+void setup() {
+
+    Serial.begin(9600);
+
+
+
+    ledcSetup(LEDC_CHANNEL_1, LEDC_BASE_FREQ, LEDC_TIMER_13_BIT);
+    ledcAttachPin(TRIGGER_PIN1, LEDC_CHANNEL_1);
+    ledcWrite(LEDC_CHANNEL_1, dutyCycle);
+
+    delay(333);
+    ledcSetup(LEDC_CHANNEL_0, LEDC_BASE_FREQ, LEDC_TIMER_13_BIT);
+    ledcAttachPin(TRIGGER_PIN0, LEDC_CHANNEL_0);
+    ledcWrite(LEDC_CHANNEL_0, dutyCycle);
+
+    delay(333);
+    ledcSetup(LEDC_CHANNEL_2, LEDC_BASE_FREQ, LEDC_TIMER_13_BIT);
+    ledcAttachPin(TRIGGER_PIN2, LEDC_CHANNEL_2);
+    ledcWrite(LEDC_CHANNEL_2, dutyCycle);
+
+}
+
+void loop() {}
