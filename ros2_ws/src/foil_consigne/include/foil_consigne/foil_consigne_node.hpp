@@ -22,6 +22,7 @@ public:
     ~FoilConsigneNode();
 
 private:
+
     double x_ = 0.0;
     double y_ = 0.0;
     double z_ = 0.0;

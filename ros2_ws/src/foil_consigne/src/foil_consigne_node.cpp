@@ -21,9 +21,9 @@ void FoilConsigneNode::init_parameters()
 
 void FoilConsigneNode::init_interfaces()
 {
-    subscription_foil_state_ = this->create_subscription<foil_state_msg::msg::FoilState>("foil_state", 10, std::bind(&FoilConsigneNode::foil_state_callback, this, std::placeholders::_1));
-    subscription_foil_objective_ = this->create_subscription<foil_objective_msg::msg::FoilObjective>("foil_objective", 10, std::bind(&FoilConsigneNode::foil_objective_callback, this, std::placeholders::_1));
-    subscription_foil_height_ = this->create_subscription<foil_height_sensor_message::msg::FoilHeight>("foil_objective", 10, std::bind(&FoilConsigneNode::foil_height_callback, this, std::placeholders::_1));
+    // subscription_foil_state_ = this->create_subscription<foil_state_msg::msg::FoilState>("foil_state", 10, std::bind(&FoilConsigneNode::foil_state_callback, this, std::placeholders::_1));
+    // subscription_foil_objective_ = this->create_subscription<foil_objective_msg::msg::FoilObjective>("foil_objective", 10, std::bind(&FoilConsigneNode::foil_objective_callback, this, std::placeholders::_1));
+    // subscription_foil_height_ = this->create_subscription<foil_height_sensor_message::msg::FoilHeight>("foil_objective", 10, std::bind(&FoilConsigneNode::foil_height_callback, this, std::placeholders::_1));
     publisher_foil_consigne_ = this->create_publisher<foil_consigne_msg::msg::FoilConsigne>("foil_consigne", 10);
 }
 
@@ -84,12 +84,29 @@ void FoilConsigneNode::timer_callback()
     alpha2_right_aileron = alpha2_right_aileron/(2*alpha_aileron_extrema);
     speed_ = speed_/(speed_extrema);
 
+
+    // Test de certaines valeurs 
+    beta_foil = 1.0;
+    theta_gouvernail = 10.0;
+    alpha1_left_aileron = -10.0;
+    alpha2_right_aileron = 5.0;
+    speed_ = 5.0;
+
     // Envoyer les données à la liaison série (UART)
     msg.servo_foil = 100*beta_foil;
     msg.servo_gouvernail = 100*theta_gouvernail;
     msg.servo_aileron_left = 100*alpha1_left_aileron;
     msg.servo_aileron_right = 100*alpha2_right_aileron;
     msg.thruster = 100*speed_;  
+
+    RCLCPP_INFO(
+    this->get_logger(), 
+    "Foil consigne: servo_foil: %f, servo_gouvernail: %f, servo_aileron_left: %f, servo_aileron_right: %f, thruster: %f",
+    msg.servo_foil, 
+    msg.servo_gouvernail, 
+    msg.servo_aileron_left, 
+    msg.servo_aileron_right, 
+    msg.thruster);
 
     publisher_foil_consigne_->publish(msg);
 
