@@ -9,7 +9,6 @@
 #include "foil_state_msg/msg/foil_state.hpp"
 #include "foil_objective_msg/msg/foil_objective.hpp"
 #include "foil_consigne_msg/msg/foil_consigne.hpp"
-#include "foil_height_sensor_message/msg/foil_height.hpp"
 
 using namespace std::chrono_literals;
 using namespace std;
@@ -44,11 +43,6 @@ private:
 
     double speed_objective_ = 0.0;
 
-    double height_left_ = 0.0;
-    double height_right_ = 0.0;
-    double height_rear_ = 0.0;
-    double height_potar_ = 0.0;
-
     double l = 1.0; // TODO: set this parameter
     double d = 1.0; // TODO: set this parameter
 
@@ -65,7 +59,6 @@ private:
     // TODO: Add Publisher for consigne message
     rclcpp::Subscription<foil_state_msg::msg::FoilState>::SharedPtr subscription_foil_state_;
     rclcpp::Subscription<foil_objective_msg::msg::FoilObjective>::SharedPtr subscription_foil_objective_;
-    rclcpp::Subscription<foil_height_sensor_message::msg::FoilHeight>::SharedPtr subscription_foil_height_;
     rclcpp::Publisher<foil_consigne_msg::msg::FoilConsigne>::SharedPtr publisher_foil_consigne_;
 
     void init_parameters();
@@ -73,7 +66,6 @@ private:
     void timer_callback();
     void foil_state_callback(const foil_state_msg::msg::FoilState::SharedPtr msg);
     void foil_objective_callback(const foil_objective_msg::msg::FoilObjective::SharedPtr msg);
-    void foil_height_callback(const foil_height_sensor_message::msg::FoilHeight::SharedPtr msg);
 };
 
 #endif //BUILD_FOIL_CONSIGNE_NODE_H
