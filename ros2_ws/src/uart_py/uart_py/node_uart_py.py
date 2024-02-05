@@ -1,5 +1,6 @@
 import struct
 import time
+import os 
 
 import rclpy
 import serial
@@ -61,15 +62,27 @@ class Uart(Node):
         self.get_logger().info("Subscribeur et publisher initialisé.")
         self.get_logger().info("Ouverture de la liaison série.")
 
-        # Configuration de la communication série
-        self.serial_port = serial.Serial("/dev/ttyArduino", 115200, timeout=1)
+        while not os.path.exists("/dev/ttyArduino"):
+            self.get_logger().info("Le périphérique /dev/ttyArduino n'est pas connecté ou n'est pas reconnue.")
+            time.sleep(0.5)
 
-        time.sleep(1)
-        # Vérifier si la liaison série est ouverte
-        if self.serial_port.is_open:
-            self.get_logger().info("Liaison série ouverte.")
-        else:
-            self.get_logger().info("Erreur lors de l'ouverture de la liaison série.")
+        # Configuration de la communication série
+        try :
+            self.serial_port = serial.Serial("/dev/ttyArduino", 115200, timeout=1)
+
+            # Temps d'ouverture de la liaison
+            time.sleep(1)
+        
+            # Vérifier si la liaison série est ouverte
+            if self.serial_port.is_open:
+                self.get_logger().info("Liaison série ouverte.")
+            else:
+                self.get_logger().info("Erreur lors de l'ouverture de la liaison série.")
+        
+        except IOError:
+            self.serial_port.close()
+            self.serial_port.open()
+            self.get_logger().info("Port série refermé puis rouvert")
 
         # Créer un minuteur pour appeler la fonction time_callback toutes les 2 secondes
         self.timer = self.create_timer(0.05, self.time_callback)
