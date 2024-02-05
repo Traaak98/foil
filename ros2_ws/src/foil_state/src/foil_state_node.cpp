@@ -6,7 +6,7 @@ FoilStateNode::FoilStateNode() : Node("foil_state_node")
   init_interfaces();
 
   timer_ = this->create_wall_timer(
-          loop_dt_, std::bind(&FoilStateNode::timer_callback, this));
+      loop_dt_, std::bind(&FoilStateNode::timer_callback, this));
 }
 
 FoilStateNode::~FoilStateNode()
@@ -22,6 +22,8 @@ void FoilStateNode::init_interfaces()
   subscription_sbg_ekf_euler_ = this->create_subscription<sbg_driver::msg::SbgEkfEuler>("ekf_euler", 10, std::bind(&FoilStateNode::sbg_ekf_euler_callback, this, std::placeholders::_1));
   subscription_sbg_gps_vel_ = this->create_subscription<sbg_driver::msg::SbgGpsVel>("gps_vel", 10, std::bind(&FoilStateNode::sbg_gps_vel_callback, this, std::placeholders::_1));
   subscription_sbg_gps_hdt_ = this->create_subscription<sbg_driver::msg::SbgGpsHdt>("gps_hdt", 10, std::bind(&FoilStateNode::sbg_gps_hdt_callback, this, std::placeholders::_1));
+  subscription_utm_pose = this->create_subscription<geometry_msgs::msg::PoseStamped>("utm_pose", 10, std::bind(&FoilStateNode::utm_pose_callback, this, std::placeholders::_1));
+  subscription_foil_height_ = this->create_subscription<foil_height_sensor_message::msg::FoilHeight>("esp_data", 10, std::bind(&FoilConsigneNode::foil_height_callback, this, std::placeholders::_1));
   publisher_foil_state_ = this->create_publisher<foil_state_msg::msg::FoilState>("foil_state", 10);
 }
 
@@ -42,6 +44,11 @@ void FoilStateNode::timer_callback()
   msg.speed.x = this->speed_x_;
   msg.speed.y = this->speed_y_;
   msg.speed.z = this->speed_z_;
+
+  msg.height_left = this->height_left_;
+  msg.height_right = this->height_right_;
+  msg.height_rear = this->height_rear_;
+  msg.height_potar = this->height_potar_;
 
   publisher_foil_state_->publish(msg);
 }
@@ -64,10 +71,24 @@ void FoilStateNode::sbg_gps_hdt_callback(const sbg_driver::msg::SbgGpsHdt::Share
   this->yaw_ = msg->true_heading;
 }
 
-int main(int argc, char ** argv)
+void FoilStateNode::utm_pose_callback(const geometry_msgs::msg::PoseStamped::SharedPtr msg)
 {
-  (void) argc;
-  (void) argv;
+  this->x_ = msg->pose.position.x;
+  this->y_ = msg->pose.position.y;
+}
+
+void FoilConsigneNode::foil_height_callback(const foil_height_sensor_message::msg::FoilHeight::SharedPtr msg)
+{
+  this->height_left_ = msg->height_left;
+  this->height_right_ = msg->height_right;
+  this->height_rear_ = msg->height_rear;
+  this->height_potar_ = msg->height_potar;
+}
+
+int main(int argc, char **argv)
+{
+  (void)argc;
+  (void)argv;
 
   rclcpp::init(argc, argv);
   rclcpp::spin(std::make_shared<FoilStateNode>());
