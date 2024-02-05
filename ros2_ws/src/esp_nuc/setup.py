@@ -20,7 +20,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'node_esp_nuc = esp_nuc.node_esp_nuc:main'
+            'esp_nuc = esp_nuc.node_esp_nuc:main'
         ],
     },
 )
