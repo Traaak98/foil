@@ -4,40 +4,47 @@ import os
 
 import rclpy
 import serial
-from foil_consigne_msg.msg import FoilConsigne
 from foil_cmd_servo_msg.msg import FoilCmd
+from foil_consigne_msg.msg import FoilConsigne
 from rclpy.node import Node
 
 
 # Définir la structure pour stocker les données envoyées
 class CommandData:
-    def __init__(self, command1, command2, command3, command4, command5):
-        self.command1 = command1
-        self.command2 = command2
-        self.command3 = command3
-        self.command4 = command4
-        self.command5 = command5
+    def __init__(
+        self,
+        command_servo_foil,
+        command_servo_gouvernail,
+        command_servo_aileron_left,
+        command_servo_aileron_right,
+        command_thruster,
+    ):
+        self.command_servo_foil = command_servo_foil
+        self.command_servo_gouvernail = command_servo_gouvernail
+        self.command_servo_aileron_left = command_servo_aileron_left
+        self.command_servo_aileron_right = command_servo_aileron_right
+        self.command_thruster = command_thruster
 
 
 # Définir la structure pour stocker les données reçues
 class ReceivedData:
     def __init__(
         self,
-        sensor_data1,
-        sensor_data2,
-        sensor_data3,
-        sensor_data4,
-        sensor_data5,
-        sensor_data6,
-        sensor_data7,
+        servo_foil,
+        servo_gouvernail,
+        servo_aileron_left,
+        servo_aileron_right,
+        thruster,
+        mode,
+        emergency_stop,
     ):
-        self.sensor_data1 = sensor_data1
-        self.sensor_data2 = sensor_data2
-        self.sensor_data3 = sensor_data3
-        self.sensor_data4 = sensor_data4
-        self.sensor_data5 = sensor_data5
-        self.sensor_data6 = sensor_data6
-        self.sensor_data7 = sensor_data7
+        self.servo_foil = servo_foil
+        self.servo_gouvernail = servo_gouvernail
+        self.servo_aileron_left = servo_aileron_left
+        self.servo_aileron_right = servo_aileron_right
+        self.thruster = thruster
+        self.mode = mode
+        self.emergency_stop = emergency_stop
 
 
 class Uart(Node):
@@ -91,19 +98,18 @@ class Uart(Node):
         # Lecture des consignes d'angle des servomoteurs et de la commande du thruster
         self.get_logger().info(
             f"Angles des servomoteurs - \
-            servoFoil: {msg.servo_foil}, \
-            servoGouvernail: {msg.servo_gouvernail}, \
-            servoAileronLeft: {msg.servo_aileron_left}, \
-            servoAileronRight: {msg.servo_aileron_right}, \
-            Thruster: {msg.thruster}"
+            servo_foil: {msg.servo_foil}, \
+            servo_gouvernail: {msg.servo_gouvernail}, \
+            servo_aileron_left: {msg.servo_aileron_left}, \
+            servo_aileron_right: {msg.servo_aileron_right}, \
+            thruster: {msg.thruster}"
         )
 
-        self.commands_to_send.command1 = msg.servo_foil
-        self.commands_to_send.command2 = msg.servo_gouvernail
-        self.commands_to_send.command3 = msg.servo_aileron_left
-        self.commands_to_send.command4 = msg.servo_aileron_right
-        self.commands_to_send.command5 = msg.thruster
-
+        self.commands_to_send.command_servo_foil = msg.servo_foil
+        self.commands_to_send.command_servo_gouvernail = msg.servo_gouvernail
+        self.commands_to_send.command_servo_aileron_left = msg.servo_aileron_left
+        self.commands_to_send.command_servo_aileron_right = msg.servo_aileron_right
+        self.commands_to_send.command_thruster = msg.thruster
 
     def time_callback(self):
         # Assurez-vous d'utiliser les attributs corrects de msg
@@ -115,13 +121,13 @@ class Uart(Node):
         # Recevoir des données via UART
         self.commands_received = self.receive_sensor_data()
         if self.commands_received is not None:
-            msg.cmd_servo_foil = self.commands_received.sensor_data1
-            msg.cmd_servo_gouvernail = self.commands_received.sensor_data2
-            msg.cmd_servo_aileron_left = self.commands_received.sensor_data3
-            msg.cmd_servo_aileron_right = self.commands_received.sensor_data4
-            msg.cmd_thruster = self.commands_received.sensor_data5
-            msg.mode = self.commands_received.sensor_data6
-            msg.emmergency_stop = self.commands_received.sensor_data7
+            msg.cmd_servo_foil = self.commands_received.servo_foil
+            msg.cmd_servo_gouvernail = self.commands_received.servo_gouvernail
+            msg.cmd_servo_aileron_left = self.commands_received.servo_aileron_left
+            msg.cmd_servo_aileron_right = self.commands_received.servo_aileron_right
+            msg.cmd_thruster = self.commands_received.thruster
+            msg.mode = self.commands_received.mode
+            msg.emmergency_stop = self.commands_received.emergency_stop
 
             # Publier les données du capteur
             self.sensor_data_publisher.publish(msg)
@@ -131,23 +137,23 @@ class Uart(Node):
     def send_uart_data(self, msg):
         self.get_logger().info(
             f"Angles consignes des servomoteurs à l'envoie - \
-            servoFoil: {self.commands_to_send.command1}, \
-            servoGouvernail: {self.commands_to_send.command2}, \
-            servoAileronLeft: {self.commands_to_send.command3}, \
-            servoAileronRight: {self.commands_to_send.command4}, \
-            Thruster: {self.commands_to_send.command5}"
-            )
-        
-        # pour tester 
+            servoFoil: {self.commands_to_send.command_servo_foil}, \
+            servo_gouvernail: {self.commands_to_send.command_servo_gouvernail}, \
+            servo_aileron_left: {self.commands_to_send.command_servo_aileron_left}, \
+            servo_aileron_right: {self.commands_to_send.command_servo_aileron_right}, \
+            Thruster: {self.commands_to_send.command_thruster}"
+        )
+
+        # pour tester
 
         # Emballer les données dans une chaîne binaire
         data_to_send = struct.pack(
             "fffff",
-            self.commands_to_send.command1,
-            self.commands_to_send.command2,
-            self.commands_to_send.command3,
-            self.commands_to_send.command4,
-            self.commands_to_send.command5,
+            self.commands_to_send.command_servo_foil,
+            self.commands_to_send.command_servo_gouvernail,
+            self.commands_to_send.command_servo_aileron_left,
+            self.commands_to_send.command_servo_aileron_right,
+            self.commands_to_send.command_thruster,
         )
 
         # Envoyer les données via la liaison UART
