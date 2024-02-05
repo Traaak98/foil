@@ -7,14 +7,30 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-# uncomment the following section in order to fill in
-# further dependencies manually.
-# find_package(<dependency> REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(rosidl_default_generators REQUIRED)
+find_package(geometry_msgs REQUIRED)
+find_package(std_msgs REQUIRED)
+find_package(std_srvs REQUIRED)
+#find_package(esp_nuc REQUIRED)
+find_package(foil_cmd_servo_msg REQUIRED)
+find_package(foil_consigne REQUIRED)
+find_package(foil_consigne_msg REQUIRED)
+find_package(foil_height_sensor_message REQUIRED)
+find_package(foil_objective REQUIRED)
+find_package(foil_objective_msg REQUIRED)
+find_package(foil_state REQUIRED)
+find_package(foil_state_msg REQUIRED)
+find_package(sbg_driver REQUIRED)
+find_package(uart_py REQUIRED)
+
+find_package (Eigen3 3.3 REQUIRED NO_MODULE)
 
 install(
         DIRECTORY launch
         DESTINATION share/${PROJECT_NAME}
 )
+
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
