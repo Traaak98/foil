@@ -2,10 +2,11 @@
 
 FoilStateNode::FoilStateNode() : Node("foil_state_node")
 {
-  init_parameters();
-  init_interfaces();
+    init_parameters();
+    init_interfaces();
 
-  timer_ = this->create_wall_timer(
+
+    timer_ = this->create_wall_timer(
       loop_dt_, std::bind(&FoilStateNode::timer_callback, this));
 }
 
@@ -19,9 +20,9 @@ void FoilStateNode::init_parameters()
 
 void FoilStateNode::init_interfaces()
 {
-  subscription_sbg_ekf_euler_ = this->create_subscription<sbg_driver::msg::SbgEkfEuler>("ekf_euler", 10, std::bind(&FoilStateNode::sbg_ekf_euler_callback, this, std::placeholders::_1));
-  subscription_sbg_gps_vel_ = this->create_subscription<sbg_driver::msg::SbgGpsVel>("gps_vel", 10, std::bind(&FoilStateNode::sbg_gps_vel_callback, this, std::placeholders::_1));
-  subscription_sbg_gps_hdt_ = this->create_subscription<sbg_driver::msg::SbgGpsHdt>("gps_hdt", 10, std::bind(&FoilStateNode::sbg_gps_hdt_callback, this, std::placeholders::_1));
+  subscription_sbg_ekf_euler_ = this->create_subscription<sbg_driver::msg::SbgEkfEuler>("/sbg/ekf_euler", 10, std::bind(&FoilStateNode::sbg_ekf_euler_callback, this, std::placeholders::_1));
+  subscription_sbg_gps_vel_ = this->create_subscription<sbg_driver::msg::SbgGpsVel>("/sbg/gps_vel", 10, std::bind(&FoilStateNode::sbg_gps_vel_callback, this, std::placeholders::_1));
+  subscription_sbg_gps_hdt_ = this->create_subscription<sbg_driver::msg::SbgGpsHdt>("/sbg/gps_hdt", 10, std::bind(&FoilStateNode::sbg_gps_hdt_callback, this, std::placeholders::_1));
   subscription_utm_pose = this->create_subscription<geometry_msgs::msg::PoseStamped>("utm_pose", 10, std::bind(&FoilStateNode::utm_pose_callback, this, std::placeholders::_1));
   subscription_foil_height_ = this->create_subscription<foil_height_sensor_message::msg::FoilHeight>("esp_data", 10, std::bind(&FoilStateNode::foil_height_callback, this, std::placeholders::_1));
   publisher_foil_state_ = this->create_publisher<foil_state_msg::msg::FoilState>("foil_state", 10);
@@ -49,6 +50,22 @@ void FoilStateNode::timer_callback()
   msg.height_right = this->height_right_;
   msg.height_rear = this->height_rear_;
   msg.height_potar = this->height_potar_;
+
+  RCLCPP_INFO(this->get_logger(),
+               "Publishing: pos_x = %f pos_y = %f pos_z = %f \n angle_x = %f angle_y = %f angle_z = %f \n speed_x = %f speed_y = %f speed_z = %f \n h_left = %f h_right = %f h_rear = %f h_potar = %f",
+               msg.pose.pose.position.x,
+               msg.pose.pose.position.y,
+               msg.pose.pose.position.z,
+               msg.pose.pose.orientation.x,
+               msg.pose.pose.orientation.y,
+               msg.pose.pose.orientation.z,
+               msg.speed.x,
+               msg.speed.y,
+               msg.speed.z,
+               msg.height_left,
+               msg.height_right,
+               msg.height_rear,
+               msg.height_potar);
 
   publisher_foil_state_->publish(msg);
 }
@@ -91,6 +108,7 @@ int main(int argc, char **argv)
   (void)argv;
 
   rclcpp::init(argc, argv);
+  printf("hello world foil_state package\n");
   rclcpp::spin(std::make_shared<FoilStateNode>());
   rclcpp::shutdown();
 

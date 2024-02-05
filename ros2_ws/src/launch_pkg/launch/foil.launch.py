@@ -47,7 +47,6 @@ def generate_launch_description():
                                                       output='both',
                                                       parameters=[laserscan_params_file])
 
-    rosbag = ExecuteProcess(cmd=['ros2', 'bag', 'record', '-a'],output='screen')
 
     rosbag = ExecuteProcess(cmd=['ros2', 'bag', 'record', '-a'],output='screen')
 
