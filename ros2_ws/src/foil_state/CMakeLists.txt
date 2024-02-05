@@ -9,6 +9,7 @@ find_package(geometry_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(sbg_driver REQUIRED)
 find_package(foil_state_msg REQUIRED)
+find_package(foil_height_sensor_message REQUIRED)
 
 add_executable(foil_state_node src/foil_state_node.cpp)
 
@@ -19,6 +20,7 @@ ament_target_dependencies(foil_state_node
   std_msgs
   sbg_driver
   foil_state_msg
+  foil_height_sensor_message
 )
 
 target_include_directories(foil_state_node PUBLIC
