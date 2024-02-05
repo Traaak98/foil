@@ -28,10 +28,10 @@ class ReceivedNucData:
         sensor_data4,
 
     ):
-        self.sensor_data1 = sensor_data1
-        self.sensor_data2 = sensor_data2
-        self.sensor_data3 = sensor_data3
-        self.sensor_data4 = sensor_data4
+        self.height_left = sensor_data1
+        self.height_right = sensor_data2
+        self.height_rear = sensor_data3
+        self.height_potar = sensor_data4
 
 
 class EspUart(Node):
@@ -40,7 +40,7 @@ class EspUart(Node):
         super().__init__("esp_nuc")
         self.init_interface()
         #self.commands_to_send = CommandData(0.0, 0.0, 0.0, 0.0, 0.0)
-        self.commands_received = ReceivedNucData(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+        self.commands_received = ReceivedNucData(0.0, 0.0, 0.0, 0.0)
 
     def init_interface(self):    
         # Souscrire au topic pouvant contenir des données à envoyer à l'esp32 
@@ -90,10 +90,10 @@ class EspUart(Node):
         # Recevoir des données via UART
         self.commands_received = self.receive_sensor_data()
         if self.commands_received is not None:
-            msg.height_left = self.commands_received.sensor_data1
-            msg.height_right = self.commands_received.sensor_data2
-            msg.height_rear = self.commands_received.sensor_data3
-            msg.height_potar = self.commands_received.sensor_data4
+            msg.height_left = self.commands_received.height_left
+            msg.height_right = self.commands_received.height_right
+            msg.height_rear = self.commands_received.height_rear
+            msg.height_potar = self.commands_received.height_potar
 
             self.get_logger().info(
             f"Données publiées - \
