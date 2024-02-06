@@ -72,7 +72,7 @@ def generate_launch_description():
                                                 output="screen")
 
 
-    rosbag = ExecuteProcess(cmd=['ros2', 'bag', 'record', '-a'],output='screen')
+    rosbag = ExecuteProcess(cmd=['ros2', 'bag', 'record', '-e', '/(sbg/gps_pos|utm_pos|foil_state|foil_consigne|controler_data|foil_objective|velodyne_points|velodyne_packets)'],output='screen')
 
 
     return launch.LaunchDescription([
