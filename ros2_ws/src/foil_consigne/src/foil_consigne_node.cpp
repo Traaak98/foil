@@ -22,7 +22,7 @@ void FoilConsigneNode::init_parameters()
 void FoilConsigneNode::init_interfaces()
 {
     subscription_foil_state_ = this->create_subscription<foil_state_msg::msg::FoilState>("foil_state", 10, std::bind(&FoilConsigneNode::foil_state_callback, this, std::placeholders::_1));
-    // subscription_foil_objective_ = this->create_subscription<foil_objective_msg::msg::FoilObjective>("foil_objective", 10, std::bind(&FoilConsigneNode::foil_objective_callback, this, std::placeholders::_1));
+    subscription_foil_objective_ = this->create_subscription<foil_objective_msg::msg::FoilObjective>("foil_objective", 10, std::bind(&FoilConsigneNode::foil_objective_callback, this, std::placeholders::_1));
     publisher_foil_consigne_ = this->create_publisher<foil_consigne_msg::msg::FoilConsigne>("foil_consigne", 10);
     publisher_forces_actionneurs_ = this->create_publisher<geometry_msgs::msg::Point>("forces_actionneurs", 10);
     publisher_forces_angles_ = this->create_publisher<geometry_msgs::msg::Point>("forces_angles", 10);
@@ -97,11 +97,13 @@ void FoilConsigneNode::timer_callback()
     double theta_gouvernail = 0.0;
 
     // REGULATION CAP :
-//    if (yaw_objective_ < 0){
-//        yaw_objective_+=2*M_PI;
-//    }
-//    else{yaw_objective_+= M_PI;}
-    double yaw_error = sawtooth(yaw_objective_ - yaw_);
+    //    if (yaw_objective_ < 0){
+    //        yaw_objective_+=2*M_PI;
+    //    }
+    //    else{yaw_objective_+= M_PI;}
+    // double yaw_error = sawtooth(yaw_objective_ - yaw_);
+    double yaw_error = yaw_objective_ - yaw_;
+    double kyaw_proportional = 0.5; // TODO: set this parameter
     if (yaw_error >= 0){
         theta_gouvernail += kyaw_proportional*yaw_error;
     }

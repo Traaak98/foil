@@ -48,7 +48,7 @@ void FoilObjectiveNode::timer_callback()
     msg.pose.pose.position.y = y_objective_;
     msg.pose.pose.position.z = z_objective_;
 
-    find_theta_objective()
+    find_theta_objective();
     msg.pose.pose.orientation.x = roll_objective_;
     msg.pose.pose.orientation.y = pitch_objective_;
     msg.pose.pose.orientation.z = yaw_objective_;
