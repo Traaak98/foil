@@ -48,8 +48,11 @@ void FoilObjectiveNode::timer_callback()
     msg.pose.pose.position.y = y_objective_;
     msg.pose.pose.position.z = z_objective_;
 
+    find_theta_objective();
     msg.pose.pose.orientation.x = roll_objective_;
     msg.pose.pose.orientation.y = pitch_objective_;
+    msg.pose.pose.orientation.z = yaw_objective_;
+
 
     end_objective();
     msg.speed = speed_objective_;
@@ -85,10 +88,15 @@ void FoilObjectiveNode::foil_state_callback(const foil_state_msg::msg::FoilState
 }
 
 void FoilObjectiveNode::end_objective(){
-    double d_carre = pow((this->x_ - this->x_objective_), 2) + pow((this->y_-this->y_objective_),2);
-    if (d_carre <= pow(this->R_,2)){
-        this->speed_objective_ = 0;
+    double d_carre = pow((x_ - x_objective_), 2) + pow((y_-y_objective_),2);
+    if (d_carre <= pow(R_,2)){
+        speed_objective_ = 0;
     }
+}
+
+void FoilObjectiveNode::find_theta_objective()
+{
+    yaw_objective_ = atan2((y_objective_ - y_), (x_objective_ - x_));
 }
 
 int main(int argc, char * argv[])
