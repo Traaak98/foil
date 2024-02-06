@@ -46,13 +46,10 @@ void FoilStateNode::timer_callback()
   msg.speed.y = this->speed_y_;
   msg.speed.z = this->speed_z_;
 
-  msg.height_left = this->height_left_;
-  msg.height_right = this->height_right_;
-  msg.height_rear = this->height_rear_;
-  msg.height_potar = this->height_potar_;
+  msg.height_est = this->height_est_;
 
   RCLCPP_INFO(this->get_logger(),
-               "Publishing: \n pos_x = %f pos_y = %f pos_z = %f \n angle_x = %f angle_y = %f angle_z = %f \n speed_x = %f speed_y = %f speed_z = %f \n h_left = %f h_right = %f h_rear = %f h_potar = %f",
+               "Publishing: \n pos_x = %f pos_y = %f pos_z = %f \n angle_x = %f angle_y = %f angle_z = %f \n speed_x = %f speed_y = %f speed_z = %f \n h_est = %f",
                msg.pose.pose.position.x,
                msg.pose.pose.position.y,
                msg.pose.pose.position.z,
@@ -62,10 +59,7 @@ void FoilStateNode::timer_callback()
                msg.speed.x,
                msg.speed.y,
                msg.speed.z,
-               msg.height_left,
-               msg.height_right,
-               msg.height_rear,
-               msg.height_potar);
+               msg.height_est);
 
   publisher_foil_state_->publish(msg);
 }
@@ -96,10 +90,7 @@ void FoilStateNode::utm_pose_callback(const geometry_msgs::msg::PoseStamped::Sha
 
 void FoilStateNode::foil_height_callback(const foil_height_sensor_message::msg::FoilHeight::SharedPtr msg)
 {
-  this->height_left_ = msg->height_left;
-  this->height_right_ = msg->height_right;
-  this->height_rear_ = msg->height_rear;
-  this->height_potar_ = msg->height_potar;
+  this->height_est_ = msg->height_est;
 }
 
 int main(int argc, char **argv)

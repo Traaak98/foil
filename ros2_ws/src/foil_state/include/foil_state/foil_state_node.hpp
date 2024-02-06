@@ -38,6 +38,7 @@ private:
     double height_right_ = 0.0;
     double height_rear_ = 0.0;
     double height_potar_ = 0.0;
+    double height_est_ = 0.0;
 
     rclcpp::TimerBase::SharedPtr timer_;
     std::chrono::milliseconds loop_dt_ = 100ms; // loop dt
