@@ -2,8 +2,8 @@
 
 #define SOUND_SPEED 0.0340 // cm/µs
 #define LEDC_TIMER_13_BIT 13
-static const long LEDC_BASE_FREQ = 1;  //1Hz
-uint32_t dutyCycle = (pow(2, LEDC_TIMER_13_BIT) - 1) / 1000; //1kHz
+static const long LEDC_BASE_FREQ = 20;  //20Hz
+uint32_t dutyCycle = (pow(2, LEDC_TIMER_13_BIT) - 1) / 100; //2kHz
 
 /*Ultrasound 1*/
 #define LEDC_CHANNEL_1 0
@@ -14,8 +14,8 @@ volatile unsigned long measure1_stop = 0;
 
 /*Ultrasound 2*/
 #define LEDC_CHANNEL_2 1
-#define TRIGGER_PIN2 27
-#define ECHO_PIN2 14
+#define TRIGGER_PIN2 19
+#define ECHO_PIN2 18
 volatile unsigned long measure2_start = 0;
 volatile unsigned long measure2_stop = 0;
 
@@ -39,8 +39,8 @@ static const long freq_base = 80000000;
 #define NB_PROCESS 4
 
 struct Distance{
-    float distance1;
-    float distance2;
+    float distance1 = 0;
+    float distance2 = 0;
     float distance3;
     float angle;
 };
@@ -56,7 +56,9 @@ void IRAM_ATTR echo_isr1() {
 void IRAM_ATTR echo_isr2() {
     if (digitalRead(ECHO_PIN2) == HIGH){
         measure2_start = micros();}
-    else{measure2_stop = micros();}
+    else{
+        //Serial.print("received at"); Serial.print(" "); Serial.println(micros());
+        measure2_stop = micros();}
 }
 
 void IRAM_ATTR echo_isr3() {
@@ -121,8 +123,8 @@ void setup() {
         Dist.angle = angle; //TODO: CALIBRER K*sin(a*angle+b)+c
 
         Serial.write(reinterpret_cast<const uint8_t*>(&Dist), sizeof(Distance));
-        //Serial.print(Dist.distance1);Serial.print(" ");Serial.print(Dist.distance2);Serial.print(" ");Serial.print(Dist.distance3);Serial.print(" ");Serial.println(Dist.angle);
-
+        //Serial.print(Dist.distance1);Serial.print("\t");Serial.print(Dist.distance2);Serial.print("\t");Serial.print(Dist.distance3);Serial.print("\t");Serial.println(Dist.angle);
+        //Serial.print(measure1_start);Serial.print(" "); Serial.println(measure1_stop);
         delay(1000/LEDC_BASE_FREQ);
     }
 
