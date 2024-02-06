@@ -47,6 +47,30 @@ def generate_launch_description():
                                                       output='both',
                                                       parameters=[laserscan_params_file])
 
+    foil_state_node = launch_ros.actions.Node(package="foil_state",
+                                                executable="foil_state_node",
+                                                output="screen")
+
+    foil_objective_node = launch_ros.actions.Node(package="foil_objective",
+                                                executable="foil_objective_node",
+                                                output="screen")
+
+    foil_consigne_node = launch_ros.actions.Node(package="foil_consigne",
+                                                executable="foil_consigne_node",
+                                                output="screen")
+
+    utm_proj_node = launch_ros.actions.Node(package="utm_proj",
+                                                executable="utm_proj_node",
+                                                output="screen")
+
+    uart_py_node = launch_ros.actions.Node(package="uart_py",
+                                                executable="node_uart_py",
+                                                output="screen")
+
+    esp_nuc_node = launch_ros.actions.Node(package="esp_nuc",
+                                                executable="esp_nuc_node",
+                                                output="screen")
+
 
     rosbag = ExecuteProcess(cmd=['ros2', 'bag', 'record', '-a'],output='screen')
 
@@ -56,6 +80,12 @@ def generate_launch_description():
         velodyne_driver_node,
         velodyne_transform_node,
         velodyne_laserscan_node,
+        foil_state_node,
+        foil_objective_node,
+        foil_consigne_node,
+        utm_proj_node,
+        uart_py_node,
+        esp_nuc_node,
 
         launch.actions.RegisterEventHandler(
             event_handler=launch.event_handlers.OnProcessExit(
