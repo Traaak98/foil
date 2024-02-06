@@ -70,6 +70,7 @@ private:
     void foil_objective_speed_callback(const std_msgs::msg::Float32::SharedPtr msg);
     void foil_state_callback(const foil_state_msg::msg::FoilState::SharedPtr msg);
     void end_objective();
+    void find_theta_objective();
 };
 
 #endif //BUILD_FOIL_OBJECTIVE_NODE_H
