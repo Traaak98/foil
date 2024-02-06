@@ -52,7 +52,7 @@ void FoilStateNode::timer_callback()
   msg.height_potar = this->height_potar_;
 
   RCLCPP_INFO(this->get_logger(),
-               "Publishing: pos_x = %f pos_y = %f pos_z = %f \n angle_x = %f angle_y = %f angle_z = %f \n speed_x = %f speed_y = %f speed_z = %f \n h_left = %f h_right = %f h_rear = %f h_potar = %f",
+               "Publishing: \n pos_x = %f pos_y = %f pos_z = %f \n angle_x = %f angle_y = %f angle_z = %f \n speed_x = %f speed_y = %f speed_z = %f \n h_left = %f h_right = %f h_rear = %f h_potar = %f",
                msg.pose.pose.position.x,
                msg.pose.pose.position.y,
                msg.pose.pose.position.z,
