@@ -64,11 +64,11 @@ def generate_launch_description():
                                                 output="screen")
 
     uart_py_node = launch_ros.actions.Node(package="uart_py",
-                                                executable="node_uart_py",
+                                                executable="uart",
                                                 output="screen")
 
     esp_nuc_node = launch_ros.actions.Node(package="esp_nuc",
-                                                executable="esp_nuc_node",
+                                                executable="node_esp_nuc",
                                                 output="screen")
 
 
