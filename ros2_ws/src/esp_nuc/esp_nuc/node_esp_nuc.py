@@ -57,7 +57,7 @@ class EspUart(Node):
         self.get_logger().info("Ouverture de la liaison série.")
 
         while not os.path.exists("/dev/ttyESP"):
-            self.get_logger().info("Le périphérique /dev/ttyEsp n'est pas connecté ou n'est pas reconnue.")
+            self.get_logger().info("Le périphérique /dev/ttyESP n'est pas connecté ou n'est pas reconnue.")
             time.sleep(0.5)
 
         # Configuration de la communication série
@@ -95,12 +95,16 @@ class EspUart(Node):
             msg.height_rear = self.commands_received.height_rear
             msg.height_potar = self.commands_received.height_potar
 
+            #/!\ Estimation à 2 capteurs - pas fini
+            msg.height_est = 0.5*(msg.height_left + msg.height_right)
+
             self.get_logger().info(
             f"Données publiées - \
             Height left : {msg.height_left}, \
             Height right: {msg.height_right}, \
             Height rear: {msg.height_rear}, \
             Height potar: {msg.height_potar}, \
+            Height est : {msg.height_est}, \
             ")
 
             # Publier les données du capteur
