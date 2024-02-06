@@ -27,7 +27,7 @@ void UtmProjNode::init_parameters()
 
 void UtmProjNode::init_interfaces()
 {
-  subscription_gps_ = this->create_subscription<sbg_driver::msg::SbgGpsPos>("fix", 10, std::bind(&UtmProjNode::gps_callback, this, std::placeholders::_1));
+  subscription_gps_ = this->create_subscription<sbg_driver::msg::SbgGpsPos>("/sbg/gps_pos", 10, std::bind(&UtmProjNode::gps_callback, this, std::placeholders::_1));
   publisher_pose_ = this->create_publisher<geometry_msgs::msg::PoseStamped>("utm_pose", 10);
 }
 
