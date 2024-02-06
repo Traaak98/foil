@@ -1,6 +1,6 @@
 import struct
 import time
-import os 
+import os
 
 import rclpy
 import serial
@@ -70,22 +70,26 @@ class Uart(Node):
         self.get_logger().info("Ouverture de la liaison série.")
 
         while not os.path.exists("/dev/ttyArduino"):
-            self.get_logger().info("Le périphérique /dev/ttyArduino n'est pas connecté ou n'est pas reconnue.")
+            self.get_logger().info(
+                "Le périphérique /dev/ttyArduino n'est pas connecté ou n'est pas reconnue."
+            )
             time.sleep(0.5)
 
         # Configuration de la communication série
-        try :
+        try:
             self.serial_port = serial.Serial("/dev/ttyArduino", 115200, timeout=1)
 
             # Temps d'ouverture de la liaison
             time.sleep(1)
-        
+
             # Vérifier si la liaison série est ouverte
             if self.serial_port.is_open:
                 self.get_logger().info("Liaison série ouverte.")
             else:
-                self.get_logger().info("Erreur lors de l'ouverture de la liaison série.")
-        
+                self.get_logger().info(
+                    "Erreur lors de l'ouverture de la liaison série."
+                )
+
         except IOError:
             self.serial_port.close()
             self.serial_port.open()
@@ -96,20 +100,22 @@ class Uart(Node):
 
     def servo_angles_callback(self, msg):
         # Lecture des consignes d'angle des servomoteurs et de la commande du thruster
-        self.get_logger().info(
-            f"Angles des servomoteurs - \
-            servo_foil: {msg.servo_foil}, \
-            servo_gouvernail: {msg.servo_gouvernail}, \
-            servo_aileron_left: {msg.servo_aileron_left}, \
-            servo_aileron_right: {msg.servo_aileron_right}, \
-            thruster: {msg.thruster}"
-        )
+        # self.get_logger().info(
+        #     f"Angles des servomoteurs - \
+        #     servo_foil: {msg.servo_foil}, \
+        #     servo_gouvernail: {msg.servo_gouvernail}, \
+        #     servo_aileron_left: {msg.servo_aileron_left}, \
+        #     servo_aileron_right: {msg.servo_aileron_right}, \
+        #     thruster: {msg.thruster}"
+        # )
 
-        self.commands_to_send.command_servo_foil = msg.servo_foil
-        self.commands_to_send.command_servo_gouvernail = msg.servo_gouvernail
-        self.commands_to_send.command_servo_aileron_left = msg.servo_aileron_left
-        self.commands_to_send.command_servo_aileron_right = msg.servo_aileron_right
-        self.commands_to_send.command_thruster = msg.thruster
+        self.commands_to_send.command_servo_foil = float(msg.servo_foil)
+        self.commands_to_send.command_servo_gouvernail = float(msg.servo_gouvernail)
+        self.commands_to_send.command_servo_aileron_left = float(msg.servo_aileron_left)
+        self.commands_to_send.command_servo_aileron_right = float(
+            msg.servo_aileron_right
+        )
+        self.commands_to_send.command_thruster = float(msg.thruster)
 
     def time_callback(self):
         # Assurez-vous d'utiliser les attributs corrects de msg
@@ -135,14 +141,14 @@ class Uart(Node):
             self.get_logger().warn("Erreur lors de la lecture des données du capteur.")
 
     def send_uart_data(self, msg):
-        self.get_logger().info(
-            f"Angles consignes des servomoteurs à l'envoie - \
-            servoFoil: {self.commands_to_send.command_servo_foil}, \
-            servo_gouvernail: {self.commands_to_send.command_servo_gouvernail}, \
-            servo_aileron_left: {self.commands_to_send.command_servo_aileron_left}, \
-            servo_aileron_right: {self.commands_to_send.command_servo_aileron_right}, \
-            Thruster: {self.commands_to_send.command_thruster}"
-        )
+        # self.get_logger().info(
+        #     f"Angles consignes des servomoteurs à l'envoie - \
+        #     servoFoil: {self.commands_to_send.command_servo_foil}, \
+        #     servo_gouvernail: {self.commands_to_send.command_servo_gouvernail}, \
+        #     servo_aileron_left: {self.commands_to_send.command_servo_aileron_left}, \
+        #     servo_aileron_right: {self.commands_to_send.command_servo_aileron_right}, \
+        #     Thruster: {self.commands_to_send.command_thruster}"
+        # )
 
         # pour tester
 

@@ -79,25 +79,18 @@ void FoilConsigneNode::timer_callback()
 
     // On intuite (on a aucune idée de ce que l'on fait mais tracasse, on a qu'un lidar a 4000 balles et une sbg a 2000)
     
-    double alpha1_left_aileron = 0.1*force_aileron_left;
-    double alpha2_right_aileron = 0.1*force_aileron_right;
-    double beta_foil = 0.1*force_foil;
+    double alpha1_left_aileron = force_aileron_left;
+    double alpha2_right_aileron = force_aileron_right;
+    double beta_foil = force_foil;
     double theta_gouvernail = 0.0;
 
     // Renvoyer un pourcentage d'angle entre -100 et 100 à la liaison série
-    double beta_foil_extrema = 10.0; // TODO: set this parameter$
-    double theta_gouvernail_extrema = 10.0; // TODO: set this parameter
-    double alpha_aileron_extrema = 10.0; // TODO: set this parameter
-    double speed_extrema = 20.0; // TODO: set this parameter
+    double beta_foil_extrema = 0.6; // TODO: set this parameter$
+    double theta_gouvernail_extrema = 0.6; // TODO: set this parameter
+    double alpha_aileron_extrema = 0.3; // TODO: set this parameter
+    double speed_extrema = 1.0; // TODO: set this parameter
 
     // TODO: Regarder les angles max et min pour chacun des capteurs.
-
-    // Test de certaines valeurs 
-    beta_foil = 0.5;
-    theta_gouvernail = -0.5;
-    alpha1_left_aileron = 1.0;
-    alpha2_right_aileron = 1.0;
-    speed_ = 0.5;
 
     // Passage en pourcentage
     beta_foil = beta_foil/(2*beta_foil_extrema);
@@ -110,12 +103,14 @@ void FoilConsigneNode::timer_callback()
     msg.servo_foil = 100*beta_foil;
     msg.servo_gouvernail = 100*theta_gouvernail;
     msg.servo_aileron_left = 100*alpha1_left_aileron;
-    msg.servo_aileron_right = 100*alpha2_right_aileron;
-    msg.thruster = 100*speed_;  
+    msg.servo_aileron_right = -100*alpha2_right_aileron;
+    msg.thruster = 100*speed_;
+
+    // TODO: SATURATION DES COMMANDES. NIQUEZ VOUS, ON FLINGUE PAS LES SERVOS CETTE FOIS.
 
     RCLCPP_INFO(
     this->get_logger(), 
-    "Foil consigne: servo_foil: %f, servo_gouvernail: %f, servo_aileron_left: %f, servo_aileron_right: %f, thruster: %f",
+    "Foil consigne: servo_foil: %f, servo_gouvernail: %f, servo_aileron_left: %f, servo_aileron_right: %f, thruster: %f \n---------------------------------------------------------------\n",
     msg.servo_foil, 
     msg.servo_gouvernail, 
     msg.servo_aileron_left, 
