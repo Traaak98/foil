@@ -61,31 +61,47 @@ void FoilConsigneNode::timer_callback()
     double force_roll_desired = kroll_proportional*roll_diff;
     double force_pitch_desired = kpitch_proportional*pitch_diff;
 
+    RCLCPP_INFO(this->get_logger(),
+    "Force u desirée: %f, Force roll désirée: %f, Force pitch désirée: %f",
+    force_u_desired,
+    force_roll_desired,
+    force_pitch_desired);
+
     double force_aileron_left = Model_inv_(0, 0)*force_u_desired + Model_inv_(0, 1)*force_roll_desired + Model_inv_(0, 2)*force_pitch_desired;
     double force_aileron_right = Model_inv_(1, 0)*force_u_desired + Model_inv_(1, 1)*force_roll_desired + Model_inv_(1, 2)*force_pitch_desired;
     double force_foil = Model_inv_(2, 0)*force_u_desired + Model_inv_(2, 1)*force_roll_desired + Model_inv_(2, 2)*force_pitch_desired;
+
+    RCLCPP_INFO(this->get_logger(),
+    "Force aileron left: %f, Force aileron right: %f, Force foil: %f",
+    force_aileron_left,
+    force_aileron_right,
+    force_foil);
+
+    // On intuite (on a aucune idée de ce que l'on fait mais tracasse, on a qu'un lidar a 4000 balles et une sbg a 2000)
     
-    double alpha1_left_aileron = 0.0;
-    double alpha2_right_aileron = 0.0;
-    double beta_foil = 0.0;
+    double alpha1_left_aileron = 0.1*force_aileron_left;
+    double alpha2_right_aileron = 0.1*force_aileron_right;
+    double beta_foil = 0.1*force_foil;
     double theta_gouvernail = 0.0;
 
     // Renvoyer un pourcentage d'angle entre -100 et 100 à la liaison série
-    double beta_foil_extrema = 20.0; // TODO: set this parameter$
-    double theta_gouvernail_extrema = 20.0; // TODO: set this parameter
-    double alpha_aileron_extrema = 20.0; // TODO: set this parameter
+    double beta_foil_extrema = 10.0; // TODO: set this parameter$
+    double theta_gouvernail_extrema = 10.0; // TODO: set this parameter
+    double alpha_aileron_extrema = 10.0; // TODO: set this parameter
     double speed_extrema = 20.0; // TODO: set this parameter
 
+    // TODO: Regarder les angles max et min pour chacun des capteurs.
+
     // Test de certaines valeurs 
-    beta_foil = 1.0;
-    theta_gouvernail = 10.0;
-    alpha1_left_aileron = -10.0;
-    alpha2_right_aileron = 5.0;
-    speed_ = 5.0;
+    beta_foil = 0.5;
+    theta_gouvernail = -0.5;
+    alpha1_left_aileron = 1.0;
+    alpha2_right_aileron = 1.0;
+    speed_ = 0.5;
 
     // Passage en pourcentage
-    beta_foil = beta_foil/(2*speed_extrema);
-    theta_gouvernail = theta_gouvernail/(2*speed_extrema);
+    beta_foil = beta_foil/(2*beta_foil_extrema);
+    theta_gouvernail = theta_gouvernail/(2*theta_gouvernail_extrema);
     alpha1_left_aileron = alpha1_left_aileron/(2*alpha_aileron_extrema);
     alpha2_right_aileron = alpha2_right_aileron/(2*alpha_aileron_extrema);
     speed_ = speed_/(speed_extrema);
