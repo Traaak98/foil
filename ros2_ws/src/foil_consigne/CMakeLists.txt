@@ -8,6 +8,8 @@ endif()
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
+find_package(std_msgs REQUIRED)
+find_package(geometry_msgs REQUIRED)
 find_package(foil_state_msg REQUIRED)
 find_package(foil_objective_msg REQUIRED)
 find_package(foil_consigne_msg REQUIRED)
@@ -19,6 +21,8 @@ add_executable(foil_consigne_node src/foil_consigne_node.cpp)
 
 ament_target_dependencies(foil_consigne_node
   rclcpp
+  std_msgs
+  geometry_msgs
   foil_state_msg
   foil_objective_msg
   foil_consigne_msg

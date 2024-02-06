@@ -24,11 +24,15 @@ void FoilConsigneNode::init_interfaces()
     subscription_foil_state_ = this->create_subscription<foil_state_msg::msg::FoilState>("foil_state", 10, std::bind(&FoilConsigneNode::foil_state_callback, this, std::placeholders::_1));
     // subscription_foil_objective_ = this->create_subscription<foil_objective_msg::msg::FoilObjective>("foil_objective", 10, std::bind(&FoilConsigneNode::foil_objective_callback, this, std::placeholders::_1));
     publisher_foil_consigne_ = this->create_publisher<foil_consigne_msg::msg::FoilConsigne>("foil_consigne", 10);
+    publisher_forces_actionneurs_ = this->create_publisher<geometry_msgs::msg::Point>("forces_actionneurs", 10);
+    publisher_forces_angles_ = this->create_publisher<geometry_msgs::msg::Point>("forces_angles", 10);
 }
 
 void FoilConsigneNode::timer_callback()
 {
     auto msg = foil_consigne_msg::msg::FoilConsigne();
+    auto msg_angles = geometry_msgs::msg::Point();
+    auto msg_actionneurs = geometry_msgs::msg::Point();
 
     double speed_ = sqrt(pow(speed_x_, 2) + pow(speed_y_, 2));
 
@@ -67,6 +71,10 @@ void FoilConsigneNode::timer_callback()
     force_roll_desired,
     force_pitch_desired);
 
+    msg_angles.x = force_u_desired;
+    msg_angles.y = force_roll_desired;
+    msg_angles.z = force_pitch_desired;
+
     double force_aileron_left = Model_inv_(0, 0)*force_u_desired + Model_inv_(0, 1)*force_roll_desired + Model_inv_(0, 2)*force_pitch_desired;
     double force_aileron_right = Model_inv_(1, 0)*force_u_desired + Model_inv_(1, 1)*force_roll_desired + Model_inv_(1, 2)*force_pitch_desired;
     double force_foil = Model_inv_(2, 0)*force_u_desired + Model_inv_(2, 1)*force_roll_desired + Model_inv_(2, 2)*force_pitch_desired;
@@ -76,6 +84,10 @@ void FoilConsigneNode::timer_callback()
     force_aileron_left,
     force_aileron_right,
     force_foil);
+
+    msg_actionneurs.x = force_aileron_left;
+    msg_actionneurs.y = force_aileron_right;
+    msg_actionneurs.z = force_foil;
 
     // On intuite (on a aucune idée de ce que l'on fait mais tracasse, on a qu'un lidar a 4000 balles et une sbg a 2000)
     
@@ -118,7 +130,8 @@ void FoilConsigneNode::timer_callback()
     msg.thruster);
 
     publisher_foil_consigne_->publish(msg);
-
+    publisher_forces_angles_->publish(msg_angles);
+    publisher_forces_actionneurs_->publish(msg_actionneurs);
 }
 
 void FoilConsigneNode::foil_state_callback(const foil_state_msg::msg::FoilState::SharedPtr msg)
