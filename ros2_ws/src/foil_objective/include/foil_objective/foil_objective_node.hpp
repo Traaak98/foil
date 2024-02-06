@@ -5,8 +5,11 @@
 #include "rclcpp/rclcpp.hpp"
 #include "geometry_msgs/msg/point.hpp"
 #include "std_msgs/msg/float32.hpp"
+#include <proj.h>       // PROJ library
+#include <memory>
 
 #include "foil_objective_msg/msg/foil_objective.hpp"
+#include "foil_state_msg/msg/foil_state.hpp"
 
 using namespace std::chrono_literals;
 using namespace std;
@@ -17,6 +20,28 @@ public:
 
     ~FoilObjectiveNode();
 private:
+
+    // Définir un point gps à transformer 
+    double lat_ = 0.0;
+    double lon_ = 0.0;
+
+    PJ_CONTEXT *C;
+    PJ *P;
+    PJ *norm;
+    PJ_COORD a, b;
+
+    double x_ = 0.0;
+    double y_ = 0.0;
+    double z_ = 0.0;
+
+    double roll_ = 0.0;
+    double pitch_ = 0.0;
+    double yaw_ = 0.0;
+
+    double speed_x_ = 0.0;
+    double speed_y_ = 0.0;
+    double speed_z_ = 0.0;
+
     double x_objective_ = 0.0;
     double y_objective_ = 0.0;
     double z_objective_ = 0.0;
@@ -31,6 +56,7 @@ private:
 
     rclcpp::Subscription<geometry_msgs::msg::Point>::SharedPtr subscription_foil_objective_position_;
     rclcpp::Subscription<std_msgs::msg::Float32>::SharedPtr subscription_foil_objective_speed_;
+    rclcpp::Subscription<foil_state_msg::msg::FoilState>::SharedPtr subscription_foil_state_;
     rclcpp::Publisher<foil_objective_msg::msg::FoilObjective>::SharedPtr publisher_foil_objective_;
 
     void init_parameters();
@@ -38,7 +64,7 @@ private:
     void timer_callback();
     void foil_objective_position_callback(const geometry_msgs::msg::Point::SharedPtr msg);
     void foil_objective_speed_callback(const std_msgs::msg::Float32::SharedPtr msg);
-
+    void foil_state_callback(const foil_state_msg::msg::FoilState::SharedPtr msg);
 };
 
 #endif //BUILD_FOIL_OBJECTIVE_NODE_H
