@@ -7,6 +7,7 @@
 #include "std_msgs/msg/float32.hpp"
 #include <proj.h>       // PROJ library
 #include <memory>
+#include <cmath>
 
 #include "foil_objective_msg/msg/foil_objective.hpp"
 #include "foil_state_msg/msg/foil_state.hpp"
@@ -22,8 +23,8 @@ public:
 private:
 
     // Définir un point gps à transformer 
-    double lat_ = 0.0;
-    double lon_ = 0.0;
+    double lat_ = 48.19949;
+    double lon_ = -3.01573;
 
     PJ_CONTEXT *C;
     PJ *P;
@@ -51,6 +52,8 @@ private:
 
     double speed_objective_ = 0.0;
 
+    double R_ = 1;
+
     rclcpp::TimerBase::SharedPtr timer_;
     std::chrono::milliseconds loop_dt_ = 100ms; // loop dt
 
@@ -65,6 +68,7 @@ private:
     void foil_objective_position_callback(const geometry_msgs::msg::Point::SharedPtr msg);
     void foil_objective_speed_callback(const std_msgs::msg::Float32::SharedPtr msg);
     void foil_state_callback(const foil_state_msg::msg::FoilState::SharedPtr msg);
+    void end_objective();
 };
 
 #endif //BUILD_FOIL_OBJECTIVE_NODE_H

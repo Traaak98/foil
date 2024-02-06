@@ -51,6 +51,7 @@ void FoilObjectiveNode::timer_callback()
     msg.pose.pose.orientation.x = roll_objective_;
     msg.pose.pose.orientation.y = pitch_objective_;
 
+    end_objective();
     msg.speed = speed_objective_;
 
     publisher_foil_objective_->publish(msg);
@@ -81,6 +82,13 @@ void FoilObjectiveNode::foil_state_callback(const foil_state_msg::msg::FoilState
     this->speed_x_ = msg->speed.x;
     this->speed_y_ = msg->speed.y;
     this->speed_z_ = msg->speed.z;
+}
+
+void FoilObjectiveNode::end_objective(){
+    double d_carre = pow((this->x_ - this->x_objective_), 2) + pow((this->y_-this->y_objective_),2);
+    if (d_carre <= pow(this->R_,2)){
+        this->speed_objective_ = 0;
+    }
 }
 
 int main(int argc, char * argv[])
