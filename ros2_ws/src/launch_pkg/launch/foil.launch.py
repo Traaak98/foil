@@ -68,11 +68,11 @@ def generate_launch_description():
                                                 output="screen")
 
     esp_nuc_node = launch_ros.actions.Node(package="esp_nuc",
-                                                executable="node_esp_nuc",
+                                                executable="esp_nuc_node",
                                                 output="screen")
 
 
-    rosbag = ExecuteProcess(cmd=['ros2', 'bag', 'record', '-e', '/(sbg/gps_pos|utm_pos|foil_state|foil_consigne|controler_data|foil_objective|velodyne_points|velodyne_packets)'],output='screen')
+    rosbag = ExecuteProcess(cmd=['ros2', 'bag', 'record', '-e', '/(sbg/gps_pos|utm_pos|foil_state|foil_consigne|controler_data|foil_objective|velodyne_points|velodyne_packets|forces_actionneurs|forces_angles)'],output='screen')
 
 
     return launch.LaunchDescription([

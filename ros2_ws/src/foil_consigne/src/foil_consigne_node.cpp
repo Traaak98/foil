@@ -64,11 +64,24 @@ void FoilConsigneNode::timer_callback()
     double force_aileron_left = Model_inv_(0, 0)*force_u_desired + Model_inv_(0, 1)*force_roll_desired + Model_inv_(0, 2)*force_pitch_desired;
     double force_aileron_right = Model_inv_(1, 0)*force_u_desired + Model_inv_(1, 1)*force_roll_desired + Model_inv_(1, 2)*force_pitch_desired;
     double force_foil = Model_inv_(2, 0)*force_u_desired + Model_inv_(2, 1)*force_roll_desired + Model_inv_(2, 2)*force_pitch_desired;
-    
+
     double alpha1_left_aileron = 0.0;
     double alpha2_right_aileron = 0.0;
     double beta_foil = 0.0;
     double theta_gouvernail = 0.0;
+
+    // REGULATION CAP :
+//    if (yaw_objective_ < 0){
+//        yaw_objective_+=2*M_PI;
+//    }
+//    else{yaw_objective_+= M_PI;}
+    double yaw_error = sawtooth(yaw_objective_ - yaw_);
+    if (yaw_error >= 0){
+        theta_gouvernail += kyaw_proportional*yaw_error;
+    }
+    else{
+        theta_gouvernail -= kyaw_proportional*yaw_error;
+    }
 
     // Renvoyer un pourcentage d'angle entre -100 et 100 à la liaison série
     double beta_foil_extrema = 20.0; // TODO: set this parameter$
@@ -133,6 +146,7 @@ void FoilConsigneNode::foil_objective_callback(const foil_objective_msg::msg::Fo
 
     this->roll_objective_ = msg->pose.pose.orientation.x;
     this->pitch_objective_ = msg->pose.pose.orientation.y;
+    this->yaw_objective_ = msg->pose.pose.orientation.z;
 
     this->speed_objective_ = msg->speed;
 }

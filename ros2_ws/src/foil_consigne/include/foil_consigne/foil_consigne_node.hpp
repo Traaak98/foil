@@ -40,6 +40,7 @@ private:
 
     double roll_objective_ = 0.0;
     double pitch_objective_ = 0.0;
+    double yaw_objective_ = 0.0;
 
     double speed_objective_ = 0.0;
 
