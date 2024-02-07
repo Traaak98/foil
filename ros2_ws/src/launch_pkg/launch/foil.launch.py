@@ -81,7 +81,7 @@ def generate_launch_description():
     )
 
     esp_nuc_node = launch_ros.actions.Node(
-        package="esp_nuc", executable="node_esp_nuc", output="screen"
+        package="esp_nuc", executable="esp_nuc_node", output="screen"
     )
 
     rosbag_foil = ExecuteProcess(
@@ -125,6 +125,6 @@ def generate_launch_description():
                 )
             ),
             rosbag_foil,
-            rosbag_vld
+            rosbag_vld,
         ]
     )
