@@ -111,6 +111,10 @@ void FoilConsigneNode::timer_callback()
         theta_gouvernail -= kyaw_proportional*yaw_error;
     }
 
+    // REGULATION VITESSE
+    // CA CARBURE !!!!!!!!!!!!!!
+    speed_ = 0.4;
+
     // Renvoyer un pourcentage d'angle entre -100 et 100 à la liaison série
     double beta_foil_extrema = 0.6; // TODO: set this parameter$
     double theta_gouvernail_extrema = 0.6; // TODO: set this parameter
@@ -162,6 +166,8 @@ void FoilConsigneNode::foil_state_callback(const foil_state_msg::msg::FoilState:
     this->speed_x_ = msg->speed.x;
     this->speed_y_ = msg->speed.y;
     this->speed_z_ = msg->speed.z;
+
+    this->height_est_ = msg->height_est;
 }
 
 void FoilConsigneNode::foil_objective_callback(const foil_objective_msg::msg::FoilObjective::SharedPtr msg)

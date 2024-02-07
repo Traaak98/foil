@@ -45,6 +45,8 @@ private:
 
     double speed_objective_ = 0.0;
 
+    double height_est_ = 0.0;
+
     double l = 1.0; // TODO: set this parameter
     double d = 1.0; // TODO: set this parameter
 

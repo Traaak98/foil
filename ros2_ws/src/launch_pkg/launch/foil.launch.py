@@ -84,13 +84,24 @@ def generate_launch_description():
         package="esp_nuc", executable="node_esp_nuc", output="screen"
     )
 
-    rosbag = ExecuteProcess(
+    rosbag_foil = ExecuteProcess(
         cmd=[
             "ros2",
             "bag",
             "record",
             "-e",
-            "/(sbg/gps_pos|utm_pos|foil_state|foil_consigne|controler_data|foil_objective|velodyne_points|velodyne_packets)",
+            "/(sbg/gps_pos|utm_pos|foil_state|foil_consigne|controler_data|foil_objective)",
+        ],
+        output="screen",
+    )
+
+    rosbag_vld = ExecuteProcess(
+        cmd=[
+            "ros2",
+            "bag",
+            "record",
+            "-e",
+            "/(velodyne_points|velodyne_packets)",
         ],
         output="screen",
     )
@@ -113,6 +124,7 @@ def generate_launch_description():
                     on_exit=[launch.actions.EmitEvent(event=launch.events.Shutdown())],
                 )
             ),
-            rosbag,
+            rosbag_foil,
+            rosbag_vld
         ]
     )
