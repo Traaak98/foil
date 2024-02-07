@@ -95,6 +95,12 @@ class Uart(Node):
             self.serial_port.open()
             self.get_logger().info("Port série refermé puis rouvert")
 
+        init_data = struct.pack(
+            "ffffffffffff", 20, 120, 60, 55, 125, 90, 55, 125, 90, 45, 115, 80
+        )  # Min servo foil, max servo foil, zero servo foil, min servo gouvernail, max servo gouvernail, zero servo gouvernail
+        # Min servo Left, max servo Left, zero servo Left, min servo Right, max servo Right, zero servo Right
+        self.serial_port.write(init_data)
+
         # Créer un minuteur pour appeler la fonction time_callback toutes les 2 secondes
         self.timer = self.create_timer(0.05, self.time_callback)
 
