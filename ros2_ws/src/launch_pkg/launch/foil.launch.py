@@ -84,11 +84,6 @@ def generate_launch_description():
         package="esp_nuc", executable="node_esp_nuc", output="screen"
     )
 
-    currentFolder = os.path.dirname(os.path.abspath(__file__))
-    rosbags_dir = os.path.abspath(os.path.join(
-        currentFolder, os.pardir, os.pardir, os.pardir, os.pardir, os.pardir, 'bag_files'))
-    os.makedirs(rosbags_dir, exist_ok=True)
-
     rosbag_foil = ExecuteProcess(
         cmd=[
             "ros2",
@@ -106,10 +101,9 @@ def generate_launch_description():
             "bag",
             "record",
             "-e",
-            "/(sbg/gps_pos|utm_pos|foil_state|foil_consigne|controler_data|foil_objective|velodyne_points|velodyne_packets)",
+            "/(velodyne_points|velodyne_packets)",
         ],
         output="screen",
-        cwd=rosbags_dir,
     )
 
     return launch.LaunchDescription(
