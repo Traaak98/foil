@@ -115,6 +115,8 @@ void FoilConsigneNode::timer_callback()
     // CA CARBURE !!!!!!!!!!!!!!
     speed_ = 0.4;
 
+    theta_gouvernail = 0.0; //TODO: Remove this parameter
+
     // Renvoyer un pourcentage d'angle entre -100 et 100 à la liaison série
     double beta_foil_extrema = 0.6; // TODO: set this parameter$
     double theta_gouvernail_extrema = 0.6; // TODO: set this parameter

@@ -85,10 +85,30 @@ def generate_launch_description():
     )
 
     currentFolder = os.path.dirname(os.path.abspath(__file__))
-    rosdirVelodyne = os.path.abspath(os.path.join(currentFolder,os.pardir,os.pardir,os.pardir,os.pardir,os.pardir,'bag_files/velodyne'))
-    os.makedirs(rosdirVelodyne,exist_ok=True)
-    rosdirFoil = os.path.abspath(os.path.join(currentFolder,os.pardir,os.pardir,os.pardir,os.pardir,os.pardir,'bag_files/foil'))
-    os.makedirs(rosdirFoil,exist_ok=True)
+    rosdirVelodyne = os.path.abspath(
+        os.path.join(
+            currentFolder,
+            os.pardir,
+            os.pardir,
+            os.pardir,
+            os.pardir,
+            os.pardir,
+            "bag_files/velodyne",
+        )
+    )
+    os.makedirs(rosdirVelodyne, exist_ok=True)
+    rosdirFoil = os.path.abspath(
+        os.path.join(
+            currentFolder,
+            os.pardir,
+            os.pardir,
+            os.pardir,
+            os.pardir,
+            os.pardir,
+            "bag_files/foil",
+        )
+    )
+    os.makedirs(rosdirFoil, exist_ok=True)
 
     rosbag_foil = ExecuteProcess(
         cmd=[
@@ -99,7 +119,7 @@ def generate_launch_description():
             "/(sbg/gps_pos|utm_pos|foil_state|foil_consigne|controler_data|foil_objective|forces_actionneurs|forces_angles)",
         ],
         output="screen",
-        cwd = rosdirFoil,
+        cwd=rosdirFoil,
     )
 
     rosbag_vld = ExecuteProcess(
@@ -111,7 +131,7 @@ def generate_launch_description():
             "/(velodyne_points|velodyne_packets)",
         ],
         output="screen",
-        cwd = rosdirVelodyne,
+        cwd=rosdirVelodyne,
     )
 
     return launch.LaunchDescription(
@@ -125,7 +145,7 @@ def generate_launch_description():
             foil_consigne_node,
             utm_proj_node,
             uart_py_node,
-            esp_nuc_node,
+            # esp_nuc_node,
             launch.actions.RegisterEventHandler(
                 event_handler=launch.event_handlers.OnProcessExit(
                     target_action=velodyne_driver_node,
@@ -133,6 +153,6 @@ def generate_launch_description():
                 )
             ),
             rosbag_foil,
-            rosbag_vld
+            rosbag_vld,
         ]
     )
