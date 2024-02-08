@@ -1,0 +1,26 @@
+#include <Arduino.h>
+
+#define POT_PIN 2
+
+ 
+long distance_mm = 0;
+
+
+void setup() {
+   
+  Serial.begin(9600);
+   
+
+  //pinMode(POT_PIN, INPUT);
+}
+
+void loop() {
+  
+  distance_mm = analogRead(POT_PIN); //Plage de 1 tour - plage morte au début
+   
+  Serial.print(F(">Distance:"));
+  Serial.print(distance_mm);
+  Serial.println(F("|mm"));
+   
+  delay(100);
+}

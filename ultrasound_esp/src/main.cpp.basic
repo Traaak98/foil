@@ -1,7 +1,7 @@
 #include <Arduino.h>
 
-#define TRIGGER_PIN 19
-#define ECHO_PIN    18
+#define TRIGGER_PIN 26
+#define ECHO_PIN    25
 #define SOUND_SPEED 0.34 // mm/µs
  
 const unsigned long MEASURE_TIMEOUT = 25000UL; // 25ms = ~8m à 340m/s
