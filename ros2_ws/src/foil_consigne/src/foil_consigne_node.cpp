@@ -18,8 +18,8 @@ void FoilConsigneNode::init_parameters()
 {
     Model_inv_ = Model_.inverse();
     this->declare_parameter<double>("kz_", 0.5);
-    this->declare_parameter<double>("kroll_", 1);
-    this->declare_parameter<double>("kpitch_", (180/3.1415)/10);
+    this->declare_parameter<double>("kroll_", 1.0);
+    this->declare_parameter<double>("kpitch_", 5.3); // (180/3.1415)/10
     this->declare_parameter<double>("kz_proportional_", 0.5);
     this->declare_parameter<double>("kroll_proportional_", 0.5);
     this->declare_parameter<double>("kpitch_proportional_", 0.5);
