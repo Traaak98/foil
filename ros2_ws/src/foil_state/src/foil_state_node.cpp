@@ -56,9 +56,9 @@ void FoilStateNode::timer_callback()
               msg.pose.pose.position.x,
               msg.pose.pose.position.y,
               msg.pose.pose.position.z,
-              msg.pose.pose.orientation.x,
-              msg.pose.pose.orientation.y,
-              msg.pose.pose.orientation.z,
+              msg.pose.pose.orientation.x * 180 / M_PI,
+              msg.pose.pose.orientation.y * 180 / M_PI,
+              msg.pose.pose.orientation.z * 180 / M_PI,
               msg.vector_speed.x,
               msg.vector_speed.y,
               msg.vector_speed.z,
@@ -83,13 +83,13 @@ void FoilStateNode::sbg_gps_vel_callback(const sbg_driver::msg::SbgGpsVel::Share
 
 void FoilStateNode::sbg_gps_hdt_callback(const sbg_driver::msg::SbgGpsHdt::SharedPtr msg)
 {
-  this->yaw_ = msg->true_heading;  //TODO: cap en degré
+  this->yaw_ = msg->true_heading * M_PI / 180;
 }
 
 void FoilStateNode::utm_pose_callback(const geometry_msgs::msg::PoseStamped::SharedPtr msg)
 {
-  this->x_ = msg->pose.position.x; //TODO: mettre le roulis en degré
-  this->y_ = msg->pose.position.y; //TODO: mettre le tangage en degré
+  this->x_ = msg->pose.position.x;
+  this->y_ = msg->pose.position.y;
 }
 
 void FoilStateNode::foil_height_callback(const foil_height_sensor_message::msg::FoilHeight::SharedPtr msg)
