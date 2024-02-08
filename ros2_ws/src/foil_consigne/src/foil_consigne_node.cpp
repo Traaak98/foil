@@ -28,21 +28,21 @@ void FoilConsigneNode::init_parameters()
 
 void FoilConsigneNode::init_interfaces()
 {
-    subscription_foil_state_ = this->create_subscription<foil_state_msg::msg::FoilState>("foil_state", 10, std::bind(&FoilConsigneNode::foil_state_callback, this, std::placeholders::_1));
-    subscription_foil_objective_ = this->create_subscription<foil_objective_msg::msg::FoilObjective>("foil_objective", 10, std::bind(&FoilConsigneNode::foil_objective_callback, this, std::placeholders::_1));
-    publisher_foil_consigne_ = this->create_publisher<foil_consigne_msg::msg::FoilConsigne>("foil_consigne", 10);
+    subscription_foil_state_ = this->create_subscription<custom_msg::msg::FoilState>("foil_state", 10, std::bind(&FoilConsigneNode::foil_state_callback, this, std::placeholders::_1));
+    subscription_foil_objective_ = this->create_subscription<custom_msg::msg::FoilObjective>("foil_objective", 10, std::bind(&FoilConsigneNode::foil_objective_callback, this, std::placeholders::_1));
+    publisher_foil_consigne_ = this->create_publisher<custom_msg::msg::FoilConsigne>("foil_consigne", 10);
     publisher_forces_actionneurs_ = this->create_publisher<geometry_msgs::msg::Point>("forces_actionneurs", 10);
     publisher_forces_angles_ = this->create_publisher<geometry_msgs::msg::Point>("forces_angles", 10);
-    publisher_parametres_consigne_ = this->create_publisher<foil_consigne_msg::msg::ParamConsigne>("parametres_consigne", 10);
+    publisher_parametres_consigne_ = this->create_publisher<custom_msg::msg::ParamConsigne>("parametres_consigne", 10);
 
 }
 
 void FoilConsigneNode::timer_callback()
 {
-    auto msg = foil_consigne_msg::msg::FoilConsigne();
+    auto msg = custom_msg::msg::FoilConsigne();
     auto msg_angles = geometry_msgs::msg::Point();
     auto msg_actionneurs = geometry_msgs::msg::Point();
-    auto msg_parametres = foil_consigne_msg::msg::ParamConsigne();
+    auto msg_parametres = custom_msg::msg::ParamConsigne();
 
     // double kz_ = 0.5; // TODO: set this parameter
     // double kroll_ = 0.5; // TODO: set this parameter
@@ -201,7 +201,7 @@ void FoilConsigneNode::timer_callback()
     publisher_parametres_consigne_->publish(msg_parametres);
 }
 
-void FoilConsigneNode::foil_state_callback(const foil_state_msg::msg::FoilState::SharedPtr msg)
+void FoilConsigneNode::foil_state_callback(const custom_msg::msg::FoilState::SharedPtr msg)
 {
     this->x_ = msg->pose.pose.position.x;
     this->y_ = msg->pose.pose.position.y;
@@ -219,7 +219,7 @@ void FoilConsigneNode::foil_state_callback(const foil_state_msg::msg::FoilState:
     this->height_est_ = msg->height_est;
 }
 
-void FoilConsigneNode::foil_objective_callback(const foil_objective_msg::msg::FoilObjective::SharedPtr msg)
+void FoilConsigneNode::foil_objective_callback(const custom_msg::msg::FoilObjective::SharedPtr msg)
 {
     this->x_objective_ = msg->pose.pose.position.x;
     this->y_objective_ = msg->pose.pose.position.y;

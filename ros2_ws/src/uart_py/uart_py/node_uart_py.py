@@ -4,8 +4,8 @@ import os
 
 import rclpy
 import serial
-from foil_cmd_servo_msg.msg import FoilCmd
-from foil_consigne_msg.msg import FoilConsigne
+from custom_msg.msg import FoilCmd
+from custom_msg.msg import FoilConsigne
 from rclpy.node import Node
 
 

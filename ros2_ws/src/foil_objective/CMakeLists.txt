@@ -10,8 +10,7 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
-find_package(foil_objective_msg REQUIRED)
-find_package(foil_state_msg REQUIRED)
+find_package(custom_msg REQUIRED)
 
 add_executable(foil_objective_node src/foil_objective_node.cpp)
 
@@ -19,8 +18,7 @@ ament_target_dependencies(foil_objective_node
   rclcpp
   std_msgs
   geometry_msgs
-  foil_objective_msg
-  foil_state_msg
+  custom_msg
 )
 
 target_link_libraries(foil_objective_node "${cpp_typesupport_target}" proj)

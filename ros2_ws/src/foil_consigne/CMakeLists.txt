@@ -10,10 +10,7 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
-find_package(foil_state_msg REQUIRED)
-find_package(foil_objective_msg REQUIRED)
-find_package(foil_consigne_msg REQUIRED)
-find_package(foil_height_sensor_message REQUIRED)
+find_package(custom_msg REQUIRED)
 
 find_package (Eigen3 3.3 REQUIRED NO_MODULE)
 
@@ -23,10 +20,7 @@ ament_target_dependencies(foil_consigne_node
   rclcpp
   std_msgs
   geometry_msgs
-  foil_state_msg
-  foil_objective_msg
-  foil_consigne_msg
-  foil_height_sensor_message
+  custom_msg
 )
 
 target_include_directories(foil_consigne_node PUBLIC

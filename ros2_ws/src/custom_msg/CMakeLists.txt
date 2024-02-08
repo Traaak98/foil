@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(foil_consigne_msg)
+project(custom_msg)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
@@ -12,11 +12,14 @@ find_package(geometry_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
 
 rosidl_generate_interfaces(${PROJECT_NAME}
+        "msg/FoilCmd.msg"
         "msg/FoilConsigne.msg"
         "msg/ParamConsigne.msg"
+        "msg/FoilHeight.msg"
+        "msg/FoilObjective.msg"
+        "msg/FoilState.msg"
         DEPENDENCIES std_msgs geometry_msgs
 )
-
 # uncomment the following section in order to fill in
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)

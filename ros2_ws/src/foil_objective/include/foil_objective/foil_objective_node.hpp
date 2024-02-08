@@ -9,8 +9,8 @@
 #include <memory>
 #include <cmath>
 
-#include "foil_objective_msg/msg/foil_objective.hpp"
-#include "foil_state_msg/msg/foil_state.hpp"
+#include "custom_msg/msg/foil_objective.hpp"
+#include "custom_msg/msg/foil_state.hpp"
 
 using namespace std::chrono_literals;
 using namespace std;
@@ -60,15 +60,15 @@ private:
 
     rclcpp::Subscription<geometry_msgs::msg::Point>::SharedPtr subscription_foil_objective_position_;
     rclcpp::Subscription<std_msgs::msg::Float32>::SharedPtr subscription_foil_objective_speed_;
-    rclcpp::Subscription<foil_state_msg::msg::FoilState>::SharedPtr subscription_foil_state_;
-    rclcpp::Publisher<foil_objective_msg::msg::FoilObjective>::SharedPtr publisher_foil_objective_;
+    rclcpp::Subscription<custom_msg::msg::FoilState>::SharedPtr subscription_foil_state_;
+    rclcpp::Publisher<custom_msg::msg::FoilObjective>::SharedPtr publisher_foil_objective_;
 
     void init_parameters();
     void init_interfaces();
     void timer_callback();
     void foil_objective_position_callback(const geometry_msgs::msg::Point::SharedPtr msg);
     void foil_objective_speed_callback(const std_msgs::msg::Float32::SharedPtr msg);
-    void foil_state_callback(const foil_state_msg::msg::FoilState::SharedPtr msg);
+    void foil_state_callback(const custom_msg::msg::FoilState::SharedPtr msg);
     void end_objective();
     void find_theta_objective();
 };

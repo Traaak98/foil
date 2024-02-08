@@ -24,13 +24,13 @@ void FoilStateNode::init_interfaces()
   subscription_sbg_gps_vel_ = this->create_subscription<sbg_driver::msg::SbgGpsVel>("/sbg/gps_vel", 10, std::bind(&FoilStateNode::sbg_gps_vel_callback, this, std::placeholders::_1));
   subscription_sbg_gps_hdt_ = this->create_subscription<sbg_driver::msg::SbgGpsHdt>("/sbg/gps_hdt", 10, std::bind(&FoilStateNode::sbg_gps_hdt_callback, this, std::placeholders::_1));
   subscription_utm_pose = this->create_subscription<geometry_msgs::msg::PoseStamped>("utm_pose", 10, std::bind(&FoilStateNode::utm_pose_callback, this, std::placeholders::_1));
-  subscription_foil_height_ = this->create_subscription<foil_height_sensor_message::msg::FoilHeight>("esp_data", 10, std::bind(&FoilStateNode::foil_height_callback, this, std::placeholders::_1));
-  publisher_foil_state_ = this->create_publisher<foil_state_msg::msg::FoilState>("foil_state", 10);
+  subscription_foil_height_ = this->create_subscription<custom_msg::msg::FoilHeight>("esp_data", 10, std::bind(&FoilStateNode::foil_height_callback, this, std::placeholders::_1));
+  publisher_foil_state_ = this->create_publisher<custom_msg::msg::FoilState>("foil_state", 10);
 }
 
 void FoilStateNode::timer_callback()
 {
-  auto msg = foil_state_msg::msg::FoilState();
+  auto msg = custom_msg::msg::FoilState();
   msg.header.stamp = this->now();
   msg.header.frame_id = "world";
 
@@ -92,7 +92,7 @@ void FoilStateNode::utm_pose_callback(const geometry_msgs::msg::PoseStamped::Sha
   this->y_ = msg->pose.position.y;
 }
 
-void FoilStateNode::foil_height_callback(const foil_height_sensor_message::msg::FoilHeight::SharedPtr msg)
+void FoilStateNode::foil_height_callback(const custom_msg::msg::FoilHeight::SharedPtr msg)
 {
   this->height_est_ = msg->height_est;
 }
