@@ -82,9 +82,9 @@ void FoilObjectiveNode::foil_state_callback(const foil_state_msg::msg::FoilState
     this->pitch_ = msg->pose.pose.orientation.y;
     this->yaw_ = msg->pose.pose.orientation.z;
 
-    this->speed_x_ = msg->speed.x;
-    this->speed_y_ = msg->speed.y;
-    this->speed_z_ = msg->speed.z;
+    this->speed_x_ = msg->vector_speed.x;
+    this->speed_y_ = msg->vector_speed.y;
+    this->speed_z_ = msg->vector_speed.z;
 }
 
 void FoilObjectiveNode::end_objective(){

@@ -33,6 +33,7 @@ private:
     double speed_x_ = 0.0;
     double speed_y_ = 0.0;
     double speed_z_ = 0.0;
+    double speed_ = 0.0;
 
     double height_left_ = 0.0;
     double height_right_ = 0.0;

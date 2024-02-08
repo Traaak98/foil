@@ -44,8 +44,6 @@ void FoilConsigneNode::timer_callback()
     auto msg_actionneurs = geometry_msgs::msg::Point();
     auto msg_parametres = foil_consigne_msg::msg::ParamConsigne();
 
-    double speed_ = sqrt(pow(speed_x_, 2) + pow(speed_y_, 2));
-
     //double kz_ = 0.5; // TODO: set this parameter
     //double kroll_ = 0.5; // TODO: set this parameter
     //double kpitch_ = 0.5; // TODO: set this parameter
@@ -193,10 +191,11 @@ void FoilConsigneNode::foil_state_callback(const foil_state_msg::msg::FoilState:
     this->pitch_ = msg->pose.pose.orientation.y;
     this->yaw_ = msg->pose.pose.orientation.z;
 
-    this->speed_x_ = msg->speed.x;
-    this->speed_y_ = msg->speed.y;
-    this->speed_z_ = msg->speed.z;
+    this->speed_x_ = msg->vector_speed.x;
+    this->speed_y_ = msg->vector_speed.y;
+    this->speed_z_ = msg->vector_speed.z;
 
+    this->speed_ = msg->speed;
     this->height_est_ = msg->height_est;
 }
 
