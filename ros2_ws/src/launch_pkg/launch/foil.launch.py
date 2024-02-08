@@ -116,7 +116,7 @@ def generate_launch_description():
             "bag",
             "record",
             "-e",
-            "/(sbg/gps_pos|utm_pos|foil_state|foil_consigne|controler_data|foil_objective|forces_actionneurs|forces_angles)",
+            "/(sbg/gps_pos|sbg/imu_data|utm_pos|foil_state|foil_consigne|controler_data|foil_objective|forces_actionneurs|forces_angles)",
         ],
         output="screen",
         cwd=rosdirFoil,
