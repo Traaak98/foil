@@ -51,12 +51,13 @@ private:
 
     double height_est_ = 0.0;
 
-    double l = 2.2; // TODO: set this parameter
-    double d = 0.52; // TODO: set this parameter
+    double l = 2.2;
+    double d = 0.52;
 
     double kz_ = 0.0;
     double kroll_ = 0.0;
     double kpitch_ = 0.0;
+
     double kz_proportional_ = 0.0;
     double kroll_proportional_ = 0.0;
     double kpitch_proportional_ = 0.0;

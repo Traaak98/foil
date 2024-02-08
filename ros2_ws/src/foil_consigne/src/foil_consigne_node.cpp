@@ -19,7 +19,7 @@ void FoilConsigneNode::init_parameters()
     Model_inv_ = Model_.inverse();
     this->declare_parameter<double>("kz_", 0.5);
     this->declare_parameter<double>("kroll_", 1);
-    this->declare_parameter<double>("kpitch_", 0.5);
+    this->declare_parameter<double>("kpitch_", (180/3.1415)/10);
     this->declare_parameter<double>("kz_proportional_", 0.5);
     this->declare_parameter<double>("kroll_proportional_", 0.5);
     this->declare_parameter<double>("kpitch_proportional_", 0.5);
@@ -44,9 +44,9 @@ void FoilConsigneNode::timer_callback()
     auto msg_actionneurs = geometry_msgs::msg::Point();
     auto msg_parametres = foil_consigne_msg::msg::ParamConsigne();
 
-    //double kz_ = 0.5; // TODO: set this parameter
-    //double kroll_ = 0.5; // TODO: set this parameter
-    //double kpitch_ = 0.5; // TODO: set this parameter
+    // double kz_ = 0.5; // TODO: set this parameter
+    // double kroll_ = 0.5; // TODO: set this parameter
+    // double kpitch_ = 0.5; // TODO: set this parameter
 
     kz_ = this->get_parameter("kz_").as_double();
     kroll_ = this->get_parameter("kroll_").as_double();
@@ -73,9 +73,9 @@ void FoilConsigneNode::timer_callback()
     pitch_desired = 0.0; // TODO: TEST PARAMETER. TO BE REMOVED
     double pitch_diff = pitch_desired - pitch_;
 
-    //double kz_proportional = 0.5; // TODO: set this parameter
-    //double kroll_proportional = 0.5; // TODO: set this parameter
-    //double kpitch_proportional = 0.5; // TODO: set this parameter
+    // double kz_proportional = 0.5; // TODO: set this parameter
+    // double kroll_proportional = 0.5; // TODO: set this parameter
+    // double kpitch_proportional = 0.5; // TODO: set this parameter
 
     kz_proportional_ = this->get_parameter("kz_proportional_").as_double();
     kroll_proportional_ = this->get_parameter("kroll_proportional_").as_double();
@@ -157,14 +157,34 @@ void FoilConsigneNode::timer_callback()
     alpha2_right_aileron = alpha2_right_aileron/(2*alpha_aileron_extrema);
     speed_ = speed_/(speed_extrema);
 
+    // ########################################################################################### //
+    // ########################################################################################### //
+    //                                                                                             //
+    //                          REGULATION SIMPLE DU FOIL ARRIERE                                  //
+    //                                                                                             //
+    // ########################################################################################### //
+    // ########################################################################################### //
+
+    pitch_desired = 0.0;
+    pitch_diff = pitch_desired - pitch_;
+    double beta_foil_regul = kpitch_ * pitch_diff;
+    if (beta_foil_regul > 1.){
+        beta_foil_regul = 1.;
+    } else if (beta_foil_regul < -1.){
+        beta_foil_regul = -1.;
+    }
+
+    RCLCPP_INFO(this->get_logger(), "Pitch diff: %f", pitch_diff);
+
+    // TODO: SATURATION DES COMMANDES. NIQUEZ VOUS, ON FLINGUE PAS LES SERVOS CETTE FOIS.
+
+
     // Envoyer les données à la liaison série (UART)
-    msg.servo_foil = 100*beta_foil;
+    msg.servo_foil = 100*beta_foil_regul;
     msg.servo_gouvernail = 100*theta_gouvernail;
     msg.servo_aileron_left = 100*alpha1_left_aileron;
     msg.servo_aileron_right = -100*alpha2_right_aileron;
     msg.thruster = 100*speed_;
-
-    // TODO: SATURATION DES COMMANDES. NIQUEZ VOUS, ON FLINGUE PAS LES SERVOS CETTE FOIS.
 
     RCLCPP_INFO(
     this->get_logger(), 

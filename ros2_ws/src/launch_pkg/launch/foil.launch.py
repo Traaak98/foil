@@ -145,7 +145,7 @@ def generate_launch_description():
             foil_consigne_node,
             utm_proj_node,
             uart_py_node,
-            # esp_nuc_node,
+            esp_nuc_node,
             launch.actions.RegisterEventHandler(
                 event_handler=launch.event_handlers.OnProcessExit(
                     target_action=velodyne_driver_node,
