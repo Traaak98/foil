@@ -10,6 +10,8 @@
 #include "foil_state_msg/msg/foil_state.hpp"
 #include "foil_objective_msg/msg/foil_objective.hpp"
 #include "foil_consigne_msg/msg/foil_consigne.hpp"
+#include "foil_consigne_msg/msg/param_consigne.hpp"
+
 
 using namespace std::chrono_literals;
 using namespace std;
@@ -50,6 +52,14 @@ private:
     double l = 1.0; // TODO: set this parameter
     double d = 1.0; // TODO: set this parameter
 
+    double kz_ = 0.0;
+    double kroll_ = 0.0;
+    double kpitch_ = 0.0;
+    double kz_proportional_ = 0.0;
+    double kroll_proportional_ = 0.0;
+    double kpitch_proportional_ = 0.0;
+    double kyaw_proportional_ = 0.0;
+
     Matrix <double, 3, 3> Model_ {
         {1.0, 1.0, 1.0},
         {d, -d, 0.0},
@@ -66,6 +76,8 @@ private:
     rclcpp::Publisher<foil_consigne_msg::msg::FoilConsigne>::SharedPtr publisher_foil_consigne_;
     rclcpp::Publisher<geometry_msgs::msg::Point>::SharedPtr publisher_forces_actionneurs_;
     rclcpp::Publisher<geometry_msgs::msg::Point>::SharedPtr publisher_forces_angles_;
+    rclcpp::Publisher<foil_consigne_msg::msg::ParamConsigne>::SharedPtr publisher_parametres_consigne_;
+
 
     void init_parameters();
     void init_interfaces();

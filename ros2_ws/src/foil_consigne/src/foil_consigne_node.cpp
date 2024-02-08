@@ -17,6 +17,13 @@ FoilConsigneNode::~FoilConsigneNode()
 void FoilConsigneNode::init_parameters()
 {
     Model_inv_ = Model_.inverse();
+    this->declare_parameter<double>("kz_", 0.5);
+    this->declare_parameter<double>("kroll_", 1);
+    this->declare_parameter<double>("kpitch_", 0.5);
+    this->declare_parameter<double>("kz_proportional_", 0.5);
+    this->declare_parameter<double>("kroll_proportional_", 0.5);
+    this->declare_parameter<double>("kpitch_proportional_", 0.5);
+    this->declare_parameter<double>("kyaw_proportional_", 0.5);
 }
 
 void FoilConsigneNode::init_interfaces()
@@ -26,6 +33,8 @@ void FoilConsigneNode::init_interfaces()
     publisher_foil_consigne_ = this->create_publisher<foil_consigne_msg::msg::FoilConsigne>("foil_consigne", 10);
     publisher_forces_actionneurs_ = this->create_publisher<geometry_msgs::msg::Point>("forces_actionneurs", 10);
     publisher_forces_angles_ = this->create_publisher<geometry_msgs::msg::Point>("forces_angles", 10);
+    publisher_parametres_consigne_ = this->create_publisher<foil_consigne_msg::msg::ParamConsigne>("parametres_consigne", 10);
+
 }
 
 void FoilConsigneNode::timer_callback()
@@ -33,12 +42,21 @@ void FoilConsigneNode::timer_callback()
     auto msg = foil_consigne_msg::msg::FoilConsigne();
     auto msg_angles = geometry_msgs::msg::Point();
     auto msg_actionneurs = geometry_msgs::msg::Point();
+    auto msg_parametres = foil_consigne_msg::msg::ParamConsigne();
 
     double speed_ = sqrt(pow(speed_x_, 2) + pow(speed_y_, 2));
 
-    double kz_ = 0.5; // TODO: set this parameter
-    double kroll_ = 0.5; // TODO: set this parameter
-    double kpitch_ = 0.5; // TODO: set this parameter
+    //double kz_ = 0.5; // TODO: set this parameter
+    //double kroll_ = 0.5; // TODO: set this parameter
+    //double kpitch_ = 0.5; // TODO: set this parameter
+
+    kz_ = this->get_parameter("kz_").as_double();
+    kroll_ = this->get_parameter("kroll_").as_double();
+    kpitch_ = this->get_parameter("kpitch_").as_double();
+
+    msg_parametres.kz = kz_;
+    msg_parametres.kroll = kroll_;
+    msg_parametres.kpitch = kpitch_;
 
     double g = 9.81;
 
@@ -50,20 +68,29 @@ void FoilConsigneNode::timer_callback()
     yaw_desired = 0.0; // TODO: TEST PARAMETER. TO BE REMOVED
     double yaw_diff = yaw_desired - yaw_;
 
-    double roll_desired = atan(yaw_diff*speed_/g);
+    double roll_desired = atan(kroll_*yaw_diff*speed_/g);
     roll_desired = 0.0; // TODO: TEST PARAMETER. TO BE REMOVED
     double roll_diff = roll_desired - roll_;
     double pitch_desired = pitch_objective_*tanh(kpitch_*z_diff);
     pitch_desired = 0.0; // TODO: TEST PARAMETER. TO BE REMOVED
     double pitch_diff = pitch_desired - pitch_;
 
-    double kz_proportional = 0.5; // TODO: set this parameter
-    double kroll_proportional = 0.5; // TODO: set this parameter
-    double kpitch_proportional = 0.5; // TODO: set this parameter
+    //double kz_proportional = 0.5; // TODO: set this parameter
+    //double kroll_proportional = 0.5; // TODO: set this parameter
+    //double kpitch_proportional = 0.5; // TODO: set this parameter
 
-    double force_u_desired = kz_proportional*z_diff;
-    double force_roll_desired = kroll_proportional*roll_diff;
-    double force_pitch_desired = kpitch_proportional*pitch_diff;
+    kz_proportional_ = this->get_parameter("kz_proportional_").as_double();
+    kroll_proportional_ = this->get_parameter("kroll_proportional_").as_double();
+    kpitch_proportional_ = this->get_parameter("kpitch_proportional_").as_double();
+
+    msg_parametres.kz_proportional = kz_proportional_;
+    msg_parametres.kroll_proportional = kroll_proportional_;
+    msg_parametres.kpitch_proportional = kpitch_proportional_;
+
+
+    double force_u_desired = kz_proportional_*z_diff;
+    double force_roll_desired = kroll_proportional_*roll_diff;
+    double force_pitch_desired = kpitch_proportional_*pitch_diff;
 
     RCLCPP_INFO(this->get_logger(),
     "Force u desirée: %f, Force roll désirée: %f, Force pitch désirée: %f",
@@ -103,12 +130,12 @@ void FoilConsigneNode::timer_callback()
     //    else{yaw_objective_+= M_PI;}
     // double yaw_error = sawtooth(yaw_objective_ - yaw_);
     double yaw_error = yaw_objective_ - yaw_;
-    double kyaw_proportional = 0.5; // TODO: set this parameter
+    kyaw_proportional_ = this->get_parameter("kyaw_proportional_").as_double();
     if (yaw_error >= 0){
-        theta_gouvernail += kyaw_proportional*yaw_error;
+        theta_gouvernail += kyaw_proportional_*yaw_error;
     }
     else{
-        theta_gouvernail -= kyaw_proportional*yaw_error;
+        theta_gouvernail -= kyaw_proportional_*yaw_error;
     }
 
     // REGULATION VITESSE
@@ -153,6 +180,7 @@ void FoilConsigneNode::timer_callback()
     publisher_foil_consigne_->publish(msg);
     publisher_forces_angles_->publish(msg_angles);
     publisher_forces_actionneurs_->publish(msg_actionneurs);
+    publisher_parametres_consigne_->publish(msg_parametres);
 }
 
 void FoilConsigneNode::foil_state_callback(const foil_state_msg::msg::FoilState::SharedPtr msg)

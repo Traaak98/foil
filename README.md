@@ -21,6 +21,22 @@ adresse ip velodyne : 192.168.10.91
 ## SBG
 ** Attention ** : La connection au SBG se fait uniquement avec un port USB 3.0.
 
+## Modifier les paramètres de foil_consigne_node :
+Liste des paramètres :
+- kz 
+- kroll
+- kpitch
+- kz_proportional
+- kroll_proportional 
+- kpitch_proportional
+- kyaw_proportional
+
+```bash
+ros2 param set /foil_consigne_node nom_du_parametre valeur
+```
+
+** ATTENTION ** : Mettre la valeur en double même pour les entiers (exemple : 0.0).
+
 ## Mettre une nouveau nom pour un port :
 
 Obtenir les information sur le port :
