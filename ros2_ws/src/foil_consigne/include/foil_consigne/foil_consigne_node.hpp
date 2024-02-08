@@ -7,10 +7,10 @@
 #include "rclcpp/rclcpp.hpp"
 
 #include "geometry_msgs/msg/point.hpp"
-#include "foil_state_msg/msg/foil_state.hpp"
-#include "foil_objective_msg/msg/foil_objective.hpp"
-#include "foil_consigne_msg/msg/foil_consigne.hpp"
-#include "foil_consigne_msg/msg/param_consigne.hpp"
+#include "custom_msg/msg/foil_state.hpp"
+#include "custom_msg/msg/foil_objective.hpp"
+#include "custom_msg/msg/foil_consigne.hpp"
+#include "custom_msg/msg/param_consigne.hpp"
 
 
 using namespace std::chrono_literals;
@@ -74,19 +74,19 @@ private:
     std::chrono::milliseconds loop_dt_ = 100ms; // loop dt
     
     // TODO: Add Publisher for consigne message
-    rclcpp::Subscription<foil_state_msg::msg::FoilState>::SharedPtr subscription_foil_state_;
-    rclcpp::Subscription<foil_objective_msg::msg::FoilObjective>::SharedPtr subscription_foil_objective_;
-    rclcpp::Publisher<foil_consigne_msg::msg::FoilConsigne>::SharedPtr publisher_foil_consigne_;
+    rclcpp::Subscription<custom_msg::msg::FoilState>::SharedPtr subscription_foil_state_;
+    rclcpp::Subscription<custom_msg::msg::FoilObjective>::SharedPtr subscription_foil_objective_;
+    rclcpp::Publisher<custom_msg::msg::FoilConsigne>::SharedPtr publisher_foil_consigne_;
     rclcpp::Publisher<geometry_msgs::msg::Point>::SharedPtr publisher_forces_actionneurs_;
     rclcpp::Publisher<geometry_msgs::msg::Point>::SharedPtr publisher_forces_angles_;
-    rclcpp::Publisher<foil_consigne_msg::msg::ParamConsigne>::SharedPtr publisher_parametres_consigne_;
+    rclcpp::Publisher<custom_msg::msg::ParamConsigne>::SharedPtr publisher_parametres_consigne_;
 
 
     void init_parameters();
     void init_interfaces();
     void timer_callback();
-    void foil_state_callback(const foil_state_msg::msg::FoilState::SharedPtr msg);
-    void foil_objective_callback(const foil_objective_msg::msg::FoilObjective::SharedPtr msg);
+    void foil_state_callback(const custom_msg::msg::FoilState::SharedPtr msg);
+    void foil_objective_callback(const custom_msg::msg::FoilObjective::SharedPtr msg);
 };
 
 #endif //BUILD_FOIL_CONSIGNE_NODE_H

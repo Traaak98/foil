@@ -28,14 +28,14 @@ void FoilObjectiveNode::init_interfaces()
 {
     subscription_foil_objective_position_ = this->create_subscription<geometry_msgs::msg::Point>("foil_objective_position", 10, std::bind(&FoilObjectiveNode::foil_objective_position_callback, this, std::placeholders::_1));
     subscription_foil_objective_speed_ = this->create_subscription<std_msgs::msg::Float32>("foil_objective_speed", 10, std::bind(&FoilObjectiveNode::foil_objective_speed_callback, this, std::placeholders::_1));
-    subscription_foil_state_ = this->create_subscription<foil_state_msg::msg::FoilState>("foil_state", 10, std::bind(&FoilObjectiveNode::foil_state_callback, this, std::placeholders::_1));
-    publisher_foil_objective_ = this->create_publisher<foil_objective_msg::msg::FoilObjective>("foil_objective", 10);
+    subscription_foil_state_ = this->create_subscription<custom_msg::msg::FoilState>("foil_state", 10, std::bind(&FoilObjectiveNode::foil_state_callback, this, std::placeholders::_1));
+    publisher_foil_objective_ = this->create_publisher<custom_msg::msg::FoilObjective>("foil_objective", 10);
 
 }
 
 void FoilObjectiveNode::timer_callback()
 {
-    auto msg = foil_objective_msg::msg::FoilObjective();
+    auto msg = custom_msg::msg::FoilObjective();
 
     a = proj_coord(this->lat_, this->lon_, 0, 0);
     b = proj_trans(this->P, PJ_FWD, a);
@@ -72,7 +72,7 @@ void FoilObjectiveNode::foil_objective_speed_callback(const std_msgs::msg::Float
     speed_objective_ = msg->data;
 }
 
-void FoilObjectiveNode::foil_state_callback(const foil_state_msg::msg::FoilState::SharedPtr msg)
+void FoilObjectiveNode::foil_state_callback(const custom_msg::msg::FoilState::SharedPtr msg)
 {
     this->x_ = msg->pose.pose.position.x;
     this->y_ = msg->pose.pose.position.y;
