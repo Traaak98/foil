@@ -81,18 +81,57 @@ def generate_launch_description():
     )
 
     esp_nuc_node = launch_ros.actions.Node(
-        package="esp_nuc", executable="node_esp_nuc", output="screen"
+        package="esp_nuc", executable="esp_nuc_node", output="screen"
     )
 
-    rosbag = ExecuteProcess(
+    currentFolder = os.path.dirname(os.path.abspath(__file__))
+    rosdirVelodyne = os.path.abspath(
+        os.path.join(
+            currentFolder,
+            os.pardir,
+            os.pardir,
+            os.pardir,
+            os.pardir,
+            os.pardir,
+            "bag_files/velodyne",
+        )
+    )
+    os.makedirs(rosdirVelodyne, exist_ok=True)
+    rosdirFoil = os.path.abspath(
+        os.path.join(
+            currentFolder,
+            os.pardir,
+            os.pardir,
+            os.pardir,
+            os.pardir,
+            os.pardir,
+            "bag_files/foil",
+        )
+    )
+    os.makedirs(rosdirFoil, exist_ok=True)
+
+    rosbag_foil = ExecuteProcess(
         cmd=[
             "ros2",
             "bag",
             "record",
             "-e",
-            "/(sbg/gps_pos|utm_pos|foil_state|foil_consigne|controler_data|foil_objective|velodyne_points|velodyne_packets)",
+            "/(sbg/gps_pos|sbg/imu_data|utm_pos|foil_state|foil_consigne|controler_data|foil_objective|forces_actionneurs|forces_angles|parametres_consigne)",
         ],
         output="screen",
+        cwd=rosdirFoil,
+    )
+
+    rosbag_vld = ExecuteProcess(
+        cmd=[
+            "ros2",
+            "bag",
+            "record",
+            "-e",
+            "/(velodyne_points|velodyne_packets)",
+        ],
+        output="screen",
+        cwd=rosdirVelodyne,
     )
 
     return launch.LaunchDescription(
@@ -113,6 +152,7 @@ def generate_launch_description():
                     on_exit=[launch.actions.EmitEvent(event=launch.events.Shutdown())],
                 )
             ),
-            rosbag,
+            rosbag_foil,
+            rosbag_vld,
         ]
     )

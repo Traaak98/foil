@@ -33,11 +33,13 @@ private:
     double speed_x_ = 0.0;
     double speed_y_ = 0.0;
     double speed_z_ = 0.0;
+    double speed_ = 0.0;
 
     double height_left_ = 0.0;
     double height_right_ = 0.0;
     double height_rear_ = 0.0;
     double height_potar_ = 0.0;
+    double height_est_ = 0.0;
 
     rclcpp::TimerBase::SharedPtr timer_;
     std::chrono::milliseconds loop_dt_ = 100ms; // loop dt

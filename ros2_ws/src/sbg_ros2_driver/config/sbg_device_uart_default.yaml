@@ -8,7 +8,7 @@
       #       output frequency.
       #       The frequency can be reduced in order to reduce CPU consumption but
       #       it can lead to miss data frame and less accurate time stamping.
-      frequency: 20
+      frequency: 400
 
     odometry:
       # Enable ROS odometry messages.
@@ -60,7 +60,7 @@
       # 3 MARINE          Used in marine and underwater applications
       # 4 AIRPLANE        For fixed wings aircraft
       # 5 HELICOPTER      For rotary wing aircraft
-      motionProfile: 3
+      motionProfile: 1
     
     # IMU_ALIGNMENT_LEVER_ARM
     imuAlignementLeverArm:
@@ -104,7 +104,7 @@
       # 2 Module connected on PORT_C
       # 3 Module connected on PORT_D
       # 5 Module is connected internally
-      gnss1ModulePortAssignment: 255
+      gnss1ModulePortAssignment: 5
       # GNSS module sync assignment:
       # 0 Module is disabled
       # 1 Synchronization is done using SYNC_IN_A pin
@@ -114,9 +114,9 @@
       # 5 Synchronization is internal
       # 6 Synchronization is done using SYNC_OUT_A pin
       # 7 Synchronization is done using SYNC_OUT_B pin
-      gnss1ModuleSyncAssignment: 0
+      gnss1ModuleSyncAssignment: 5
       # RTCM input port assignment for Ellipse-N DGPS (see gnss1ModulePortAssignment for values)
-      rtcmPortAssignment: 255
+      rtcmPortAssignment: 5
       # Odometer module pin assignment
       # 0 Odometer is disabled
       # 1 Odometer connected only to ODO_A (unidirectional).
@@ -163,7 +163,7 @@
       gnss_model_id: 107
     
       #GNSS primary antenna lever arm in IMU X axis (m)
-      primaryLeverArmX: -1.25
+      primaryLeverArmX: 0.71
       #GNSS primary antenna lever arm in IMU Y axis (m)
       primaryLeverArmY: 0.01
       #GNSS primary antenna lever arm in IMU Z axis (m)
@@ -172,7 +172,7 @@
       primaryLeverPrecise: true
     
       #GNSS secondary antenna lever arm in IMU X axis (m)
-      secondaryLeverArmX: 0.71
+      secondaryLeverArmX: -1.25
       #GNSS secondary antenna lever arm in IMU Y axis (m)
       secondaryLeverArmY: 0.01
       #GNSS secondary antenna lever arm in IMU Z axis (m)
@@ -251,7 +251,7 @@
 
       # Ros standard output:
       # Note: If true publish ROS standard messages.
-      ros_standard: true
+      ros_standard: false
 
       # Frame convention:
       # Note: If true messages are expressed in the ENU convention.

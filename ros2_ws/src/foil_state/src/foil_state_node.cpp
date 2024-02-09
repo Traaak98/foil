@@ -34,6 +34,8 @@ void FoilStateNode::timer_callback()
   msg.header.stamp = this->now();
   msg.header.frame_id = "world";
 
+  speed_ = sqrt(pow(speed_x_, 2) + pow(speed_y_, 2));
+
   msg.pose.pose.position.x = this->x_;
   msg.pose.pose.position.y = this->y_;
   msg.pose.pose.position.z = this->z_;
@@ -42,30 +44,26 @@ void FoilStateNode::timer_callback()
   msg.pose.pose.orientation.y = this->pitch_;
   msg.pose.pose.orientation.z = this->yaw_;
 
-  msg.speed.x = this->speed_x_;
-  msg.speed.y = this->speed_y_;
-  msg.speed.z = this->speed_z_;
+  msg.vector_speed.x = this->speed_x_;
+  msg.vector_speed.y = this->speed_y_;
+  msg.vector_speed.z = this->speed_z_;
+  msg.speed = this->speed_;
 
-  msg.height_left = this->height_left_;
-  msg.height_right = this->height_right_;
-  msg.height_rear = this->height_rear_;
-  msg.height_potar = this->height_potar_;
+  msg.height_est = this->height_est_;
 
   RCLCPP_INFO(this->get_logger(),
-               "Publishing: \n pos_x = %f pos_y = %f pos_z = %f \n angle_x = %f angle_y = %f angle_z = %f \n speed_x = %f speed_y = %f speed_z = %f \n h_left = %f h_right = %f h_rear = %f h_potar = %f",
-               msg.pose.pose.position.x,
-               msg.pose.pose.position.y,
-               msg.pose.pose.position.z,
-               msg.pose.pose.orientation.x,
-               msg.pose.pose.orientation.y,
-               msg.pose.pose.orientation.z,
-               msg.speed.x,
-               msg.speed.y,
-               msg.speed.z,
-               msg.height_left,
-               msg.height_right,
-               msg.height_rear,
-               msg.height_potar);
+              "Publishing: \n pos_x = %f pos_y = %f pos_z = %f \n angle_x = %f angle_y = %f angle_z = %f \n speed_x = %f speed_y = %f speed_z = %f \n speed_ = %f \n h_est = %f",
+              msg.pose.pose.position.x,
+              msg.pose.pose.position.y,
+              msg.pose.pose.position.z,
+              msg.pose.pose.orientation.x * 180 / M_PI,
+              msg.pose.pose.orientation.y * 180 / M_PI,
+              msg.pose.pose.orientation.z * 180 / M_PI,
+              msg.vector_speed.x,
+              msg.vector_speed.y,
+              msg.vector_speed.z,
+              msg.speed,
+              msg.height_est);
 
   publisher_foil_state_->publish(msg);
 }
@@ -85,7 +83,7 @@ void FoilStateNode::sbg_gps_vel_callback(const sbg_driver::msg::SbgGpsVel::Share
 
 void FoilStateNode::sbg_gps_hdt_callback(const sbg_driver::msg::SbgGpsHdt::SharedPtr msg)
 {
-  this->yaw_ = msg->true_heading;
+  this->yaw_ = msg->true_heading * M_PI / 180;
 }
 
 void FoilStateNode::utm_pose_callback(const geometry_msgs::msg::PoseStamped::SharedPtr msg)
@@ -96,10 +94,7 @@ void FoilStateNode::utm_pose_callback(const geometry_msgs::msg::PoseStamped::Sha
 
 void FoilStateNode::foil_height_callback(const foil_height_sensor_message::msg::FoilHeight::SharedPtr msg)
 {
-  this->height_left_ = msg->height_left;
-  this->height_right_ = msg->height_right;
-  this->height_rear_ = msg->height_rear;
-  this->height_potar_ = msg->height_potar;
+  this->height_est_ = msg->height_est;
 }
 
 int main(int argc, char **argv)
