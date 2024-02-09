@@ -4,7 +4,7 @@ import os
 
 import rclpy
 import serial
-from custom_message.msg import FoilHeight
+from custom_msg.msg import FoilHeight
 from rclpy.node import Node
 
 
