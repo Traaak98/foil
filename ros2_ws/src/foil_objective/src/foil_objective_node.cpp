@@ -11,7 +11,6 @@ FoilObjectiveNode::FoilObjectiveNode() : Node("foil_objective_node") {
     proj_destroy(this->P);
     this->P = this->norm;
 
-
     timer_ = this->create_wall_timer(
         loop_dt_, std::bind(&FoilObjectiveNode::timer_callback, this));
 }
@@ -27,10 +26,8 @@ void FoilObjectiveNode::init_parameters()
 void FoilObjectiveNode::init_interfaces()
 {
     subscription_foil_objective_position_ = this->create_subscription<geometry_msgs::msg::Point>("foil_objective_position", 10, std::bind(&FoilObjectiveNode::foil_objective_position_callback, this, std::placeholders::_1));
-    subscription_foil_objective_speed_ = this->create_subscription<std_msgs::msg::Float32>("foil_objective_speed", 10, std::bind(&FoilObjectiveNode::foil_objective_speed_callback, this, std::placeholders::_1));
     subscription_foil_state_ = this->create_subscription<custom_msg::msg::FoilState>("foil_state", 10, std::bind(&FoilObjectiveNode::foil_state_callback, this, std::placeholders::_1));
     publisher_foil_objective_ = this->create_publisher<custom_msg::msg::FoilObjective>("foil_objective", 10);
-
 }
 
 void FoilObjectiveNode::timer_callback()
@@ -55,7 +52,7 @@ void FoilObjectiveNode::timer_callback()
 
 
     end_objective();
-    msg.speed = speed_objective_;
+    msg.objective = objective_;
 
     publisher_foil_objective_->publish(msg);
 }
@@ -65,11 +62,6 @@ void FoilObjectiveNode::foil_objective_position_callback(const geometry_msgs::ms
     x_objective_ = msg->x;
     y_objective_ = msg->y;
     z_objective_ = msg->z;
-}
-
-void FoilObjectiveNode::foil_objective_speed_callback(const std_msgs::msg::Float32::SharedPtr msg)
-{
-    speed_objective_ = msg->data;
 }
 
 void FoilObjectiveNode::foil_state_callback(const custom_msg::msg::FoilState::SharedPtr msg)
@@ -89,8 +81,10 @@ void FoilObjectiveNode::foil_state_callback(const custom_msg::msg::FoilState::Sh
 
 void FoilObjectiveNode::end_objective(){
     double d_carre = pow((x_ - x_objective_), 2) + pow((y_-y_objective_),2);
-    if (d_carre <= pow(R_,2)){
-        speed_objective_ = 0;
+    if (d_carre <= pow(R_,2)) {
+        objective_ = true;
+    } else {
+        objective_ = false;
     }
 }
 
