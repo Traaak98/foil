@@ -24,6 +24,7 @@ void FoilConsigneNode::init_parameters()
     this->declare_parameter<double>("kroll_proportional_", 0.5);
     this->declare_parameter<double>("kpitch_proportional_", 0.5);
     this->declare_parameter<double>("kyaw_proportional_", 0.5);
+    //TODO : kspeed_ 
 }
 
 void FoilConsigneNode::init_interfaces()
@@ -58,20 +59,20 @@ void FoilConsigneNode::timer_callback()
 
     double g = 9.81;
 
-    double z_desired = z_objective_*tanh(kz_*speed_);
-    z_desired = z_; // TODO: TEST PARAMETER. TO BE REMOVED
-    double z_diff = z_desired - z_;
+    // double z_desired = z_objective_*tanh(kz_*speed_);
+    // z_desired = z_; // TODO: TEST PARAMETER. TO BE REMOVED
+    // double z_diff = z_desired - z_;
 
-    double yaw_desired = atan2(y_objective_ - y_, x_objective_ - x_);
-    yaw_desired = 0.0; // TODO: TEST PARAMETER. TO BE REMOVED
-    double yaw_diff = yaw_desired - yaw_;
+    // double yaw_desired = atan2(y_objective_ - y_, x_objective_ - x_);
+    // yaw_desired = 0.0; // TODO: TEST PARAMETER. TO BE REMOVED
+    // double yaw_diff = yaw_desired - yaw_;
 
-    double roll_desired = atan(kroll_*yaw_diff*speed_/g);
-    roll_desired = 0.0; // TODO: TEST PARAMETER. TO BE REMOVED
-    double roll_diff = roll_desired - roll_;
-    double pitch_desired = pitch_objective_*tanh(kpitch_*z_diff);
-    pitch_desired = 0.0; // TODO: TEST PARAMETER. TO BE REMOVED
-    double pitch_diff = pitch_desired - pitch_;
+    // double roll_desired = atan(kroll_*yaw_diff*speed_/g);
+    // roll_desired = 0.0; // TODO: TEST PARAMETER. TO BE REMOVED
+    // double roll_diff = roll_desired - roll_;
+    // double pitch_desired = pitch_objective_*tanh(kpitch_*z_diff);
+    // pitch_desired = 0.0; // TODO: TEST PARAMETER. TO BE REMOVED
+    // double pitch_diff = pitch_desired - pitch_;
 
     // double kz_proportional = 0.5; // TODO: set this parameter
     // double kroll_proportional = 0.5; // TODO: set this parameter
@@ -121,12 +122,22 @@ void FoilConsigneNode::timer_callback()
     double beta_foil = force_foil;
     double theta_gouvernail = 0.0;
 
+
+    // ########################################################################################### //
+    // ########################################################################################### //
+    //                                                                                             //
+    //                           REGULATION PROPORTIONEL EN CAP                                    //
+    //                                                                                             //
+    // ########################################################################################### //
+    // ########################################################################################### //
+
     // REGULATION CAP :
     //    if (yaw_objective_ < 0){
     //        yaw_objective_+=2*M_PI;
     //    }
     //    else{yaw_objective_+= M_PI;}
     // double yaw_error = sawtooth(yaw_objective_ - yaw_);
+    
     double yaw_error = yaw_objective_ - yaw_;
     kyaw_proportional_ = this->get_parameter("kyaw_proportional_").as_double();
     if (yaw_error >= 0){
@@ -136,9 +147,67 @@ void FoilConsigneNode::timer_callback()
         theta_gouvernail -= kyaw_proportional_*yaw_error;
     }
 
-    // REGULATION VITESSE
-    // CA CARBURE !!!!!!!!!!!!!!
-    speed_ = 0.4;
+    // ########################################################################################### //
+    // ########################################################################################### //
+    //                                                                                             //
+    //                    REGULATION PROPORTIONEL DU FOIL ARRIERE                                  //
+    //                                                                                             //
+    // ########################################################################################### //
+    // ########################################################################################### //
+
+    pitch_desired = 0.0;
+    pitch_diff = pitch_desired - pitch_;
+    double beta_foil_regul = kpitch_ * pitch_diff;
+    if (beta_foil_regul > 1.){
+        beta_foil_regul = 1.;
+    } else if (beta_foil_regul < -1.){
+        beta_foil_regul = -1.;
+    }
+
+    RCLCPP_INFO(this->get_logger(), "Pitch diff: %f", pitch_diff);
+
+    // ########################################################################################### //
+    // ########################################################################################### //
+    //                                                                                             //
+    //                         REGULATION PROPORTIONEL EN ROLL                                     //
+    //                                                                                             //
+    // ########################################################################################### //
+    // ########################################################################################### //
+
+    // double roll_desired = 0.0;
+    // double roll_diff = roll_desired - roll_;
+    // double roll_foil_regul = kroll_ * roll_diff;
+    // if (roll_foil_regul > 1.){
+    //     roll_foil_regul = 1.;
+    // } else if (roll_foil_regul < -1.){
+    //     roll_foil_regul = -1.;
+    // }
+
+    // alpha1_left_aileron = roll_foil_regul;
+    // alpha2_right_aileron = roll_foil_regul;
+
+    // RCLCPP_INFO(this->get_logger(), "Roll diff: %f", roll_diff);
+
+    // ########################################################################################### //
+    // ########################################################################################### //
+    //                                                                                             //
+    //                         REGULATION PROPORTIONEL EN HAUTEUR                                  //
+    //                                                                                             //
+    // ########################################################################################### //
+    // ########################################################################################### //
+
+    double z_desired = 0.8; // hauteur désirée en mètres
+    z_ = height_est_
+    z_diff = z_desired - z_;
+    
+    // définir kz_ violent  
+    double z_foil_regul = z_desired*tanh(kz_*z_diff);
+    if (z_foil_regul > 1.){
+        z_foil_regul = 1.;
+    } else if (z_foil_regul < 0.){
+        z_foil_regul = 0.;
+    }
+    RCLCPP_INFO(this->get_logger(), "Z diff: %f", z_diff);
 
     theta_gouvernail = 0.0; //TODO: Remove this parameter
 
@@ -155,29 +224,9 @@ void FoilConsigneNode::timer_callback()
     theta_gouvernail = theta_gouvernail/(2*theta_gouvernail_extrema);
     alpha1_left_aileron = alpha1_left_aileron/(2*alpha_aileron_extrema);
     alpha2_right_aileron = alpha2_right_aileron/(2*alpha_aileron_extrema);
-    speed_ = speed_/(speed_extrema);
-
-    // ########################################################################################### //
-    // ########################################################################################### //
-    //                                                                                             //
-    //                          REGULATION SIMPLE DU FOIL ARRIERE                                  //
-    //                                                                                             //
-    // ########################################################################################### //
-    // ########################################################################################### //
-
-    pitch_desired = 0.0;
-    pitch_diff = pitch_desired - pitch_;
-    double beta_foil_regul = kpitch_ * pitch_diff;
-    if (beta_foil_regul > 1.){
-        beta_foil_regul = 1.;
-    } else if (beta_foil_regul < -1.){
-        beta_foil_regul = -1.;
-    }
-
-    RCLCPP_INFO(this->get_logger(), "Pitch diff: %f", pitch_diff);
+    speed_ = speed_foil_regul/(speed_extrema);
 
     // TODO: SATURATION DES COMMANDES. NIQUEZ VOUS, ON FLINGUE PAS LES SERVOS CETTE FOIS.
-
 
     // Envoyer les données à la liaison série (UART)
     msg.servo_foil = 100*beta_foil_regul;

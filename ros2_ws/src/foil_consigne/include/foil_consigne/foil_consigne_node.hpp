@@ -4,7 +4,9 @@
 #include <memory>
 #include <Eigen/Core>
 #include <Eigen/LU>
+#include <math.h>
 #include "rclcpp/rclcpp.hpp"
+
 
 #include "geometry_msgs/msg/point.hpp"
 #include "custom_msg/msg/foil_state.hpp"
@@ -57,6 +59,7 @@ private:
     double kz_ = 0.0;
     double kroll_ = 0.0;
     double kpitch_ = 0.0;
+    double kspeed_ = 0.0;
 
     double kz_proportional_ = 0.0;
     double kroll_proportional_ = 0.0;
