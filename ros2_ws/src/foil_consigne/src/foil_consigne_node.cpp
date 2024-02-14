@@ -1,5 +1,7 @@
 #include "foil_consigne/foil_consigne_node.hpp"
 
+//TODO: IF objective = true, then stop the regulation
+
 FoilConsigneNode::FoilConsigneNode() : Node("foil_consigne_node")
 {
     init_parameters();
@@ -56,7 +58,7 @@ void FoilConsigneNode::foil_objective_callback(const custom_msg::msg::FoilObject
     this->pitch_objective_ = msg->pose.pose.orientation.y;
     this->yaw_objective_ = msg->pose.pose.orientation.z;
 
-    this->speed_objective_ = msg->speed;
+    this->objective_ = msg->objective;
 }
 
 void FoilConsigneNode::timer_callback() 
