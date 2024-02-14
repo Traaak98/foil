@@ -212,11 +212,11 @@ void SbgDevice::initSubscribers()
 {
   if (config_store_.shouldSubscribeToRtcm())
   {
-    auto rtcm_cb = [&](const rtcm_msgs::msg::Message::SharedPtr msg) -> void {
+    auto rtcm_cb = [&](const mavros_msgs::msg::RTCM::SharedPtr msg) -> void {
         this->writeRtcmMessageToDevice(msg);
     };
     
-    rtcm_sub_ = ref_node_.create_subscription<rtcm_msgs::msg::Message>(config_store_.getRtcmFullTopic(), 10, rtcm_cb);
+    rtcm_sub_ = ref_node_.create_subscription<mavros_msgs::msg::RTCM>(config_store_.getRtcmFullTopic(), 10, rtcm_cb);
   }
 }
 
@@ -464,9 +464,9 @@ void SbgDevice::exportMagCalibrationResults() const
   RCLCPP_INFO(ref_node_.get_logger(), "SBG DRIVER [Mag Calib] - Magnetometers calibration results saved to file %s", output_filename.c_str());
 }
 
-void SbgDevice::writeRtcmMessageToDevice(const rtcm_msgs::msg::Message::SharedPtr msg)
+void SbgDevice::writeRtcmMessageToDevice(const mavros_msgs::msg::RTCM::SharedPtr msg)
 {
-  auto rtcm_data = msg->message;
+  auto rtcm_data = msg->data;
   auto error_code = sbgInterfaceWrite(&sbg_interface_, rtcm_data.data(), rtcm_data.size());
   
   if (error_code != SBG_NO_ERROR)

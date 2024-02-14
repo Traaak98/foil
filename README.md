@@ -25,6 +25,13 @@ Ellipse D
 Récupération de la branche devel du git de sbg_systems (https://github.com/SBG-Systems/sbg_ros2_driver/tree/devel) le 14/02/2024
 Modification du fichier sbg_device_uart_default.yaml pour autoriser le RTK et calibrer la sbg.
 
+Modification de la config de la sbg pour passer la correction RTCM sur le PORT A sur sbgCenter. cf README sbg_driver
+Modification sbg_driver pour passer les messages RTCM en mavros_msgs/RTCM.msg.
+
+## RTK
+
+ros2 launch ntrip_client ntrip_client_launch.py host:='147.100.179.214' mountpoint:='IUEM' username:='centipede' password:='centipede'
+
 ## Modifier les paramètres de foil_consigne_node :
 Liste des paramètres :
 - kz 

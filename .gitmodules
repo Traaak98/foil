@@ -7,3 +7,6 @@
 [submodule "ros2_ws/src/rtcm_msgs"]
 	path = ros2_ws/src/rtcm_msgs
 	url = https://github.com/tilk/rtcm_msgs.git
+[submodule "ros2_ws/src/ntrip_client"]
+	path = ros2_ws/src/ntrip_client
+	url = https://github.com/LORD-MicroStrain/ntrip_client.git

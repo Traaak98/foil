@@ -40,7 +40,7 @@
 // ROS headers
 #include <std_srvs/srv/set_bool.hpp>
 #include <std_srvs/srv/trigger.hpp>
-#include <rtcm_msgs/msg/message.hpp>
+#include <mavros_msgs/msg/rtcm.hpp>
 
 // Project headers
 #include <config_applier.h>
@@ -83,7 +83,7 @@ private:
   rclcpp::Service<std_srvs::srv::Trigger>::SharedPtr        calib_service_;
   rclcpp::Service<std_srvs::srv::Trigger>::SharedPtr        calib_save_service_;
 
-  rclcpp::Subscription<rtcm_msgs::msg::Message>::SharedPtr  rtcm_sub_;
+  rclcpp::Subscription<mavros_msgs::msg::RTCM>::SharedPtr  rtcm_sub_;
 
   //---------------------------------------------------------------------//
   //- Private  methods                                                  -//
@@ -210,7 +210,7 @@ private:
    *
    * \param[in] msg             ROS RTCM message.
    */
-  void writeRtcmMessageToDevice(const rtcm_msgs::msg::Message::SharedPtr msg);
+  void writeRtcmMessageToDevice(const mavros_msgs::msg::RTCM::SharedPtr msg);
 
 public:
 
