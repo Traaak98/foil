@@ -19,7 +19,11 @@ voir "tuto_velodyne.md"
 adresse ip velodyne : 192.168.10.91
 
 ## SBG
+Ellipse D
 ** Attention ** : La connection au SBG se fait uniquement avec un port USB 3.0.
+
+Récupération de la branche devel du git de sbg_systems (https://github.com/SBG-Systems/sbg_ros2_driver/tree/devel) le 14/02/2024
+Modification du fichier sbg_device_uart_default.yaml pour autoriser le RTK et calibrer la sbg.
 
 ## Modifier les paramètres de foil_consigne_node :
 Liste des paramètres :
