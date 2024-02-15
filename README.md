@@ -215,6 +215,79 @@ Renommer dans le node la sortie USB0 (sur le NUC)
 - Change Wireless Mode to Station
 - Choose Select and find WIFI-FOIL and Lock to AP
 
+## Clé 4G SETUP sur UBUNTU SERVEUR (ici 22.04)
+
+- Brancher et configurer la clé 4G sur un pc possédant une version d'ubuntu similaire mais avec une interface graphique (L'outil graphique est en haut à droite et en dessous du wifi).
+- Récupérer les paramètres config à l'aides des commandes suivantes :
+
+-Installer ModemManager :
+```bash 
+sudo apt install modemmanager
+```
+-Recherche du modem (il devrait apparaitre comme gsmmodem)
+```bash 
+ls /dev
+```
+-Récupération des infos du modem (ici 0 parfois à changer voir avec la commande mmcli -L)
+```bash 
+mmcli -L
+mmcli -m 0
+mmcli -i 3
+```
+-Installer NetworkManager :
+```bash 
+sudo apt install networkmanager
+```
+-Récupération de la config réseau
+```bash 
+nmcli con show
+```
+
+- Sur le pc embarqué on branche la clé.  
+
+-Installer NetworkManager et ModemManager:
+```bash 
+sudo apt install networkmanager
+sudo apt install modemmanager
+```
+
+-Recherche du modem (il devrait apparaitre comme gsmmodem)
+```bash 
+ls /dev
+mmcli -L
+```
+-Récupération des infos du modem (ici 0 parfois à changer voir avec la commande mmcli -L)
+```bash 
+mmcli -m 0 
+```
+-Configuration de l'APN (Basé sur les informations récupéré, l'APN est b2bouygtel.com) :
+```bash 
+sudo mmcli -m 2 --create-bearer="apn='b2bouygtel.com',ip-type=ipv4v6"
+```
+-Établir la connexion avec les paramètres APN spécifiés.
+```bash 
+sudo mmcli -m 0 --simple-connect="apn='b2bouygtel.com',ip-type=ipv4v6"
+```
+-Vérifier l'état du modem et du porteur:
+```bash 
+mmcli -m 2
+mmcli -b 2
+```
+-Créer et activer une connexion mobile broadband en utilisant nmcli.
+```bash 
+sudo nmcli con add type gsm ifname "*" con-name "Bouygues4G" apn "b2bouygtel.com"
+sudo nmcli con up "Bouygues4G"
+```
+-Vérifier l'état de la connexion 
+```bash 
+nmcli con show
+```
+-Tester la connectivité Internet
+```bash 
+ping -c 4 google.com
+```
+
+
 ## KillList
 
 - Arduino ATMega 2560 : Morte le 05/10 au Labo ROB. Cause du décès: surtension, prend feu instantanément.
