@@ -112,8 +112,8 @@ void setup() {
 
 
     while(true){
-       //vieillissement des mesures
-        for (int i = 0; i < 9; i++){
+       //vieillissement des mesures - TODO: adapter un FIR, pk pas
+        for (int i = 0; i < 9; i++){ 
             dist1[i] = dist1[i+1];
             dist2[i] = dist2[i+1];
             dist3[i] = dist3[i+1];
@@ -143,8 +143,8 @@ void setup() {
         Dist.angle     /= 10; //K*sin(a*angle+b)+c
         
         
-        //Serial.write(reinterpret_cast<const uint8_t*>(&Dist), sizeof(Distance));
-        Serial.print(Dist.distance1);Serial.print("\t");Serial.print(Dist.distance2);Serial.print("\t");Serial.print(Dist.distance3);Serial.print("\t");Serial.println(Dist.angle);
+        Serial.write(reinterpret_cast<const uint8_t*>(&Dist), sizeof(Distance));
+        //Serial.print(Dist.distance1);Serial.print("\t");Serial.print(Dist.distance2);Serial.print("\t");Serial.print(Dist.distance3);Serial.print("\t");Serial.println(Dist.angle);
         //Serial.print(measure1_start);Serial.print(" "); Serial.println(measure1_stop);
         delay(100);
     }
@@ -154,15 +154,3 @@ void setup() {
 void loop() {
     // rien à faire ici, le loop décale les mesures
 }
-
-
-/**
-
-*/
-
-/**
-         Dist.distance1 = (measure1_stop - measure1_start)/2 * SOUND_SPEED;
-        Dist.distance2 = (measure2_stop - measure2_start)/2 * SOUND_SPEED;
-        Dist.distance3 = (measure3_stop - measure3_start)/2 * SOUND_SPEED;
-        Dist.angle = angle; //TODO: CALIBRER K*sin(a*angle+b)+c
-*/

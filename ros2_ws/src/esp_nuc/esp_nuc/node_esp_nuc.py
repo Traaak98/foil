@@ -8,30 +8,13 @@ from foil_height_sensor_message.msg import FoilHeight
 from rclpy.node import Node
 
 
-# # Définir la structure pour stocker les données envoyées
-# class CommandData:
-#     def __init__(self, command1, command2, command3, command4, command5):
-#         self.command1 = command1
-#         self.command2 = command2
-#         self.command3 = command3
-#         self.command4 = command4
-#         self.command5 = command5
-
-
-# Définir la structure pour stocker les données reçues
 class ReceivedNucData:
-    def __init__(
-        self,
-        sensor_data1,
-        sensor_data2,
-        sensor_data3,
-        sensor_data4,
-
-    ):
+    def __init__(self, sensor_data1, sensor_data2, sensor_data3, sensor_data4):
         self.height_left = sensor_data1
         self.height_right = sensor_data2
         self.height_rear = sensor_data3
         self.height_potar = sensor_data4
+        self.height_est = 0.5*(sensor_data1 + sensor_data2)
 
 
 class EspUart(Node):
@@ -39,19 +22,12 @@ class EspUart(Node):
     def __init__(self):
         super().__init__("esp_nuc")
         self.init_interface()
-        #self.commands_to_send = CommandData(0.0, 0.0, 0.0, 0.0, 0.0)
         self.commands_received = ReceivedNucData(0.0, 0.0, 0.0, 0.0)
 
-    def init_interface(self):    
-        # Souscrire au topic pouvant contenir des données à envoyer à l'esp32 
-        # self.servo_angles_subscription = self.create_subscription(
-        #     FoilCmd, "/foil_consigne", self.servo_angles_callback, 10
-        # )
 
+    def init_interface(self):    
         # Créer un publisher pour publier les données du capteur
-        self.sensor_data_publisher = self.create_publisher(
-            FoilHeight, "/esp_data", 10
-        )
+        self.sensor_data_publisher = self.create_publisher(FoilHeight, "/esp_data", 10)
 
         self.get_logger().info("Publisher initialisé.")
         self.get_logger().info("Ouverture de la liaison série.")
@@ -80,12 +56,10 @@ class EspUart(Node):
         # Créer un minuteur pour appeler la fonction time_callback toutes les 2 secondes
         self.timer = self.create_timer(0.05, self.time_callback)
 
+
     def time_callback(self):
         # Assurez-vous d'utiliser les attributs corrects de msg
         msg = FoilHeight()
-
-        # # Envoyer des données via UART
-        # self.send_uart_data(msg)
 
         # Recevoir des données via UART
         self.commands_received = self.receive_sensor_data()
@@ -94,27 +68,26 @@ class EspUart(Node):
             msg.height_right = self.commands_received.height_right
             msg.height_rear = self.commands_received.height_rear
             msg.height_potar = self.commands_received.height_potar
-
             #/!\ Estimation à 2 capteurs - pas fini
             msg.height_est = 0.5*(msg.height_left + msg.height_right)
 
-            self.get_logger().info(
-            f"Données publiées - \
-            Height left : {msg.height_left}, \
-            Height right: {msg.height_right}, \
-            Height rear: {msg.height_rear}, \
-            Height potar: {msg.height_potar}, \
-            Height est : {msg.height_est}, \
-            ")
 
-            # Publier les données du capteur
+
+            self.get_logger().info(f"Données publiées - Height left : {msg.height_left:.3f}, \
+                                                      \tHeight right: {msg.height_right:.3f}, \
+                                                      \tHeight rear: {msg.height_rear:.3f}, \
+                                                      \tHeight potar: {msg.height_potar:.3f}, \
+                                                      \tHeight est : {msg.height_est:.3f}")
             self.sensor_data_publisher.publish(msg)
+        
         else:
             self.get_logger().warn("Erreur lors de la lecture des données du capteur.")
 
+
     def receive_sensor_data(self):
         # Lire la taille des données (sizeof(SensorData))
-        data_size = struct.calcsize("ffff")  # Utiliser 'fffff' pour 5 flottants
+        float_map = "fffff" # Utiliser 5'f' pour 5 flottants
+        data_size = struct.calcsize(float_map)
 
         # Lire les données depuis le port série
         raw_data = self.serial_port.read(data_size)
@@ -122,7 +95,7 @@ class EspUart(Node):
         # Vérifier si suffisamment de données ont été lues
         if len(raw_data) == data_size:
             # Déballer les données dans la structure SensorData
-            sensor_data = ReceivedNucData(*struct.unpack("ffff", raw_data))
+            sensor_data = ReceivedNucData(*struct.unpack(float_map, raw_data))
             self.get_logger().info(f"Données du capteur reçues: {sensor_data.__dict__}")
 
             return sensor_data
@@ -130,35 +103,6 @@ class EspUart(Node):
             self.get_logger().warn("Erreur de lecture des données série.")
             return None
 
-    # def send_uart_data(self, msg):
-    #     self.get_logger().info(
-    #         f"Angles consignes des servomoteurs à l'envoie - \
-    #         servoFoil: {self.commands_to_send.command1}, \
-    #         servoGouvernail: {self.commands_to_send.command2}, \
-    #         servoAileronLeft: {self.commands_to_send.command3}, \
-    #         servoAileronRight: {self.commands_to_send.command4}, \
-    #         Thruster: {self.commands_to_send.command5}"
-    #         )
-        
-    #     # pour tester 
-
-    #     # Emballer les données dans une chaîne binaire
-    #     data_to_send = struct.pack(
-    #         "fffff",
-    #         self.commands_to_send.command1,
-    #         self.commands_to_send.command2,
-    #         self.commands_to_send.command3,
-    #         self.commands_to_send.command4,
-    #         self.commands_to_send.command5,
-    #     )
-
-    #     # Envoyer les données via la liaison UART
-    #     self.serial_port.write(data_to_send)
-
-    #     # Afficher les données envoyées
-    #     self.get_logger().info(
-    #         f"Données de commandes envoyées: {self.commands_to_send.__dict__}"
-    #     )
 
     def destroy_node(self):
         # Fermer la liaison série lors de la fermeture du node
