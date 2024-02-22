@@ -87,9 +87,9 @@
       # Residual yaw error after axis alignment rad
       misYaw: 0.0
       # X Primary lever arm in IMU X axis (once IMU alignment is applied) m
-      leverArmX: -0.28
+      leverArmX: -0.25
       # Y Primary lever arm in IMU Y axis (once IMU alignment is applied) m
-      leverArmY: 0.15
+      leverArmY: 0.
       # Z Primary lever arm in IMU Z axis (once IMU alignment is applied) m
       leverArmZ: 0.01
     
@@ -165,7 +165,7 @@
       #GNSS primary antenna lever arm in IMU X axis (m)
       primaryLeverArmX: 0.71
       #GNSS primary antenna lever arm in IMU Y axis (m)
-      primaryLeverArmY: 0.01
+      primaryLeverArmY: 0.
       #GNSS primary antenna lever arm in IMU Z axis (m)
       primaryLeverArmZ: -0.05
       #GNSS primary antenna precise. Set to true if the primary lever arm has been accurately entered and doesn't need online re-estimation.
@@ -174,7 +174,7 @@
       #GNSS secondary antenna lever arm in IMU X axis (m)
       secondaryLeverArmX: -1.25
       #GNSS secondary antenna lever arm in IMU Y axis (m)
-      secondaryLeverArmY: 0.01
+      secondaryLeverArmY: 0.
       #GNSS secondary antenna lever arm in IMU Z axis (m)
       secondaryLeverArmZ: -0.05
     
