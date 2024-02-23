@@ -136,7 +136,7 @@ def generate_launch_description():
 
     rtk_node = launch_ros.actions.Node(
         package="ntrip_client",
-        executable="ntrip_client",
+        executable="ntrip_ros.py",
         output="screen",
         parameters=[
             {"host": "147.100.179.214"},
