@@ -134,6 +134,18 @@ def generate_launch_description():
         cwd=rosdirVelodyne,
     )
 
+    rtk_node = launch_ros.actions.Node(
+        package="ntrip_client",
+        executable="ntrip_client",
+        output="screen",
+        parameters=[
+            {"host": "147.100.179.214"},
+            {"mountpoint": "IUEM"},
+            {"username": "centipede"},
+            {"password": "centipede"},
+        ],
+    )
+
     return launch.LaunchDescription(
         [
             sbg_node,
@@ -146,6 +158,7 @@ def generate_launch_description():
             utm_proj_node,
             uart_py_node,
             esp_nuc_node,
+            rtk_node,
             launch.actions.RegisterEventHandler(
                 event_handler=launch.event_handlers.OnProcessExit(
                     target_action=velodyne_driver_node,
