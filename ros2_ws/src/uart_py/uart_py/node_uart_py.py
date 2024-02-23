@@ -1,11 +1,10 @@
+import os
 import struct
 import time
-import os
 
 import rclpy
 import serial
-from custom_msg.msg import FoilCmd
-from custom_msg.msg import FoilConsigne
+from custom_msg.msg import FoilCmd, FoilConsigne
 from rclpy.node import Node
 
 
@@ -37,6 +36,8 @@ class ReceivedData:
         thruster,
         mode,
         emergency_stop,
+        battery_voltage,
+        battery_current,
     ):
         self.servo_foil = servo_foil
         self.servo_gouvernail = servo_gouvernail
@@ -45,6 +46,8 @@ class ReceivedData:
         self.thruster = thruster
         self.mode = mode
         self.emergency_stop = emergency_stop
+        self.battery_voltage = battery_voltage
+        self.battery_current = battery_current
 
 
 class Uart(Node):
@@ -53,7 +56,9 @@ class Uart(Node):
         super().__init__("uart")
         self.init_interface()
         self.commands_to_send = CommandData(0.0, 0.0, 0.0, 0.0, 0.0)
-        self.commands_received = ReceivedData(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+        self.commands_received = ReceivedData(
+            0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+        )
 
     def init_interface(self):
         # Souscrire au topic donnant les consignes d'angle des servomoteurs
@@ -140,6 +145,8 @@ class Uart(Node):
             msg.cmd_thruster = self.commands_received.thruster
             msg.mode = self.commands_received.mode
             msg.emmergency_stop = self.commands_received.emergency_stop
+            msg.battery_voltage = self.commands_received.battery_voltage
+            msg.battery_current = self.commands_received.battery_current
 
             # Publier les données du capteur
             self.sensor_data_publisher.publish(msg)
@@ -178,7 +185,7 @@ class Uart(Node):
 
     def receive_sensor_data(self):
         # Lire la taille des données (sizeof(SensorData))
-        data_size = struct.calcsize("fffffff")  # Utiliser 'fffff' pour 5 flottants
+        data_size = struct.calcsize("fffffffff")  # Utiliser 'fffff' pour 5 flottants
 
         # Lire les données depuis le port série
         raw_data = self.serial_port.read(data_size)
@@ -186,7 +193,7 @@ class Uart(Node):
         # Vérifier si suffisamment de données ont été lues
         if len(raw_data) == data_size:
             # Déballer les données dans la structure SensorData
-            sensor_data = ReceivedData(*struct.unpack("fffffff", raw_data))
+            sensor_data = ReceivedData(*struct.unpack("fffffffff", raw_data))
             self.get_logger().info(f"Données du capteur reçues: {sensor_data.__dict__}")
 
             return sensor_data
