@@ -36,6 +36,7 @@ void BatteryStatusNode::timer_callback()
   msg.capacity = this->capacity_;
   msg.design_capacity = this->design_capacity_;
   msg.percentage = this->percentage_;
+  msg.location = this->location_;
 
   publisher_battery_state_->publish(msg);
 }
@@ -48,9 +49,6 @@ void BatteryStatusNode::read_battery_status()
   read_capacity();
   read_design_capacity();
   read_percentage();
-
-  RCLCPP_INFO(this->get_logger(), "Voltage: %f, Current: %f, Charge: %f, Capacity: %f, Design Capacity: %f, Percentage: %f",
-              this->voltage_, this->current_, this->charge_, this->capacity_, this->design_capacity_, this->percentage_);
 }
 
 void BatteryStatusNode::read_voltage()

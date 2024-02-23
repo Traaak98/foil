@@ -30,6 +30,7 @@ private:
     double capacity_ = 0.0;
     double design_capacity_ = 0.0;
     double percentage_ = 0.0;
+    string location_ = "NUC";
 
     rclcpp::TimerBase::SharedPtr timer_;
     std::chrono::milliseconds loop_dt_ = 10000ms; // loop dt
