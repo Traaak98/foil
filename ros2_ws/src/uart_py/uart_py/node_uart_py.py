@@ -38,6 +38,7 @@ class ReceivedData:
         emergency_stop,
         battery_voltage,
         battery_current,
+        battery_percentage,
     ):
         self.servo_foil = servo_foil
         self.servo_gouvernail = servo_gouvernail
@@ -48,6 +49,7 @@ class ReceivedData:
         self.emergency_stop = emergency_stop
         self.battery_voltage = battery_voltage
         self.battery_current = battery_current
+        self.battery_percentage = battery_percentage
 
 
 class Uart(Node):
@@ -57,7 +59,7 @@ class Uart(Node):
         self.init_interface()
         self.commands_to_send = CommandData(0.0, 0.0, 0.0, 0.0, 0.0)
         self.commands_received = ReceivedData(
-            0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+            0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
         )
 
     def init_interface(self):
@@ -185,7 +187,7 @@ class Uart(Node):
 
     def receive_sensor_data(self):
         # Lire la taille des données (sizeof(SensorData))
-        data_size = struct.calcsize("fffffffff")  # Utiliser 'fffff' pour 5 flottants
+        data_size = struct.calcsize("ffffffffff")  # Utiliser 'fffff' pour 5 flottants
 
         # Lire les données depuis le port série
         raw_data = self.serial_port.read(data_size)
@@ -193,7 +195,7 @@ class Uart(Node):
         # Vérifier si suffisamment de données ont été lues
         if len(raw_data) == data_size:
             # Déballer les données dans la structure SensorData
-            sensor_data = ReceivedData(*struct.unpack("fffffffff", raw_data))
+            sensor_data = ReceivedData(*struct.unpack("ffffffffff", raw_data))
             self.get_logger().info(f"Données du capteur reçues: {sensor_data.__dict__}")
 
             return sensor_data
