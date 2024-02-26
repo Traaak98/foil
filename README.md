@@ -287,6 +287,12 @@ nmcli con show
 ping -c 4 google.com
 ```
 
+## ROSBAG
+sudo apt-get install ros-humble-rosbag2-storage-mcap
+
+cf https://mcap.dev/guides/getting-started/ros-2
+
+
 
 ## KillList
 
