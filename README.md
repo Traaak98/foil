@@ -277,6 +277,12 @@ ros2 launch ntrip_client ntrip_client_launch.py host:='147.100.179.214' mountpoi
 
 Pour plus d'informations sur le réseaux centipède, veuillez consulter le [site](https://docs.centipede.fr/). Pour la position des balises, veuillez consulter la [carte intéractive](https://centipede.fr/index.php/view/map/?repository=cent&project=centipede).
 
+Un autre réseau est disponible en cas de problème sur le premier. Il s'agit de celui de RTG2GO. Voici un exemple de lancement :
+```bash
+ros2 launch ntrip_client ntrip_client_launch.py host:='3.143.243.81' mountpoint:='ENSTABRE' username:='adresse_mail_valide' password:='none'
+```
+Pour plus d'information sur le réseau RTK2GO, veuillez consulter le [site](http://rtk2go.com/).
+
 ### Arduino Setup
 
 Il est possible de flasher le microcontroleur avec les codes disponibles dans le submodule `kayak_foil_io`. Pour cela, il faut installer les packages suivants :
