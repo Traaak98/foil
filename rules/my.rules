@@ -1,0 +1,15 @@
+
+#lien symbolique vers la sonde acoustique
+KERNEL=="ttyUSB*", SUBSYSTEM=="tty", ATTRS{idVendor}=="0557", ATTRS{idProduct}=="2008", SYMLINK="ttyAcous", MODE="0777"
+
+#lien symbolique vers l'INS SBG
+KERNEL=="ttyUSB*", SUBSYSTEM=="tty", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6001", SYMLINK="ttySBG", MODE="0777"
+
+#lien symbolique vers Arduino
+KERNEL=="ttyUSB*", SUBSYSTEM=="tty", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="7523", ATTRS{bcdDevice}=="8132", SYMLINK="ttyArduino", MODE="0777"
+
+#lien symbolique vers la caméra
+KERNEL=="video*", MODE="0777", OWNER="foil"
+
+#lien symbolique vers l'ESP
+KERNEL=="ttyUSB*", SUBSYSTEM=="tty", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="7523", ATTRS{bcdDevice}=="0254", SYMLINK="ttyESP", MODE="0777"

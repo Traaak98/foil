@@ -282,23 +282,34 @@ La sauvegarde des rosbags se fait dans deux fichier simultanément. Le premier c
 
 Pour tracer les données, le format **mcap** est compatible avec **Plotjuggler**. Plus d'informations disponibles sur leur [github](https://github.com/facontidavide/PlotJuggler).
 
-## Modifier les paramètres de foil_consigne_node :
+### NUC Setup
 
-Liste des paramètres :
+Pour configurer le NUC, il faut installer Ubuntu Server 22.04. Pour cela, il suffit de suivre le tutoriel officiel disponible [ici](https://ubuntu.com/download/server).
 
-- kpitch_
-- kspeed_
-- kroll_
+### NUC USB Port Configuration
+
+La configuration du NUC consiste à affecter les différents ports USB au bon device. Pour cela, il faut utiliser le fichier `udev` disponible [ici](./rules/my.rules). Il faut le copier dans le dossier `/etc/udev/rules.d/` et redémarrer le NUC.
 
 ```bash
-ros2 param set /foil_consigne_node nom_du_parametre valeur
+#lien symbolique vers la sonde acoustique
+KERNEL=="ttyUSB*", SUBSYSTEM=="tty", ATTRS{idVendor}=="0557", ATTRS{idProduct}=="2008", SYMLINK="ttyAcous", MODE="0777"
+
+#lien symbolique vers l'INS SBG
+KERNEL=="ttyUSB*", SUBSYSTEM=="tty", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6001", SYMLINK="ttySBG", MODE="0777"
+
+#lien symbolique vers Arduino
+KERNEL=="ttyUSB*", SUBSYSTEM=="tty", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="7523", ATTRS{bcdDevice}=="8132", SYMLINK="ttyArduino", MODE="0777"
+
+#lien symbolique vers la caméra
+KERNEL=="video*", MODE="0777", OWNER="foil"
+
+#lien symbolique vers l'ESP
+KERNEL=="ttyUSB*", SUBSYSTEM=="tty", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="7523", ATTRS{bcdDevice}=="0254", SYMLINK="ttyESP", MODE="0777"
 ```
 
-** ATTENTION ** : Mettre la valeur en double même pour les entiers (exemple : 0.0).
+Si vous voulez ajouter un **nouvel élément** sur le NUC, il suffit de suivre la procédure suivante:
 
-## Mettre une nouveau nom pour un port :
-
-Obtenir les information sur le port :
+1. Obtenir les information sur le port :
 
 ```bash
 udevadm info -a -p $(udevadm info -q path -n adresse_du_port)
@@ -311,90 +322,56 @@ En général les informations à retenir sont :
 - kernel
 - subsystem
 
-Ensuite il faut modifier notre fichier de règle udev :
+2. Modifier notre fichier de règle udev :
 
 ```bash
 nano /etc/udev/rules.d/myrule.rules
 ```
 
-Et ajouter le port en prenant exemple sur les lignes suivantes.
+3. Ajouter le port en prenant exemple sur les lignes suivantes.
 On suppose dans cet exemple que le port est un port ttyACM\* et que le idVendor est 1546 et le idProduct est 01a8.
 On souhaite le renomer en ttyGPS et que les droits d'accès soient donnés à l'utilisateur.
 
-```
+```bash
 KERNEL=="ttyACM*", SUBSYSTEM=="tty", ATTRS{idVendor}=="1546", ATTRS{idProduct}=="01a8", SYMLINK="ttyGPS", MODE="0777"
 ```
 
-Puis on recharge les règles udev :
+4. Recharger les règles udev :
 
 ```bash
 sudo udevadm control --reload-rules
 sudo udevadm trigger
 ```
 
-## TODOLIST
+### NUC Ethernet and WiFi Configuration
 
-- [ ] Plan d'expérimentation
-- [ ] 2 Antennes Ubiquiti
-- [ ] 2 Antennes GNSS
-- [ ] SBG IMU avec deux connecteurs
-- [ ] Schéma des différents systèmes
-- [ ] Plan d'alimentation
-- [ ] Alimentation du NUC
-- [ ] Driver ROS2 IMU
-- [ ] Driver ROS2 GNSS
-- [ ] Driver ROS2 Sonar/Lidar
-- [ ] Driver ROS2 Sonde Accoustique
-- [ ] Driver ROS2 Servomoteurs
-- [ ] RC Controller
-- [ ] Carte Arduino pour les PWM
-- [ ] Algorithme de vol
-- [ ] Algorithmes de détection
-- [ ] Algorithme d'évitement
-- [ ] interface ncurses terminal
-
-### Calibration servomotors
-
-Use microcontroller to calibrate servomotors: _Micro Maestro 6-Channel_ from _Pololu_ :smile:
-
-### Antenna setup
-
-video link: [Antenna Setup](https://www.youtube.com/watch?v=jPwG0O03uEA)
-
-Black Antenna is the Access Point and the White Antenna is the Station.
-Username is ubnt
-Password is foil
-
-### Webcam setup
-
-Commande gstreamer pour publier le flux vidéo de la webcam sur le réseau:
+Il faut configurer les différentes connections Ethernet et WiFi pour que le NUC puisse se connecter à internet. Pour cela, nous vous conseillons d'utiliser le logiciel **nmtui** disponible sur Ubuntu Server. Vous pouvez l'installer avec la commande suivante :
 
 ```bash
-gst-launch-1.0 -v v4l2src device=/dev/video2 do-timestamp=true ! video/x-h264, width=1920, height=1080, framerate=30/1 ! h264parse ! queue ! rtph264pay config-interval=10 pt=96 ! udpsink host=adresse_ip_station port=5600
+sudo apt install network-manager
 ```
 
-Commande gstreamer pour lire le flux vidéo de la webcam sur le réseau:
+Il suffit ensuite de lancer l'utilitaire et d'appeler **Fabrice** ou de consulter le fichier [Ubuntu.txt](https://www.ensta-bretagne.fr/lebars/Share/Ubuntu.txt).
 
-```bash
-gst-launch-1.0 -e -v udpsrc port=5600 close-socket=false multicast-iface=false auto-multicast=true ! application/x-rtp, payload=96 ! rtpjitterbuffer ! rtph264depay ! avdec_h264 ! queue ! autovideosink
-```
+**ATTENTION**: **NE TOUCHER A CELA QU'EN DERNIER RECOURS!!!**
 
-## Servo Binding
+<div align="center">
+  <p>
+    <img src=images/meme_reseaux.jpg width="250" height="830">
+  </p>
+</div>
 
-PCB order:
 
-1. Foil Arrière
-2. Gouvernail
-3. Servo avant ????
-4. Servo avant ????
+### Antennas Setup
 
-## Servo Transport / Remise à zéro
+Deux Ubiquiti sont utilisées pour la communication entre votre PC et le NUC. Actuellement, l'antenne noire est configurée en **Access Point** et l'antenne blanche en **Station**. Le nom du réseau est **WIFI-FOIL**. Le nom d'utilisateur est **ubnt** et le mot de passe est **foil**.
 
-- Foil arrière: Dévisser la petite vis entre la pièce blanche et la pièce noire. NE PAS RETIRER LA PIECE NOIRE
+Les adresses IP sont les suivantes :
 
-## UART
+- Access Point : 192.168.20.101
+- Station : 192.168.20.102
 
-Renommer dans le node la sortie USB0 (sur le NUC)
+Pour les configurer, il faut suivre les tutoriels suivants ou sur la vidéo [suivante](https://www.youtube.com/watch?v=jPwG0O03uEA) :
 
 #### Access Point
 
@@ -458,6 +435,52 @@ Renommer dans le node la sortie USB0 (sur le NUC)
 - Set airMAX Priority to High
 - Change Wireless Mode to Station
 - Choose Select and find WIFI-FOIL and Lock to AP
+
+## Modifier les paramètres de foil_consigne_node :
+
+Liste des paramètres :
+
+- kpitch_
+- kspeed_
+- kroll_
+
+```bash
+ros2 param set /foil_consigne_node nom_du_parametre valeur
+```
+
+**ATTENTION** : Mettre la valeur en double même pour les entiers (exemple : 0.0).
+
+
+### Calibration servomotors
+
+Use microcontroller to calibrate servomotors: _Micro Maestro 6-Channel_ from _Pololu_.
+
+### Webcam setup
+
+Commande gstreamer pour publier le flux vidéo de la webcam sur le réseau:
+
+```bash
+gst-launch-1.0 -v v4l2src device=/dev/video2 do-timestamp=true ! video/x-h264, width=1920, height=1080, framerate=30/1 ! h264parse ! queue ! rtph264pay config-interval=10 pt=96 ! udpsink host=adresse_ip_station port=5600
+```
+
+Commande gstreamer pour lire le flux vidéo de la webcam sur le réseau:
+
+```bash
+gst-launch-1.0 -e -v udpsrc port=5600 close-socket=false multicast-iface=false auto-multicast=true ! application/x-rtp, payload=96 ! rtpjitterbuffer ! rtph264depay ! avdec_h264 ! queue ! autovideosink
+```
+
+## Servo Binding
+
+PCB order:
+
+1. Foil Arrière
+2. Gouvernail
+3. Servo avant ????
+4. Servo avant ????
+
+## Servo Transport / Remise à zéro
+
+- Foil arrière: Dévisser la petite vis entre la pièce blanche et la pièce noire. NE PAS RETIRER LA PIECE NOIRE
 
 ## Clé 4G SETUP sur UBUNTU SERVEUR (ici 22.04)
 
