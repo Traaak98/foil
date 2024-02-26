@@ -44,7 +44,7 @@ Ce projet contient l'ensemble des codes et des configurations pour le projet de 
   - [ROS2](#ros2)
   - [Z-Shell Installation](#z-shell-installation)
   - [Z-Shell Configuration](#z-shell-configuration)
-- [Lidar](#lidar)
+  - [Lidar](#lidar)
   - [SBG](#sbg)
   - [RTK](#rtk)
   - [Arduino Setup](#arduino-setup)
@@ -58,6 +58,7 @@ Ce projet contient l'ensemble des codes et des configurations pour le projet de 
   - [Clé 4G SETUP sur UBUNTU SERVEUR (ici 22.04)](#clé-4g-setup-sur-ubuntu-serveur-ici-2204)
   - [Webcam setup](#webcam-setup)
   - [Positionnement des Servomoteurs sur le PCB](#positionnement-des-servomoteurs-sur-le-pcb)
+  - [Capteurs Ultrason](#capteurs-ultrason)
 - [Modifier les paramètres de foil\_consigne\_node](#modifier-les-paramètres-de-foil_consigne_node)
 - [KillList](#killlist)
 
@@ -99,7 +100,7 @@ Pour plus d'informations sur la configuration de Z-Shell, veuillez consulter le 
   - [zsh-navigation-tools](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/zsh-navigation-tools)
   - [zsh-interative-cd](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/zsh-interactive-cd)
 
-## Lidar
+### Lidar
 
 Voir [tuto_velodyne.md](./tuto_velodyne.md) pour la configuration du Velodyne.
 **Adresse IP du Velodyne : 192.168.10.91**
@@ -583,6 +584,18 @@ PCB order:
 5. Foil Arrière
 
 **Attention** : Lors du transport et du flash de la carte ATMega, il faut débrancher mechaniquement les servomoteurs pour éviter tout blocage mechanique.
+
+### Capteurs Ultrason
+
+Se référer au schéma suivant pour le branchement des capteurs ultrason :
+
+<div align="center">
+  <p>
+    <img src=images/schema_capteurs.png width="1000" height="1000">
+  </p>
+</div>
+
+**Attention** : En cas de problèmes avec les capteurs ultrason, adressez-vous à notre meilleur <a href="mailto:gwendal.crecquer@ensta-bretagne.org?subject=Les Capteurs Ultrasons ne marchent pas">élément</a>
 
 ## Modifier les paramètres de foil_consigne_node
 
