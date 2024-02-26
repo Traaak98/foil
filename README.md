@@ -36,6 +36,31 @@ _Ludovic Mustière_ - _Apolline de Vaulchier_ - _Gwendal Crecquer_ - _Louis-Nam 
 
 Ce projet contient l'ensemble des codes et des configurations pour le projet de foil de l'ENSTA Bretagne. Il emporte de nombreux capteurs qu'il faut configurer et interconnecter. Le projet est basé sur ROS2 et utilise un NUC pour le traitement des données.
 
+## Table des matières
+
+- [Introduction](#introduction)
+- [Table des matières](#table-des-matières)
+- [Installation](#installation)
+  - [ROS2](#ros2)
+  - [Z-Shell Installation](#z-shell-installation)
+  - [Z-Shell Configuration](#z-shell-configuration)
+- [Lidar](#lidar)
+  - [SBG](#sbg)
+  - [RTK](#rtk)
+  - [Arduino Setup](#arduino-setup)
+  - [Rosbag Setup](#rosbag-setup)
+  - [NUC Setup](#nuc-setup)
+  - [NUC USB Port Configuration](#nuc-usb-port-configuration)
+  - [NUC Ethernet and WiFi Configuration](#nuc-ethernet-and-wifi-configuration)
+  - [Antennas Setup](#antennas-setup)
+    - [Access Point](#access-point)
+    - [Station](#station)
+  - [Clé 4G SETUP sur UBUNTU SERVEUR (ici 22.04)](#clé-4g-setup-sur-ubuntu-serveur-ici-2204)
+  - [Webcam setup](#webcam-setup)
+  - [Positionnement des Servomoteurs sur le PCB](#positionnement-des-servomoteurs-sur-le-pcb)
+- [Modifier les paramètres de foil\_consigne\_node](#modifier-les-paramètres-de-foil_consigne_node)
+- [KillList](#killlist)
+
 ## Installation
 
 ### ROS2
@@ -436,53 +461,7 @@ Pour les configurer, il faut suivre les tutoriels suivants ou sur la vidéo [sui
 - Change Wireless Mode to Station
 - Choose Select and find WIFI-FOIL and Lock to AP
 
-## Modifier les paramètres de foil_consigne_node :
-
-Liste des paramètres :
-
-- kpitch_
-- kspeed_
-- kroll_
-
-```bash
-ros2 param set /foil_consigne_node nom_du_parametre valeur
-```
-
-**ATTENTION** : Mettre la valeur en double même pour les entiers (exemple : 0.0).
-
-
-### Calibration servomotors
-
-Use microcontroller to calibrate servomotors: _Micro Maestro 6-Channel_ from _Pololu_.
-
-### Webcam setup
-
-Commande gstreamer pour publier le flux vidéo de la webcam sur le réseau:
-
-```bash
-gst-launch-1.0 -v v4l2src device=/dev/video2 do-timestamp=true ! video/x-h264, width=1920, height=1080, framerate=30/1 ! h264parse ! queue ! rtph264pay config-interval=10 pt=96 ! udpsink host=adresse_ip_station port=5600
-```
-
-Commande gstreamer pour lire le flux vidéo de la webcam sur le réseau:
-
-```bash
-gst-launch-1.0 -e -v udpsrc port=5600 close-socket=false multicast-iface=false auto-multicast=true ! application/x-rtp, payload=96 ! rtpjitterbuffer ! rtph264depay ! avdec_h264 ! queue ! autovideosink
-```
-
-## Servo Binding
-
-PCB order:
-
-1. Foil Arrière
-2. Gouvernail
-3. Servo avant ????
-4. Servo avant ????
-
-## Servo Transport / Remise à zéro
-
-- Foil arrière: Dévisser la petite vis entre la pièce blanche et la pièce noire. NE PAS RETIRER LA PIECE NOIRE
-
-## Clé 4G SETUP sur UBUNTU SERVEUR (ici 22.04)
+### Clé 4G SETUP sur UBUNTU SERVEUR (ici 22.04)
 
 - Brancher et configurer la clé 4G sur un pc possédant une version d'ubuntu similaire mais avec une interface graphique (L'outil graphique est en haut à droite et en dessous du wifi).
 - Récupérer les paramètres config à l'aides des commandes suivantes :
@@ -579,11 +558,45 @@ nmcli con show
 ping -c 4 google.com
 ```
 
-## ROSBAG
+### Webcam setup
 
-sudo apt-get install ros-humble-rosbag2-storage-mcap
+Commande gstreamer pour publier le flux vidéo de la webcam sur le réseau:
 
-cf https://mcap.dev/guides/getting-started/ros-2
+```bash
+gst-launch-1.0 -v v4l2src device=/dev/video2 do-timestamp=true ! video/x-h264, width=1920, height=1080, framerate=30/1 ! h264parse ! queue ! rtph264pay config-interval=10 pt=96 ! udpsink host=adresse_ip_station port=5600
+```
+
+Commande gstreamer pour lire le flux vidéo de la webcam sur le réseau:
+
+```bash
+gst-launch-1.0 -e -v udpsrc port=5600 close-socket=false multicast-iface=false auto-multicast=true ! application/x-rtp, payload=96 ! rtpjitterbuffer ! rtph264depay ! avdec_h264 ! queue ! autovideosink
+```
+
+### Positionnement des Servomoteurs sur le PCB
+
+PCB order:
+
+1. RF
+2. Servo avant gauche
+3. Servo avant droit
+4. Gouvernail
+5. Foil Arrière
+
+**Attention** : Lors du transport et du flash de la carte ATMega, il faut débrancher mechaniquement les servomoteurs pour éviter tout blocage mechanique.
+
+## Modifier les paramètres de foil_consigne_node
+
+Liste des paramètres :
+
+- kpitch_
+- kspeed_
+- kroll_
+
+```bash
+ros2 param set /foil_consigne_node nom_du_parametre valeur
+```
+
+**Attention** : Mettre la valeur en double même pour les entiers (exemple : 0.0).
 
 ## KillList
 
@@ -592,4 +605,10 @@ cf https://mcap.dev/guides/getting-started/ros-2
 - HS-5646WP : Mort au combat le 11/10 à Guerlédan. Cause du décès: non remise à zéro après le test, décède de ses blessures durant la nuit.
 - Torqeedo motor : Mort le 11/10 dans le lac de Guerlédan. Cause du décès: inconnue. Hypothèse retennue : surchauffe.
 - HS-646WP : Mort le 12/10 à Guerlédan. Cause du suicide: inconnue.
-- Servo Tester Pro-Tronik : Mort le 12/10 à Guerlédan. Cause du décès : grillé à cause d'un court-circuit.
+- Servo Tester Pro-Tronik : Mort le 12/10 à Guerlédan. Cause du décès: grillé à cause d'un court-circuit.
+- ESP32 : Mort lors de la préparation pour Guerlédan. Cause du décès: Grillé à cause d'un court-circuit.
+- ESP32 : Mort lors de la préparation pour Guerlédan. Cause du décès: Grillé à cause d'un court-circuit.
+- Capteur Ultrason droit : Mort lors de la première mise à l'eau le 06/02 à Guerlédan. Cause du décès: Marsouinage.
+- Capteur Ultrason gauche : Mort lors du premier virage le 06/02 à Guerlédan. Cause du décès: Marsouinage.
+- Arduino ATMega 2560 : Morte le 09/10 à Guerlédan. Cause du décès: Arrachement du port série.
+- Cable d'antenne pour SBG : Mort lors des tests avant le Grand Retour. Cause du décès: Décapité par Grorobotix.
