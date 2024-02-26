@@ -241,21 +241,54 @@ void SbgDevice::initSubscribers()
 
 Enfin, il faut modifier le fichier `CMakeLists.txt` disponible [ici](./ros2_ws/src/sbg_ros2_driver/CMakeLists.txt) pour ajouter le package `mavros_msgs` à la liste des dépendances.
 
-## RTK
+### RTK
 
+Le RTK utilisé est celui du réseau **centipede**. Pour s'y connecter, il faut utiliser le package `ntrip_client` disponible [ici](./ros2_ws/src/ntrip_client). C'est un **submodule** issu de la branche **ROS2** du git [suivant](https://github.com/LORD-MicroStrain/ntrip_client). Toute la configuration s'effectue au lancement du node. Voici un exemple de lancement du node à l'ENSTA Bretagne:
+
+```bash
 ros2 launch ntrip_client ntrip_client_launch.py host:='147.100.179.214' mountpoint:='IUEM' username:='centipede' password:='centipede'
+```
+
+Pour plus d'informations sur le réseaux centipède, veuillez consulter le [site](https://docs.centipede.fr/). Pour la position des balises, veuillez consulter la [carte intéractive](https://centipede.fr/index.php/view/map/?repository=cent&project=centipede).
+
+### Arduino Setup
+
+Il est possible de flasher le microcontroleur avec les codes disponibles dans le submodule `kayak_foil_io`. Pour cela, il faut installer les packages suivants :
+
+```bash
+sudo apt install arduino-mk
+sudo apt remove brltty # If no ttyUSB0
+```
+
+Ensuite, il suffit de se rendre dans le dossier `kayak_foil_io` et de lancer la commande `make upload` pour flasher le microcontroleur.
+
+```bash
+make clean all
+make upload
+```
+
+Le paramétrage des ports se fait dans le fichier `Makefile` disponible [ici](./kayak_foil_io/Makefile). Il faut modifier la ligne `MONITOR_PORT = /dev/ttyArduino` et la ligne `̀DEVICE_PATH = /dev/ttyArduino` pour le port de l'Arduino.
+Il faut aussi installer la librairie `Servo` dans le dossier `libraries` de l'Arduino IDE disponible [ici](https://github.com/arduino-libraries/Servo).
+
+### Rosbag Setup
+
+Pour enregistrer les données, nous utilisons un format spécial de rosbag nommé **mcap**. Pour l'installer, il suffit de suivre les instructions disponibles [ici](https://mcap.dev/guides/getting-started/ros-2).
+
+```bash
+sudo apt-get install ros-humble-rosbag2-storage-mcap
+```
+
+La sauvegarde des rosbags se fait dans deux fichier simultanément. Le premier contient toutes les informations pour le contrôle du foil et le second les informations du Lidar pour une reconstruction de l'environnement en 3D.
+
+Pour tracer les données, le format **mcap** est compatible avec **Plotjuggler**. Plus d'informations disponibles sur leur [github](https://github.com/facontidavide/PlotJuggler).
 
 ## Modifier les paramètres de foil_consigne_node :
 
 Liste des paramètres :
 
-- kz
-- kroll
-- kpitch
-- kz_proportional
-- kroll_proportional
-- kpitch_proportional
-- kyaw_proportional
+- kpitch_
+- kspeed_
+- kroll_
 
 ```bash
 ros2 param set /foil_consigne_node nom_du_parametre valeur
@@ -319,19 +352,6 @@ sudo udevadm trigger
 - [ ] Algorithmes de détection
 - [ ] Algorithme d'évitement
 - [ ] interface ncurses terminal
-
-### Arduino Setup
-
-```bash
-sudo apt install arduino-mk
-sudo apt install seyon
-sudo apt remove brltty # If no ttyUSB0
-make clean all
-make upload
-seyon -modem /dev/ttyUSB0
-# Or
-minicom -D /dev/ttyUSB0 -b 115200
-```
 
 ### Calibration servomotors
 
