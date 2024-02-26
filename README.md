@@ -79,16 +79,167 @@ Pour plus d'informations sur la configuration de Z-Shell, veuillez consulter le 
 Voir [tuto_velodyne.md](./tuto_velodyne.md) pour la configuration du Velodyne.
 **Adresse IP du Velodyne : 192.168.10.91**
 
-## SBG
+### SBG
 
-Ellipse D
-** Attention ** : La connection au SBG se fait uniquement avec un port USB 3.0.
+La centrale inertielle utilisée est une SBG Ellipse D. Pour la configurer, il faut utiliser le logiciel Inertial SDK disponible [ici](https://github.com/SBG-Systems/sbgECom) pour **Linux** et **MacOS** ou [ici](https://files.sbg-systems.com/s/ANQxBt55aiQjRNx/download) pour **Windows** .
 
-Récupération de la branche devel du git de sbg_systems (https://github.com/SBG-Systems/sbg_ros2_driver/tree/devel) le 14/02/2024
-Modification du fichier sbg_device_uart_default.yaml pour autoriser le RTK et calibrer la sbg.
+Le driver ROS2 utilisé est sbg_ros2_driver. **Attention**, il faut utiliser la branche `devel` pour avoir accès à la dernière version du driver et notamment pour avoir le **RTK**. Elle est disponible sur ce [lien](https://github.com/SBG-Systems/sbg_ros2_driver/tree/devel) et peut être téléchargé avec la commande suivante. Cette opération avait été réalisée le 14/02/2024:
 
-Modification de la config de la sbg pour passer la correction RTCM sur le PORT A sur sbgCenter. cf README sbg_driver
-Modification sbg_driver pour passer les messages RTCM en mavros_msgs/RTCM.msg.
+```bash
+git clone https://github.com/SBG-Systems/sbg_ros2_driver -b devel
+```
+
+**Attention** : La connection au SBG se fait uniquement avec un port USB 3.0.
+
+**Attention** : Pour activer le RTK, il faut modifier la configuration de la centrale inertielle sur le logiciel Inertial SDK. Il faut connecter la SBG à l'ordinateur et aller dans l'onglet `Assignment panel`, puis passer la valeur de `RTCM` à `Port A`. Pour plus de détail, se reporter aux informations disponibles [ici](./ros2_ws/src/sbg_ros2_driver/README.md).
+
+Le fichier de configuration utilisé est le fichier `sbg_device_uart_default.yaml` disponible [ici](./ros2_ws/src/sbg_ros2_driver/config/sbg_device_uart_default.yaml).
+
+Les différentes modification effectuées sont les suivantes :
+
+```yaml
+# Port Name
+portName: "/dev/ttySBG"
+
+
+# IMU_ALIGNMENT_LEVER_ARM
+imuAlignementLeverArm:
+  # IMU X axis direction in vehicle frame
+  # 0 ALIGNMENT_FORWARD   IMU Axis is turned in vehicle's forward direction
+  # 1 ALIGNMENT_BACKWARD  IMU Axis is turned in vehicle's backward direction
+  # 2 ALIGNMENT_LEFT      IMU Axis is turned in vehicle's left direction
+  # 3 ALIGNMENT_RIGHT     IMU Axis is turned in vehicle's right direction
+  # 4 ALIGNMENT_UP        IMU Axis is turned in vehicle's up direction
+  # 5 ALIGNMENT_DOWN      IMU Axis is turned in vehicle's down direction
+  axisDirectionX: 0
+  # IMU Y axis direction in vehicle frame
+  # 0 ALIGNMENT_FORWARD   IMU Axis is turned in vehicle's forward direction
+  # 1 ALIGNMENT_BACKWARD  IMU Axis is turned in vehicle's backward direction
+  # 2 ALIGNMENT_LEFT      IMU Axis is turned in vehicle's left direction
+  # 3 ALIGNMENT_RIGHT     IMU Axis is turned in vehicle's right direction
+  # 4 ALIGNMENT_UP        IMU Axis is turned in vehicle's up direction
+  # 5 ALIGNMENT_DOWN      IMU Axis is turned in vehicle's down direction
+  axisDirectionY: 3
+  # Residual roll error after axis alignment rad
+  misRoll: 0.0
+  # Residual pitch error after axis alignment rad
+  misPitch: 0.0
+  # Residual yaw error after axis alignment rad
+  misYaw: 0.0
+  # X Primary lever arm in IMU X axis (once IMU alignment is applied) m
+  leverArmX: -0.25
+  # Y Primary lever arm in IMU Y axis (once IMU alignment is applied) m
+  leverArmY: 0.
+  # Z Primary lever arm in IMU Z axis (once IMU alignment is applied) m
+  leverArmZ: 0.01
+
+
+# AIDING_ASSIGNMENT
+# Note: GNSS1 module configuration can only be set to an external port on Ellipse-E version.
+# Ellipse-N users must set this module to MODULE_INTERNAL. On the other hand, rtcmModule is only
+# available for Ellipse-N users. This module must be set to MODULE_DISABLED for other users.
+aidingAssignment:
+  # GNSS module port assignment:
+  # 255 Module is disabled
+  # 1 Module connected on PORT_B
+  # 2 Module connected on PORT_C
+  # 3 Module connected on PORT_D
+  # 5 Module is connected internally
+  gnss1ModulePortAssignment: 5
+  # GNSS module sync assignment:
+  # 0 Module is disabled
+  # 1 Synchronization is done using SYNC_IN_A pin
+  # 2 Synchronization is done using SYNC_IN_B pin
+  # 3 Synchronization is done using SYNC_IN_C pin
+  # 4 Synchronization is done using SYNC_IN_D pin
+  # 5 Synchronization is internal
+  # 6 Synchronization is done using SYNC_OUT_A pin
+  # 7 Synchronization is done using SYNC_OUT_B pin
+  gnss1ModuleSyncAssignment: 5
+  # RTCM input port assignment for Ellipse-N DGPS (see gnss1ModulePortAssignment for values)
+  rtcmPortAssignment: 5
+
+
+# GNSS configuration
+# Note: Secondary level arms should only be considered in case of dual antenna GNSS receiver. It can be left to 0 otherwise.
+gnss:
+  # Gnss Model Id
+  # 101 Used on Ellipse-N to setup the internal GNSS in GPS+GLONASS
+  # 102 Default mode for Ellipse-E connection to external GNSS
+  # 103 Used on Ellipse-N to setup the internal GNSS in GPS+BEIDOU
+  # 104 Used on Ellipse-E to setup a connection to ublox in read only mode.
+  # 106 Used on Ellipse-E to setup a connection to Novatel receiver in read only mode.
+  # 107 Used on Ellipse-D by default
+  gnss_model_id: 107
+
+  #GNSS primary antenna lever arm in IMU X axis (m)
+  primaryLeverArmX: 0.71
+  #GNSS primary antenna lever arm in IMU Y axis (m)
+  primaryLeverArmY: 0.
+  #GNSS primary antenna lever arm in IMU Z axis (m)
+  primaryLeverArmZ: -0.05
+  #GNSS primary antenna precise. Set to true if the primary lever arm has been accurately entered and doesn't need online re-estimation.
+  primaryLeverPrecise: true
+
+  #GNSS secondary antenna lever arm in IMU X axis (m)
+  secondaryLeverArmX: -1.25
+  #GNSS secondary antenna lever arm in IMU Y axis (m)
+  secondaryLeverArmY: 0.
+  #GNSS secondary antenna lever arm in IMU Z axis (m)
+  secondaryLeverArmZ: -0.05
+
+  # Secondary antenna operating mode.
+  # 1 The GNSS will be used in single antenna mode only and the secondary lever arm is not used.
+  # 2 [Reserved] The GNSS dual antenna information will be used but the secondary lever arm is not known.
+  # 3 The GNSS dual antenna information will be used and we have a rough guess for the secondary lever arm.
+  # 4 The GNSS dual antenna information will be used and the secondary lever arm is accurately entered and doesn't need online re-estimation.
+  secondaryLeverMode: 3
+
+
+rtcm:
+  # Should ros driver subscribe to RTCM topic
+  subscribe: true
+  # Topic on which RTCM is published
+  topic_name: rtcm
+  # Namespace where topic is published
+  namespace: ntrip_client
+
+nmea:
+  # Should ros driver publish NMEA string
+  publish: true
+  # Topic on which to publish nmea data
+  topic_name: nmea
+  # Namespace where to publish topic
+  namespace: ntrip_client
+```
+
+Enfin, il faut modifier le driver ROS2 pour qu'il prenne en compte les messages RTCM. Nous avons choisi d'utiliser le package `mavros_msgs` pour les messages RTCM. Pour cela, il faut modifier les fichiers `sbg_device` disponible [ici](./ros2_ws/src/sbg_ros2_driver/include/sbg_driver/sbg_device.h) et [ici](./ros2_ws/src/sbg_ros2_driver/include/sbg_driver/sbg_device.cpp). Les modifications sont les suivantes :
+
+- Fichier `sbg_device.h` :
+
+  - Ajout de l'include `#include <mavros_msgs/RTCM.h>` dans le fichier `sbg_device.h` à la ligne 43.
+  - Modification du subscriber en `rclcpp::Subscription<mavros_msgs::msg::RTCM>::SharedPtr  rtcm_sub_;` à la ligne 86.
+  - Modification de la fonction `void writeRtcmMessageToDevice(const mavros_msgs::msg::RTCM::SharedPtr msg);` à la ligne 213.
+- Fichier `sbg_device.cpp` :
+
+  - Modification du message à l'initialisation du subscriber à la ligne 211
+  - Modification de la fonction `void SbgDevice::writeRtcmMessageToDevice(const mavros_msgs::msg::RTCM::SharedPtr msg)` à la ligne 467.
+
+```c++
+void SbgDevice::initSubscribers()
+{
+  if (config_store_.shouldSubscribeToRtcm())
+  {
+    auto rtcm_cb = [&](const mavros_msgs::msg::RTCM::SharedPtr msg) -> void {
+        this->writeRtcmMessageToDevice(msg);
+    };
+    
+    rtcm_sub_ = ref_node_.create_subscription<mavros_msgs::msg::RTCM>(config_store_.getRtcmFullTopic(), 10, rtcm_cb);
+  }
+}
+```
+
+Enfin, il faut modifier le fichier `CMakeLists.txt` disponible [ici](./ros2_ws/src/sbg_ros2_driver/CMakeLists.txt) pour ajouter le package `mavros_msgs` à la liste des dépendances.
 
 ## RTK
 
