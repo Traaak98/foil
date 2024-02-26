@@ -140,16 +140,18 @@ def generate_launch_description():
         cwd=rosdirVelodyne,
     )
 
-    rtk_node = launch_ros.actions.Node(
-        package="ntrip_client",
-        executable="ntrip_ros.py",
-        output="screen",
-        parameters=[
-            {"host": "147.100.179.214"},
-            {"mountpoint": "IUEM"},
-            {"username": "centipede"},
-            {"password": "centipede"},
+    rtk_node = ExecuteProcess(
+        cmd = [
+            "ros2",
+            "launch",
+            "ntrip_client",
+            "ntrip_client_launch.py",
+            "host:= '147.100.179.214'",
+            "mountpoint:= 'IUEM'",
+            "username:= 'centipede'",
+            "password:= 'centipede'",
         ],
+        output="screen"
     )
 
     return launch.LaunchDescription(

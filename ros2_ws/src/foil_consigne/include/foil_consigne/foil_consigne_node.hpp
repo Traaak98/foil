@@ -14,6 +14,7 @@ using namespace std;
 
 const double SPEED_OFFSET = 0.8;
 const double PI = 3.14159265358979323846;
+const double Z_OFFSET = 0.34;
 
 class FoilConsigneNode : public rclcpp::Node {
 public:
