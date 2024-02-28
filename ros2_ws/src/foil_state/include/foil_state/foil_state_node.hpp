@@ -16,6 +16,8 @@ using namespace std::chrono_literals;
 using namespace std;
 
 const double OFFSET_GPS = 121; // TODO: à définir
+const double Z_OFFSET_SBG = 0.2;
+const double Z_OFFSET_ULTRASON = 0.34;
 
 class FoilStateNode : public rclcpp::Node {
 public:

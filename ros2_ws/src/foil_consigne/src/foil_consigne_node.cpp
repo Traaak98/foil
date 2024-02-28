@@ -110,7 +110,7 @@ void FoilConsigneNode::regulation_pitch()
 
 void FoilConsigneNode::regulation_speed()
 {
-    speed_regulation = tanh(kspeed_ * (z_objective_-(z_-Z_OFFSET)));
+    speed_regulation = tanh(kspeed_ * (z_objective_-z_));
     if (speed_regulation >= 0.) {
         speed_regulation = SPEED_OFFSET + (1-0.8)*speed_regulation; //* 0.8 -> plage d'accélération entre 80 et 100%
     } else {

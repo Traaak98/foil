@@ -40,10 +40,10 @@ void FoilStateNode::timer_callback()
   msg.pose.pose.position.x = this->x_;
   msg.pose.pose.position.y = this->y_;
     if (this->type_>6){
-        msg.pose.pose.position.z = this->altitude_ - OFFSET_GPS;
+        msg.pose.pose.position.z = this->altitude_ - OFFSET_GPS - Z_OFFSET_SBG;
     }
     else{
-        msg.pose.pose.position.z = this->height_est_;
+        msg.pose.pose.position.z = this->height_est_ - Z_OFFSET_ULTRASON;
     }
 
   msg.pose.pose.orientation.x = this->roll_;
