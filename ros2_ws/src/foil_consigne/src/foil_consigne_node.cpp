@@ -17,9 +17,9 @@ FoilConsigneNode::~FoilConsigneNode()
 
 void FoilConsigneNode::init_parameters()
 {
-    this->declare_parameter<double>("kpitch_", 5.3); //* (180/PI)/10 at the beginning of the project
+    this->declare_parameter<double>("kpitch_", 18); //* PI/(10*PI/180) at the beginning of the project. 10 is the max angle
     this->declare_parameter<double>("kspeed_", 0.2*PI); //TODO: SET THE RIGHT VALUE
-    this->declare_parameter<double>("kroll_", (180/PI)/20); //* (180/PI)/20 at the beginning of the project
+    this->declare_parameter<double>("kroll_", 6); //* PI/(20*PI/180) at the beginning of the project
 }
 
 void FoilConsigneNode::init_interfaces()
