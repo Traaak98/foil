@@ -46,10 +46,12 @@ private:
     double kpitch_ = 0.0;
     double kspeed_ = 0.0;
     double kroll_ = 0.0;
+    double kyaw_ = 0.0;
 
     double foil_regulation = 0.0;
     double speed_regulation = 0.0;
     double roll_regulation = 0.0;
+    double yaw_regulation = 0.0;
 
 
     rclcpp::TimerBase::SharedPtr timer_;
@@ -69,6 +71,7 @@ private:
     void regulation_pitch();
     void regulation_speed();
     void regulation_roll();
+    void regulation_yaw();
 };
 
 #endif //BUILD_FOIL_CONSIGNE_NODE_V2_H

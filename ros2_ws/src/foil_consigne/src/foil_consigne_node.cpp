@@ -18,8 +18,9 @@ FoilConsigneNode::~FoilConsigneNode()
 void FoilConsigneNode::init_parameters()
 {
     this->declare_parameter<double>("kpitch_", 18); //* PI/(10*PI/180) at the beginning of the project. 10 is the max angle
-    this->declare_parameter<double>("kspeed_", 0.2*PI); //TODO: SET THE RIGHT VALUE
+    this->declare_parameter<double>("kspeed_", PI*5); //* PI/0.2 at the beginning of the project. 0.2 is the max error before speed saturation
     this->declare_parameter<double>("kroll_", 6); //* PI/(20*PI/180) at the beginning of the project
+    this->declare_parameter<double>("kyaw_", 1.0); //TODO: Set this parameter
 }
 
 void FoilConsigneNode::init_interfaces()
@@ -73,11 +74,14 @@ void FoilConsigneNode::timer_callback()
 
     regulation_roll();
 
+    //TODO: regulation_yaw();
+
     // Send data to the publisher
     msg_consigne.servo_foil = foil_regulation;
     msg_consigne.thruster = speed_regulation;
     msg_consigne.servo_aileron_left = roll_regulation;
     msg_consigne.servo_aileron_right = roll_regulation;
+    msg_consigne.servo_gouvernail = yaw_regulation;
 
     publisher_foil_consigne_->publish(msg_consigne);
 }
@@ -128,6 +132,17 @@ void FoilConsigneNode::regulation_roll()
         roll_regulation = -1.;
     }
     roll_regulation = 100*roll_regulation;
+}
+
+void FoilConsigneNode::regulation_yaw()
+{
+    yaw_regulation = kyaw_ * (yaw_objective_ - yaw_);
+    if (yaw_regulation > 1.){
+        yaw_regulation = 1.;
+    } else if (yaw_regulation < -1.){
+        yaw_regulation = -1.;
+    }
+    yaw_regulation = 100*yaw_regulation;
 }
 
 int main(int argc, char * argv[])
