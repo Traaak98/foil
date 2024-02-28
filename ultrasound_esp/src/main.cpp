@@ -1,156 +1,112 @@
+/**
+#include <Arduino.h>
+
+#define TRIGGER_PIN 18
+#define ECHO_PIN    19
+#define SOUND_SPEED 0.00034 // mm/µs
+ 
+const unsigned long MEASURE_TIMEOUT = 2500000UL; // 25ms = ~8m à 340m/s
+
+
+
+void setup() {
+   
+  Serial.begin(9600);
+   
+  pinMode(TRIGGER_PIN, OUTPUT);
+  digitalWrite(TRIGGER_PIN, LOW);
+
+  pinMode(ECHO_PIN, INPUT);
+}
+
+void loop() {
+  
+  digitalWrite(TRIGGER_PIN, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(TRIGGER_PIN, LOW);
+  Serial.println("Triggered");
+  
+  long measure = pulseIn(ECHO_PIN, HIGH, MEASURE_TIMEOUT); // en mi
+  float distance_mm = measure / 2.0 * SOUND_SPEED;
+   
+  Serial.print(F(">Distance:"));
+  Serial.print(distance_mm);
+  Serial.println(F("|mm"));
+   
+  delay(100);
+}
+*/
+
 #include <Arduino.h>
 
 #define SOUND_SPEED 0.000340 // m/µs
-#define LEDC_TIMER_13_BIT 13
-static const long LEDC_BASE_FREQ = 50;  //50Hz
-uint32_t dutyCycle = (pow(2, LEDC_TIMER_13_BIT) - 1) / 100; // 1%
-
-/*Ultrasound 1*/
-#define LEDC_CHANNEL_1 0
-#define TRIGGER_PIN1 26
-#define ECHO_PIN1 25
-volatile unsigned long measure1_start = 0;
-volatile unsigned long measure1_stop = 0;
+#define TRIGGER_PIN2 26
+#define ECHO_PIN2    25
 float dist1[10] = {0};
-
-/*Ultrasound 2*/
-#define LEDC_CHANNEL_2 1
-#define TRIGGER_PIN2 19
-#define ECHO_PIN2 18
-volatile unsigned long measure2_start = 0;
-volatile unsigned long measure2_stop = 0;
+#define TRIGGER_PIN1 19
+#define ECHO_PIN1    18
 float dist2[10] = {0};
 
-/*Ultrasound 3*/
-#define LEDC_CHANNEL_3 2
-#define TRIGGER_PIN3 12
-#define ECHO_PIN3 13
-volatile unsigned long measure3_start = 0;
-volatile unsigned long measure3_stop = 0;
-float dist3[10] = {0};
-
-/*Potentiomètre*/
-#define FREQ_CLK 80000000
-#define TIMER_ID_4 3
-#define PRESCALER 80
-#define THRESHOLD 1000000 //1/1000000 de MHz = 1Hz
-#define POTENTIOMETER_PIN 2
-volatile unsigned int angle = 0;
-hw_timer_t * timer_pot = NULL;
-int pot[10] = {0};
-
-
-#define NB_PROCESS 5
-
+long measure;
+ 
 struct Distance{
     float distance1 = 0;
     float distance2 = 0;
-    float distance3;
-    float angle;
+    float distance3 = 0;
+    float angle     = 0;
 };
 Distance Dist;
 
 
-void IRAM_ATTR echo_isr1() {
-    if (digitalRead(ECHO_PIN1) == HIGH){measure1_start = micros();}
-    else{measure1_stop = micros();}
-}
-
-void IRAM_ATTR echo_isr2() {
-    if (digitalRead(ECHO_PIN2) == HIGH){measure2_start = micros();}
-    else{measure2_stop = micros();}
-}
-
-void IRAM_ATTR echo_isr3() {
-    if (digitalRead(ECHO_PIN3) == HIGH){measure3_start = micros();}
-    else{measure3_stop = micros();}
-}
-
-void IRAM_ATTR timer_isr4() {
-    angle = analogRead(POTENTIOMETER_PIN);
-}
-
-
 void setup() {
+   
+  Serial.begin(9600);
+   
+  pinMode(TRIGGER_PIN1, OUTPUT);
+  pinMode(TRIGGER_PIN2, OUTPUT);
+  digitalWrite(TRIGGER_PIN1, LOW);
+  digitalWrite(TRIGGER_PIN2, LOW);
 
-    Serial.begin(9600);
-
-    //Setup ultrasound 1
-    pinMode(ECHO_PIN1, INPUT);
-    attachInterrupt(ECHO_PIN1, echo_isr1, CHANGE);
-    ledcSetup(LEDC_CHANNEL_1, LEDC_BASE_FREQ, LEDC_TIMER_13_BIT);
-    ledcAttachPin(TRIGGER_PIN1, LEDC_CHANNEL_1);
-    ledcWrite(LEDC_CHANNEL_1, dutyCycle);
-
-    //Setup ultrasound 2 déphasé de 1/4 de période
-    delay(1000/LEDC_BASE_FREQ/NB_PROCESS);
-    pinMode(ECHO_PIN2, INPUT);
-    attachInterrupt(ECHO_PIN2, echo_isr2, CHANGE);
-    ledcSetup(LEDC_CHANNEL_2, LEDC_BASE_FREQ, LEDC_TIMER_13_BIT);
-    ledcAttachPin(TRIGGER_PIN2, LEDC_CHANNEL_2);
-    ledcWrite(LEDC_CHANNEL_2, dutyCycle);
-
-    //Setup ultrasound 3 déphasé de 1/4 de période
-    delay(1000/LEDC_BASE_FREQ/NB_PROCESS);
-    pinMode(ECHO_PIN3, INPUT);
-    attachInterrupt(ECHO_PIN3, echo_isr3, CHANGE);
-    ledcSetup(LEDC_CHANNEL_3, LEDC_BASE_FREQ, LEDC_TIMER_13_BIT);
-    ledcAttachPin(TRIGGER_PIN3, LEDC_CHANNEL_3);
-    ledcWrite(LEDC_CHANNEL_3, dutyCycle);
-
-    //Setup potentiometer
-    delay(1000/LEDC_BASE_FREQ/NB_PROCESS);
-    pinMode(POTENTIOMETER_PIN, INPUT);
-    timer_pot = timerBegin(TIMER_ID_4, PRESCALER, true);
-    timerAttachInterrupt(timer_pot, &timer_isr4, true);
-    timerAlarmWrite(timer_pot, THRESHOLD, true);
-    timerAlarmEnable(timer_pot);
-
-    
-    //ecriture sur programme principal
-    delay(1000/LEDC_BASE_FREQ/NB_PROCESS);
-
-
-    while(true){
-       //vieillissement des mesures - TODO: adapter un FIR, pk pas
-        for (int i = 0; i < 9; i++){ 
-            dist1[i] = dist1[i+1];
-            dist2[i] = dist2[i+1];
-            dist3[i] = dist3[i+1];
-            pot[i]   = pot[i+1];
-        }
-        dist1[9] = (measure1_stop - measure1_start)/2 * SOUND_SPEED; if (dist1[9] > 3){dist1[9] = dist1[8];} //filtre pour les mesures aberrantes
-        dist2[9] = (measure2_stop - measure2_start)/2 * SOUND_SPEED; if (dist2[9] > 3){dist2[9] = dist2[8];}
-        dist3[9] = (measure3_stop - measure3_start)/2 * SOUND_SPEED; if (dist3[9] > 3){dist3[9] = dist3[8];}
-        pot[9]   = angle;
-
-
-        //moyenne des mesures
-        Dist.distance1 = 0;
-        Dist.distance2 = 0;
-        Dist.distance3 = 0;
-        Dist.angle     = 0;
-
-        for (int i = 0; i < 10; i++){
-            Dist.distance1 += dist1[i];
-            Dist.distance2 += dist2[i];
-            Dist.distance3 += dist3[i];
-            Dist.angle     += pot[i];
-        }
-        Dist.distance1 /= 10;
-        Dist.distance2 /= 10;
-        Dist.distance3 /= 10;
-        Dist.angle     /= 10; //K*sin(a*angle+b)+c
-        
-        
-        Serial.write(reinterpret_cast<const uint8_t*>(&Dist), sizeof(Distance));
-        //Serial.print(Dist.distance1);Serial.print("\t");Serial.print(Dist.distance2);Serial.print("\t");Serial.print(Dist.distance3);Serial.print("\t");Serial.println(Dist.angle);
-        //Serial.print(measure1_start);Serial.print(" "); Serial.println(measure1_stop);
-        delay(100);
-    }
-
+  pinMode(ECHO_PIN1, INPUT);
+  pinMode(ECHO_PIN2, INPUT);
 }
 
 void loop() {
-    // rien à faire ici, le loop décale les mesures
+
+	for (int i = 0; i < 9; i++){ 
+	    dist1[i] = dist1[i+1];
+	    dist2[i] = dist2[i+1];
+	}
+  
+  digitalWrite(TRIGGER_PIN1, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(TRIGGER_PIN1, LOW);
+  measure = pulseIn(ECHO_PIN1, HIGH, 250000UL);
+  dist1[9] = measure / 2.0 * SOUND_SPEED;
+
+  digitalWrite(TRIGGER_PIN2, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(TRIGGER_PIN2, LOW); 
+  measure = pulseIn(ECHO_PIN2, HIGH, 25000UL); 
+  dist2[9] = measure / 2.0 * SOUND_SPEED;
+
+	//moyenne des mesures
+	Dist.distance1 = 0;
+	Dist.distance2 = 0;
+	Dist.distance3 = 0;
+	Dist.angle     = 0;
+
+	for (int i = 0; i < 10; i++){
+	    Dist.distance1 += dist1[i];
+	    Dist.distance2 += dist2[i];
+	}
+	Dist.distance1 /= 10;
+	Dist.distance2 /= 10;
+   
+  Serial.print(Dist.distance1);Serial.print("\t");
+  Serial.print(Dist.distance2);Serial.print("\t");
+  Serial.print(Dist.distance3);Serial.print("\t");
+  Serial.println(Dist.angle);
+   
+  delay(10);
 }
