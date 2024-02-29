@@ -45,13 +45,13 @@ void FoilObjectiveNode::timer_callback()
     msg.pose.pose.position.y = y_objective_;
     msg.pose.pose.position.z = z_objective_;
 
-    find_theta_objective();
+    find_theta_objective(p1_, p2_);
     msg.pose.pose.orientation.x = roll_objective_;
     msg.pose.pose.orientation.y = pitch_objective_;
     msg.pose.pose.orientation.z = yaw_objective_;
 
 
-    end_objective();
+    end_objective(p1_, p2_);
     msg.objective = objective_;
 
     publisher_foil_objective_->publish(msg);
@@ -79,18 +79,26 @@ void FoilObjectiveNode::foil_state_callback(const custom_msg::msg::FoilState::Sh
     this->speed_z_ = msg->vector_speed.z;
 }
 
-void FoilObjectiveNode::end_objective(){
-    double d_carre = pow((x_ - x_objective_), 2) + pow((y_-y_objective_),2);
-    if (d_carre <= pow(R_,2)) {
+void FoilObjectiveNode::end_objective(double *p1, double *p2){
+    double* p3 = {p2_[0]-(p2_[1]-p1_[1]), p2_[1]+(p2_[0]-p1_[0])};
+
+    double dist = (p3[0] - p2[0]) * (p2[1] - y_) - (p2[0] - x_) * (p3[1] - p2[1]);
+    if (dist > 0){
         objective_ = true;
     } else {
         objective_ = false;
     }
 }
 
-void FoilObjectiveNode::find_theta_objective()
-{
-    yaw_objective_ = atan2((y_objective_ - y_), (x_objective_ - x_));
+void FoilObjectiveNode::find_theta_objective(double *a, double *b)
+{   
+
+    
+    double dist = (p2[0] - p1[0]) * (p1[1] - y_) - (p1[0] - x_) * (p2[1] - p1[1]);
+    double heading = atan2((p2[1] - p1[1]), (p2[0] - p1[0]));
+
+    //Warning : si le comportement est pas dans le bon sens, d'abord penser à tester avec un +tanh
+    yaw_objective_ = heading - tanh(0.1*atan2(p1[1] - y_, p1[0] - x_)*dist)*M_PI/3;
 }
 
 int main(int argc, char * argv[])
