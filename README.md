@@ -578,6 +578,11 @@ Commande gstreamer pour lire le flux vidéo de la webcam sur le réseau:
 ```bash
 gst-launch-1.0 -e -v udpsrc port=5600 close-socket=false multicast-iface=false auto-multicast=true ! application/x-rtp, payload=96 ! rtpjitterbuffer ! rtph264depay ! avdec_h264 ! queue ! autovideosink
 ```
+Commande gstreamer pour enregistrer en .mp4 le flux vidéo de la webcam sur un ordinateur:
+
+```bash
+gst-launch-1.0 -e -v udpsrc port=5600 close-socket=false multicast-iface=false auto-multicast=true ! application/x-rtp, payload=96 ! rtpjitterbuffer ! rtph264depay ! h264parse ! mp4mux ! filesink location=guerledan.mp4
+```
 
 ### Positionnement des Servomoteurs sur le PCB
 
