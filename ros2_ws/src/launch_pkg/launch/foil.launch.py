@@ -141,17 +141,17 @@ def generate_launch_description():
     )
 
     rtk_node = ExecuteProcess(
-        cmd = [
+        cmd=[
             "ros2",
             "launch",
             "ntrip_client",
             "ntrip_client_launch.py",
             "host:= '147.100.179.214'",
-            "mountpoint:= 'IUEM'",
+            "mountpoint:= 'ALZ22'",
             "username:= 'centipede'",
             "password:= 'centipede'",
         ],
-        output="screen"
+        output="screen",
     )
 
     return launch.LaunchDescription(
