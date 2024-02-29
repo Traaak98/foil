@@ -118,7 +118,7 @@ def generate_launch_description():
             "-s",
             "mcap",
             "-e",
-            "/(sbg/(.*)|utm_pos|foil_state|foil_consigne|controler_data|foil_objective|forces_actionneurs|forces_angles|parametres_consigne)",
+            "/(sbg/(.*)|utm_pos|foil_state|foil_consigne|controler_data|foil_objective|forces_actionneurs|forces_angles|parametres_consigne|esp_data)",
         ],
         output="screen",
         cwd=rosdirFoil,

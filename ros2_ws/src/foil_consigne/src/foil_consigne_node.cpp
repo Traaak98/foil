@@ -1,4 +1,5 @@
 #include "foil_consigne/foil_consigne_node.hpp"
+#include <cmath>
 
 //TODO: IF objective = true, then stop the regulation
 
@@ -20,7 +21,7 @@ void FoilConsigneNode::init_parameters()
     this->declare_parameter<double>("kpitch_", 18); //* PI/(10*PI/180) at the beginning of the project. 10 is the max angle
     this->declare_parameter<double>("kspeed_", PI*5); //* PI/0.2 at the beginning of the project. 0.2 is the max error before speed saturation
     this->declare_parameter<double>("kroll_", 6); //* PI/(20*PI/180) at the beginning of the project
-    this->declare_parameter<double>("kyaw_", 1.0); //TODO: Set this parameter
+    this->declare_parameter<double>("kyaw_", 3/PI); //(2/PI)*arcsin(kyaw_*PI/3) = PI/2
 }
 
 void FoilConsigneNode::init_interfaces()
@@ -136,7 +137,7 @@ void FoilConsigneNode::regulation_roll()
 
 void FoilConsigneNode::regulation_yaw()
 {
-    yaw_regulation = kyaw_ * (yaw_objective_ - yaw_);
+    yaw_regulation = asin(kyaw_ * (yaw_objective_ - yaw_));
     if (yaw_regulation > 1.){
         yaw_regulation = 1.;
     } else if (yaw_regulation < -1.){

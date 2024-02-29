@@ -45,7 +45,7 @@ private:
 
     double x_objective_ = 0.0;
     double y_objective_ = 0.0;
-    double z_objective_ = 0.8;
+    double z_objective_ = 1.; // Pour simuler max de la vitesse
 
     double roll_objective_ = 0.0;
     double pitch_objective_ = 0.0;
