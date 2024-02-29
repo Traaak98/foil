@@ -32,13 +32,13 @@ class EspUart(Node):
         self.get_logger().info("Publisher initialisé.")
         self.get_logger().info("Ouverture de la liaison série.")
 
-        while not os.path.exists("/dev/ttyUSB0"):
+        while not os.path.exists("/dev/ttyESP"):
             self.get_logger().info("Le périphérique /dev/ttyESP n'est pas connecté ou n'est pas reconnue.")
             time.sleep(0.5)
 
         # Configuration de la communication série
         try :
-            self.serial_port = serial.Serial("/dev/ttyUSB0", 9600, timeout=1)
+            self.serial_port = serial.Serial("/dev/ttyESP", 9600, timeout=1)
 
             # Temps d'ouverture de la liaison
             time.sleep(1)
