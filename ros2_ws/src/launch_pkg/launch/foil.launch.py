@@ -115,8 +115,10 @@ def generate_launch_description():
             "ros2",
             "bag",
             "record",
+            "-s",
+            "mcap",
             "-e",
-            "/(sbg/gps_pos|sbg/imu_data|utm_pos|foil_state|foil_consigne|controler_data|foil_objective|forces_actionneurs|forces_angles|parametres_consigne)",
+            "/(sbg/(.*)|utm_pos|foil_state|foil_consigne|controler_data|foil_objective|forces_actionneurs|forces_angles|parametres_consigne)",
         ],
         output="screen",
         cwd=rosdirFoil,
@@ -127,11 +129,29 @@ def generate_launch_description():
             "ros2",
             "bag",
             "record",
+            "-s",
+            "mcap",
             "-e",
-            "/(velodyne_points|velodyne_packets)",
+            "/(velodyne_points|velodyne_packets|sbg/(.*))",
+            "-b",
+            "4000000000",
         ],
         output="screen",
         cwd=rosdirVelodyne,
+    )
+
+    rtk_node = ExecuteProcess(
+        cmd=[
+            "ros2",
+            "launch",
+            "ntrip_client",
+            "ntrip_client_launch.py",
+            "host:= '147.100.179.214'",
+            "mountpoint:= 'ALZ22'",
+            "username:= 'centipede'",
+            "password:= 'centipede'",
+        ],
+        output="screen",
     )
 
     return launch.LaunchDescription(
@@ -146,6 +166,7 @@ def generate_launch_description():
             utm_proj_node,
             uart_py_node,
             esp_nuc_node,
+            rtk_node,
             launch.actions.RegisterEventHandler(
                 event_handler=launch.event_handlers.OnProcessExit(
                     target_action=velodyne_driver_node,
