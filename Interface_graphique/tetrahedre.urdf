@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<robot name="myfirst">
+    <link name="base_link">
+        <visual>
+            <geometry>
+                <box size="1 1 1" orientation="ROLL PITCH YAW"/>
+            </geometry>
+        </visual>
+    </link>
+</robot>
