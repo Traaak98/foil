@@ -193,7 +193,7 @@
       # Rejection mode for velocity (see posRejectMode values)
       velRejectMode: 1
       # Rejection mode for true heading (see posRejectMode values)
-      hdtRejectMode: 1
+      hdtRejectMode: 2
     
     # Odometer configuration
     odom:
