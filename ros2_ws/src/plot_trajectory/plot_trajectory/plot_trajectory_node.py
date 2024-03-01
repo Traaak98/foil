@@ -16,9 +16,9 @@ class Plot(Node):
 
     def init_interface(self):
 
-        pointA = [7146300, -5334050]
-        pointB = [7146400, -5334050]
-        pointC = [7146700, -533756]
+        pointA = [7146100, -534100]
+        pointB = [7146300, -533900]
+        pointC = [7146600, -533900]
         self.ax.scatter(pointA[0], pointA[1], color="red", marker="o", label="Point A", s=100)
         self.ax.scatter(pointB[0], pointB[1], color="red", marker="o", label="Point B")
         self.ax.scatter(pointC[0], pointC[1], color="red", marker="o", label="Point C")
