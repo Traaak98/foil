@@ -21,6 +21,7 @@ FoilObjectiveNode::~FoilObjectiveNode()
 
 void FoilObjectiveNode::init_parameters()
 {
+    this->declare_parameter<double>("z_objective_", 1.);
 }
 
 void FoilObjectiveNode::init_interfaces()
@@ -34,6 +35,8 @@ void FoilObjectiveNode::timer_callback()
 {
     auto msg = custom_msg::msg::FoilObjective();
 
+    read_parameters();
+
     a = proj_coord(this->lat_, this->lon_, 0, 0);
     b = proj_trans(this->P, PJ_FWD, a);
 
@@ -45,13 +48,13 @@ void FoilObjectiveNode::timer_callback()
     msg.pose.pose.position.y = y_objective_;
     msg.pose.pose.position.z = z_objective_;
 
-    find_theta_objective(p1_, p2_);
+//    find_theta_objective(p1_, p2_);
     msg.pose.pose.orientation.x = roll_objective_;
     msg.pose.pose.orientation.y = pitch_objective_;
     msg.pose.pose.orientation.z = yaw_objective_;
 
 
-    end_objective(p1_, p2_);
+//    end_objective(p1_, p2_);
     msg.objective = objective_;
 
     publisher_foil_objective_->publish(msg);
@@ -80,25 +83,30 @@ void FoilObjectiveNode::foil_state_callback(const custom_msg::msg::FoilState::Sh
 }
 
 void FoilObjectiveNode::end_objective(double *p1, double *p2){
-    double* p3 = {p2_[0]-(p2_[1]-p1_[1]), p2_[1]+(p2_[0]-p1_[0])};
-
-    double dist = (p3[0] - p2[0]) * (p2[1] - y_) - (p2[0] - x_) * (p3[1] - p2[1]);
-    if (dist > 0){
-        objective_ = true;
-    } else {
-        objective_ = false;
-    }
+//    double* p3 = {p2_[0]-(p2_[1]-p1_[1]), p2_[1]+(p2_[0]-p1_[0])};
+//
+//    double dist = (p3[0] - p2[0]) * (p2[1] - y_) - (p2[0] - x_) * (p3[1] - p2[1]);
+//    if (dist > 0){
+//        objective_ = true;
+//    } else {
+//        objective_ = false;
+//    }
 }
 
 void FoilObjectiveNode::find_theta_objective(double *a, double *b)
 {   
 
     
-    double dist = (p2[0] - p1[0]) * (p1[1] - y_) - (p1[0] - x_) * (p2[1] - p1[1]);
-    double heading = atan2((p2[1] - p1[1]), (p2[0] - p1[0]));
+//    double dist = (p2[0] - p1[0]) * (p1[1] - y_) - (p1[0] - x_) * (p2[1] - p1[1]);
+//    double heading = atan2((p2[1] - p1[1]), (p2[0] - p1[0]));
+//
+//    //Warning : si le comportement est pas dans le bon sens, d'abord penser à tester avec un +tanh
+//    yaw_objective_ = heading - tanh(0.1*atan2(p1[1] - y_, p1[0] - x_)*dist)*M_PI/3;
+}
 
-    //Warning : si le comportement est pas dans le bon sens, d'abord penser à tester avec un +tanh
-    yaw_objective_ = heading - tanh(0.1*atan2(p1[1] - y_, p1[0] - x_)*dist)*M_PI/3;
+void FoilObjectiveNode::read_parameters()
+{
+    z_objective_ = this->get_parameter("z_objective_").as_double();
 }
 
 int main(int argc, char * argv[])
