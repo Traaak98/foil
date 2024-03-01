@@ -94,11 +94,11 @@ void FoilObjectiveNode::find_theta_objective(double *p1, double *p2)
 {   
 
     
-    double dist = (p2[0] - p1[0]) * (p1[1] - y_) - (p1[0] - x_) * (p2[1] - p1[1]);
+    double dist = (p2[0] - p1[0]) * (y_ - p1[1]) - (x_ - p1[0]) * (p2[1] - p1[1]);
     double heading = atan2((p2[1] - p1[1]), (p2[0] - p1[0]));
 
     //Warning : si le comportement est pas dans le bon sens, d'abord penser à tester avec un +tanh
-    yaw_objective_ = heading - tanh(0.1*atan2(p1[1] - y_, p1[0] - x_)*dist)*M_PI/3;
+    yaw_objective_ = heading - tanh(0.1**dist)*M_PI/3;
 }
 
 int main(int argc, char * argv[])
