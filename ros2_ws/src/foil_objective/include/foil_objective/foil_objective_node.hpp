@@ -44,7 +44,7 @@ private:
     double speed_z_ = 0.0;
     
     // p1 p2 les points de la trajectoire à suivre
-    double *p1_ = {7146300., -534400.};
+    double *p1_ = {7146300., -534400.0};
     double *p2_ = {7146550., -533600.0};
 
     double x_objective_ = 0.0;
@@ -71,8 +71,8 @@ private:
     void timer_callback();
     void foil_objective_position_callback(const geometry_msgs::msg::Point::SharedPtr msg);
     void foil_state_callback(const custom_msg::msg::FoilState::SharedPtr msg);
-    void end_objective();
-    void find_theta_objective();
+    void end_objective(double *p1, double *p2);
+    void find_theta_objective(double *p1, double *p2);
 };
 
 #endif //BUILD_FOIL_OBJECTIVE_NODE_H
