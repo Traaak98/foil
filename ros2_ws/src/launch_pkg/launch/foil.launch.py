@@ -97,6 +97,7 @@ def generate_launch_description():
         )
     )
     os.makedirs(rosdirVelodyne, exist_ok=True)
+
     rosdirFoil = os.path.abspath(
         os.path.join(
             currentFolder,
@@ -110,6 +111,19 @@ def generate_launch_description():
     )
     os.makedirs(rosdirFoil, exist_ok=True)
 
+    rosdirFoilSplit = os.path.abspath(
+        os.path.join(
+            currentFolder,
+            os.pardir,
+            os.pardir,
+            os.pardir,
+            os.pardir,
+            os.pardir,
+            "bag_files/foil_split",
+        )
+    )
+    os.makedirs(rosdirFoilSplit, exist_ok=True)
+
     rosbag_foil = ExecuteProcess(
         cmd=[
             "ros2",
@@ -122,6 +136,22 @@ def generate_launch_description():
         ],
         output="screen",
         cwd=rosdirFoil,
+    )
+
+    rosbag_foil_split = ExecuteProcess(
+        cmd=[
+            "ros2",
+            "bag",
+            "record",
+            "-s",
+            "mcap",
+            "-e",
+            "/(sbg/(.*)|utm_pos|foil_state|foil_consigne|controler_data|foil_objective|forces_actionneurs|forces_angles|parametres_consigne|esp_data)",
+            "-d",
+            "600",
+        ],
+        output="screen",
+        cwd=rosdirFoilSplit,
     )
 
     rosbag_vld = ExecuteProcess(
@@ -141,7 +171,7 @@ def generate_launch_description():
     )
 
     rtk_node = ExecuteProcess(
-        cmd = [
+        cmd=[
             "ros2",
             "launch",
             "ntrip_client",
@@ -151,7 +181,7 @@ def generate_launch_description():
             "username:= 'centipede'",
             "password:= 'centipede'",
         ],
-        output="screen"
+        output="screen",
     )
 
     return launch.LaunchDescription(
@@ -175,5 +205,6 @@ def generate_launch_description():
             ),
             rosbag_foil,
             rosbag_vld,
+            rosbag_foil_split,
         ]
     )
