@@ -28,6 +28,7 @@ class Plot(Node):
         pointA = [7146100, -534100]
         pointB = [7146300, -533900]
         pointC = [7146600, -533900]
+        self.ax.imshow(lac_guerldedan, extent=[Xlim[0], Xlim[1], Ylim[0], Ylim[1]])
         self.ax.scatter(pointA[0], pointA[1], color="red", marker="o", label="Point A", s=100)
         self.ax.scatter(pointB[0], pointB[1], color="red", marker="o", label="Point B")
         self.ax.scatter(pointC[0], pointC[1], color="red", marker="o", label="Point C")
