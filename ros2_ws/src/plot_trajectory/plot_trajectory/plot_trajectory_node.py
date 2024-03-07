@@ -15,15 +15,22 @@ class Plot(Node):
         self.init_interface()
 
     def init_interface(self):
-
+        Xlim = [7146050, 7146750]
+        Ylim = [-534250, -533800]
+        scalex = 3000
+        scaley= 1000
+        offsetx = 0
+        offsety = -500
+        Xlim = [Xlim[0]-scalex+offsetx, Xlim[1]+scalex+offsetx]
+        Ylim = [Ylim[0]-scaley+offsety, Ylim[1]+scaley+offsety]
         pointA = [7146100, -534100]
         pointB = [7146300, -533900]
         pointC = [7146600, -533900]
         self.ax.scatter(pointA[0], pointA[1], color="red", marker="o", label="Point A", s=100)
         self.ax.scatter(pointB[0], pointB[1], color="red", marker="o", label="Point B")
         self.ax.scatter(pointC[0], pointC[1], color="red", marker="o", label="Point C")
-        self.ax.set_xlim(7146050, 7146750)
-        self.ax.set_ylim(-534250, -533800)
+        self.ax.set_xlim(7145550, 7147250)
+        self.ax.set_ylim(Ylim[0], Ylim[1])
 
         # Souscrire au topic donnant les consignes d'angle des servomoteurs
         self.foil_state_subscription = self.create_subscription(
