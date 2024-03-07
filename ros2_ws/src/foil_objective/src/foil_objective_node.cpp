@@ -21,6 +21,7 @@ FoilObjectiveNode::~FoilObjectiveNode()
 
 void FoilObjectiveNode::init_parameters()
 {
+    this->declare_parameter<double>("z_objective_", 1.);
 }
 
 void FoilObjectiveNode::init_interfaces()
@@ -34,6 +35,8 @@ void FoilObjectiveNode::timer_callback()
 {
     auto msg = custom_msg::msg::FoilObjective();
 
+    read_parameters();
+
     a = proj_coord(this->lat_, this->lon_, 0, 0);
     b = proj_trans(this->P, PJ_FWD, a);
 
@@ -45,13 +48,13 @@ void FoilObjectiveNode::timer_callback()
     msg.pose.pose.position.y = y_objective_;
     msg.pose.pose.position.z = z_objective_;
 
-    find_theta_objective(p1_, p2_);
+//    find_theta_objective(p1_, p2_);
     msg.pose.pose.orientation.x = roll_objective_;
     msg.pose.pose.orientation.y = pitch_objective_;
     msg.pose.pose.orientation.z = yaw_objective_;
 
 
-    end_objective(p1_, p2_);
+//    end_objective(p1_, p2_);
     msg.objective = objective_;
 
     publisher_foil_objective_->publish(msg);
