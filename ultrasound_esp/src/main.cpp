@@ -1,6 +1,7 @@
 /**
 #include <Arduino.h>
 
+<<<<<<< Updated upstream
 #define TRIGGER_PIN 18
 #define ECHO_PIN    19
 #define SOUND_SPEED 0.00034 // mm/µs
@@ -38,6 +39,13 @@ void loop() {
 */
 
 #include <Arduino.h>
+=======
+#define TRIGGER_PIN 19
+#define ECHO_PIN    18
+#define SOUND_SPEED 0.34 // mm/µs
+ 
+const unsigned long MEASURE_TIMEOUT = 25000UL; // 25ms = ~8m à 340m/s
+>>>>>>> Stashed changes
 
 #define SOUND_SPEED 0.000340 // m/µs
 #define TRIGGER_PIN2 26
@@ -62,6 +70,7 @@ void setup() {
    
   Serial.begin(9600);
    
+<<<<<<< Updated upstream
   pinMode(TRIGGER_PIN1, OUTPUT);
   pinMode(TRIGGER_PIN2, OUTPUT);
   digitalWrite(TRIGGER_PIN1, LOW);
@@ -120,3 +129,26 @@ void loop() {
    
   delay(50);
 }
+=======
+  pinMode(TRIGGER_PIN, OUTPUT);
+  digitalWrite(TRIGGER_PIN, LOW);
+
+  pinMode(ECHO_PIN, INPUT);
+}
+
+void loop() {
+  
+  digitalWrite(TRIGGER_PIN, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(TRIGGER_PIN, LOW);
+  
+  long measure = pulseIn(ECHO_PIN, HIGH, MEASURE_TIMEOUT); // en mi
+  float distance_mm = measure / 2.0 * SOUND_SPEED;
+   
+  Serial.print(F(">Distance:"));
+  Serial.print(distance_mm);
+  Serial.println(F("|mm"));
+   
+  delay(100);
+}
+>>>>>>> Stashed changes
