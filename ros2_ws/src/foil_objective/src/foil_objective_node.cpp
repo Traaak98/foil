@@ -80,7 +80,9 @@ void FoilObjectiveNode::foil_state_callback(const custom_msg::msg::FoilState::Sh
 }
 
 void FoilObjectiveNode::end_objective(double *p1, double *p2){
-    double *p3 = {p2[0]-(p2[1]-p1[1]), p2[1]+(p2[0]-p1[0])};
+    double p3[2];
+    p3[0] = p2[0] - (p2[1] - p1[1]);
+    p3[1] = p2[1] + (p2[0] - p1[0]);
 
     double dist = (p3[0] - p2[0]) * (p2[1] - y_) - (p2[0] - x_) * (p3[1] - p2[1]);
     if (dist > 0){
@@ -98,7 +100,7 @@ void FoilObjectiveNode::find_theta_objective(double *p1, double *p2)
     double heading = atan2((p2[1] - p1[1]), (p2[0] - p1[0]));
 
     //Warning : si le comportement est pas dans le bon sens, d'abord penser à tester avec un +tanh
-    yaw_objective_ = heading - tanh(0.0002**dist)*M_PI/4;
+    yaw_objective_ = heading - tanh(0.0002*dist)*M_PI/4;
 }
 
 int main(int argc, char * argv[])

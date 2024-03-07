@@ -44,8 +44,8 @@ private:
     double speed_z_ = 0.0;
     
     // p1 p2 les points de la trajectoire à suivre
-    double *p1_ = {7146300., -534400.0};
-    double *p2_ = {7146550., -533600.0};
+    double p1_[2] = {7146300., -534400.0};
+    double p2_[2] = {7146550., -533600.0};
 
     double x_objective_ = 0.0;
     double y_objective_ = 0.0;
