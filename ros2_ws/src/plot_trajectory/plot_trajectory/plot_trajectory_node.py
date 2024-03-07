@@ -2,6 +2,7 @@ import rclpy
 from custom_msg.msg import FoilState
 from rclpy.node import Node
 import matplotlib.pyplot as plt
+import PIL.Image as Image
 from math import cos, sin
 
 class Plot(Node):
@@ -15,6 +16,7 @@ class Plot(Node):
         self.init_interface()
 
     def init_interface(self):
+        lac_guerldedan = Image.open("guerledan.tiff") 
         Xlim = [7146050, 7146750]
         Ylim = [-534250, -533800]
         scalex = 3000
