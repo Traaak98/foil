@@ -15,6 +15,8 @@
 using namespace std::chrono_literals;
 using namespace std;
 
+const double PI = 3.14159265358979323846;
+
 class FoilObjectiveNode : public rclcpp::Node {
 public:
     FoilObjectiveNode();
@@ -37,7 +39,7 @@ private:
 
     double roll_ = 0.0;
     double pitch_ = 0.0;
-    double yaw_ = 0.0;
+    double yaw_ = PI;
 
     double speed_x_ = 0.0;
     double speed_y_ = 0.0;

@@ -104,6 +104,10 @@ void FoilConsigneNode::read_parameters()
 
 void FoilConsigneNode::regulation_pitch() 
 {
+    double err_z = z_objective_-z_;
+    if (err_z > 0.2){
+        pitch_objective_ = 5 * PI/180
+    }
     foil_regulation = -kpitch_ * (pitch_objective_ - pitch_);
     if (foil_regulation > 1.){
         foil_regulation = 1.;
@@ -137,6 +141,10 @@ void FoilConsigneNode::regulation_roll()
 
 void FoilConsigneNode::regulation_yaw()
 {
+    double err_z = z_objective_-z_;
+    if (err_z > 0.2){
+        yaw_objective_ = yaw_;
+    }
     yaw_regulation = asin(kyaw_ * (yaw_objective_ - yaw_));
     if (yaw_regulation > 1.){
         yaw_regulation = 1.;
