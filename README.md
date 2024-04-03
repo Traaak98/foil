@@ -40,7 +40,27 @@ Ce projet contient l'ensemble des codes et des configurations pour le projet de 
 
 - [Introduction](#introduction)
 - [Table des matières](#table-des-matières)
-- [Installation](#installation)
+
+- [Montage Mécanique](#montage-mécanique)
+  - [Outils nécessaires](#Outils-nécessaires)
+  - [Montage gouverne arrière](#Montage-gouverne-arrière)
+  - [Montage du foil avant](#Montage-du-foil-avant)
+  - [Montage des flotteurs](#Montage-des-flotteurs)
+  - [Montage du mat avant](#Montage-du-mat-avant)
+  - [Montage de l'hélice](#Montage-de-l'hélice)
+
+- [Montage Electrique](#montage-electrique)
+  - [Outils nécessaires](#Outils-nécessaires)
+  - [Pré-requis](#pré-requis)
+  - [Installation boite batterie moteur](#installation-boite-batterie-moteur)
+  - [Branchement de la boite centrale aux servos et actionneur](#branchement-de-la-boite-centrale-aux-servos-et-actionneurs)
+  - [Branchement usb/ethernet](#branchement-usb/ethernet)
+  - [Branchement du Nuc](#branchement-du-Nuc)
+  - [Branchement ESP](#branchement-ESP)
+  - [Branchement PCB](#branchement-pCB)
+  - [Batteries](#batteries)
+
+- [Installation software](#installation-software)
   - [ROS2](#ros2)
   - [Z-Shell Installation](#z-shell-installation)
   - [Z-Shell Configuration](#z-shell-configuration)
@@ -60,9 +80,149 @@ Ce projet contient l'ensemble des codes et des configurations pour le projet de 
   - [Positionnement des Servomoteurs sur le PCB](#positionnement-des-servomoteurs-sur-le-pcb)
   - [Capteurs Ultrason](#capteurs-ultrason)
 - [Modifier les paramètres de foil\_consigne\_node](#modifier-les-paramètres-de-foil_consigne_node)
+- [Recommandations pour la suite groupe FOIL24](#Recommandations-pour-la-suite-groupe-FOIL24)
 - [KillList](#killlist)
 
-## Installation
+## Montage Mécanique
+
+### Outils nécessaires :
+
+- 2 clés plates de 8
+- 2 clés plates de 10
+- 1 petite clé à molette
+- 1 cliquet ou clé à pipe de 17
+- Tournevis plats et cruciformes
+- Jeu de clés Allen en pouces (Lidar uniquement)
+- Jeu de clés Allen métriques
+- Scotch (pour bâche)
+- Rilsans
+- Caoutchouc (carré vert)
+
+### Montage gouverne arrière :
+
+- Dévisser les vis de la plaque blanche.
+- Lever la plaque blanche pour installer le foil arrière dans son socle (liaison pivot).
+- Visser le support du servomoteur (avec le servo monté dessus) sur son socle.
+- Accrocher la pièce blanche de liaison (assure l'inclinaison de l'aileron arrière) entre le servo et le foil arrière.
+- Serrer le bras en plastique du servomoteur.
+
+### Montage du foil avant :
+
+- Passage du foil à travers la structure.
+- Mise des vis latérales (clé Allen) pour bloquer la structure contenant le moteur.
+- Mise en place des blocs verts avec caoutchouc au milieu.
+- Passage de la plaque maintenant les servomoteurs.
+- Passage des vis Allen dans la longueur pour bloquer les blocs plus la boîte à caler avec une multitude de rondelles.
+- Passage des tiges des ailerons dans la pièce verte.
+- Fixation des tiges au bras servo et fixation des bras servo sur les servos.
+
+### Montage des flotteurs :
+
+- Passage des flotteurs et fixation à travers 2 trous dans le tube de fixation présent sur le kayak.
+
+### Montage du mât avant :
+
+- Fixation et branchement des capteurs acoustiques, caméra et lidar.
+- Passage du mât avant la boîte batterie moteur accrochée avec des rilsans à travers le trou à l'avant et blocage avec la pièce en styrodur découpée avec la forme du mât.
+
+### Montage de l'hélice :
+
+- Installation de la goupille puis rondelle sur l'hélice.
+- Placer l'hélice sur son axe.
+- Bloquer l'hélice avec l'écrou.
+- Serrer avec la clé à pipe ou cliquet de 17 en tenant l'hélice.
+
+## Montage Électrique
+
+### Outils nécessaires :
+
+- 2 clés plates de 8
+- 2 clés plates de 10
+- 1 petite clé à molette
+- 1 cliquet ou clé à pipe de 17
+- Tournevis plats et cruciformes
+- Jeu de clés Allen en pouces (Lidar uniquement)
+- Jeu de clés Allen métriques
+- Scotch (pour bâche)
+- Rilsans
+- Caoutchouc (carré vert)
+- Pinces long bec de différentes tailles
+
+### Vidéo
+
+Cliquez sur l'image ci-dessous pour regarder la vidéo :
+
+[![Montage électrique](http://img.youtube.com/vi/N05uE3GLUsw/0.jpg)](http://www.youtube.com/watch?v=N05uE3GLUsw)
+
+Ou cliquez sur le lien suivant [http://www.youtube.com/watch?v=N05uE3GLUsw](http://www.youtube.com/watch?v=N05uE3GLUsw).
+
+### Pré-requis :
+
+Montage mécanique réalisé.
+
+### Installation boîte batterie moteur :
+
+- Ouvrir la boîte pour passer les câbles d'alim et com moteur à travers les plaques grises.
+- Passer et brancher les 2 câbles.
+- Refermer la boîte et mettre de la pâte étanche tout le long des plaques grises et autour des câbles.
+
+### Branchement de la boîte centrale aux servos et actionneurs :
+
+- Débrancher tous les câbles de l'étage du haut (IMU, GNSS, Lidar, clé 4G).
+- Enlever les câbles traversant la plaque du haut (4 commande/alim servo, récepteur RF, commande propulsion).
+- Enlever les câbles masse et 5V (câble orange) des wagos.
+  Attention au POE (Port POE) de l'antenne Ubiquiti fixé sous la plaque.
+
+Vous pouvez maintenant démonter la plaque du haut.
+
+- Déserrer et ouvrir grosse bagues et les presse-étoupes de câbles servomoteur.
+- Passer les câbles capteurs (Lidar, capteurs acoustiques) bague tribord (il doit rester une place pour futur capteur supplémentaire).
+- Passer les câbles com + capteurs (Ethernet vers antenne, GNSS arrière, commande propulseur, caméra) bague babord.
+- Resserrer et fixer les bagues avec les câbles dedans.
+- Passage des câbles dans les presse-étoupes dédiés à cet effet.
+
+### Branchement USB/Ethernet :
+
+- Caméra en USB.
+- Câble liaison série USB vers miniUSB pour l'ESP32.
+- Câble Ethernet Lidar.
+
+### Branchement du Nuc :
+
+- Branchement du hub USB/Ethernet en USB.
+- Câble liaison série USB vers miniUSB pour l'Atmega.
+- Câble SBG (attention utiliser les prises USB 3.0).
+- Câble de rallonge USB 3.0 pour clé 4G (en mission et pour récupération de donnée avec disque dur).
+- Câble Ethernet allant au POE (Port LAN).
+
+### Branchement ESP + Ultrason
+
+Se référer au schéma suivant pour le branchement des capteurs ultrason :
+
+<div align="center">
+  <p>
+    <img src="images/schema_capteurs.png" width="1000" height="1000">
+  </p>
+</div>
+
+*Attention* : En cas de problèmes avec les capteurs ultrason, adressez-vous au COMMANDANT CREQUER à l'adresse <a href="mailto:gwendal.crecquer@ensta-bretagne.org?subject=Branchements des Capteurs Ultrasons Merdiques">gwendal.crecquer@ensta-bretagne.org</a>
+
+### Branchement PCB
+
+- Relier le connecteur d'alim au câble d'alim venant de la batterie.
+- Brancher les 4 câbles PWM servomoteurs.
+- Brancher le câble PWM récepteur RF.
+- Brancher le câble de commande du propulseur.
+
+### Batteries :
+
+- 1 batterie 16V.
+- 1 batterie 7.4V pour alim servo.
+- 1 batterie 7.4V pour alim capteur acoustique.
+- Le Nuc alimente le reste.
+
+
+## Installation Software
 
 ### ROS2
 
@@ -621,6 +781,43 @@ ros2 param set /foil_consigne_node nom_du_parametre valeur
 ```
 
 **Attention** : Mettre la valeur en double même pour les entiers (exemple : 0.0).
+
+## Recommandations pour la suite groupe FOIL24
+
+Voici une liste de recommandations pour le projet :
+
+### Caméra :
+
+- **Utilisation de GStreamer** pour capturer le flux vidéo en direct. Développer un nœud ROS2 (ou utiliser une autre méthode) pour récupérer le flux vidéo sortant de la caméra. Faites attention au codec utilisé.
+
+### Mesure de la hauteur :
+
+- **Ultrasons :** Il est conseillé de filtrer les valeurs afin d'éviter les sauts de valeurs. Intégrer ce filtre directement dans le code du microcontrôleur serait l'idéal.
+- **Essai d'autres méthodes :** Envisager l'utilisation de tiges avec potentiomètre, de flux optique, ou de capteurs laser pour améliorer la mesure de la hauteur.
+
+### Régulation :
+
+- **Implémenter le modèle d'actionnement** décrit dans le rapport.
+- Si le modèle basé sur des régulateurs proportionnels simples est conservé, ajuster le régulateur en cap et le tester.
+
+### Planification :
+
+- Planifier une mission type (ligne droite, triangle ou Lissajous) dans le nœud objectif.
+
+### Évitement d'obstacle :
+
+- Avec la **configuration caméra et lidar** déjà en place, il ne reste plus qu'à développer les algorithmes d'évitement d'obstacles.
+
+### Mécanique :
+
+- **Fabrication d'une carcasse en fibre de carbone** pour protéger l'intérieur et pouvoir attacher une bache.
+- Remplacer le profilé en aluminium à l'avant par **un mât solide**.
+- Refabrication des foils avant et arrière pour améliorer les performances.
+
+### Électrique :
+
+- Évaluer la possibilité d'**installer un chargeur intégré** pour éviter de monter et démonter les batteries à chaque utilisation.
+
 
 ## KillList
 
